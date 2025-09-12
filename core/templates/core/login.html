@@ -1,0 +1,79 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+                            <!-- header imports -->
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <!--import icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!--import font-->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="shop-header"> <!--The class designs the nav bar-->
+        <div class="menu-icon">
+            <i class="fas fa-bars"></i> <!--The specific icon for menu-->
+        </div>
+
+        <div class="shop-name">SHOP NAME</div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+            <i class="fas fa-search"></i> <!--search icon-->
+        </div>
+
+        <!-- removed div class icon-group  -->
+
+    </header>
+
+    <div class="container">
+        <div class="login-box">
+            <div class="login-items">
+                <div class="login-text">Login</div>
+                <div class="information-input">
+                    <div class="username-box">
+                        <div class="username-label">Username</div>
+                        <div class="username-input-box">
+                            <form>
+                                <input type="text" name="username" class="username-input">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="password-box">
+                        <div class="password-label">Password</div>
+                        <div class="password-input-box">
+                            <form>
+                                <input type="password" name="password" class="password-input">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="forgot-password-box">
+                        <div class="forgot-password">
+                            <button type="button" class="forgot-password-button">Forgot Password</button>
+                        </div>
+                    </div>
+                    <div class="login-button-box">
+                        <button class="login-button" type="button">Login</button>
+                    </div>
+                    <div class="choose-label" >Choose your login option</div>
+                    <div class="icons-display">
+                        <div class="google-icon"></div>
+                        <div class="facebook-icon"></div>
+                        <div class="x-icon"></div>
+                    </div>
+                    <div class="register-box">
+                        <div class="register-text">Don't have an account?</div>
+                        <button class="register-button" type="button" name="register-button">Register Now!</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
