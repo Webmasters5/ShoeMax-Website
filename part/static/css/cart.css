@@ -3,7 +3,6 @@ body {
   background: #f4f6f8;
   display: flex;
   gap:20px;
-justify-content: space-between;
   align-items: center;
   height: 100vh;
   margin: 0;
@@ -13,8 +12,7 @@ justify-content: space-between;
 
 /* shopping cart */
 .shopping-cart {
-  justify-content: space-between;
-  flex:2;
+  justify-content: flex-start;
   background: white;
   padding: 20px 30px;
   border-radius: 10px;
@@ -36,40 +34,41 @@ justify-content: space-between;
 
 .order-summary {
 
-  flex:1;
+  justify-content: flex-end;
   background: white;
   padding: 20px 30px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   width: 350px;
 }
-.order-summary .total{
+
+.subtotal  {
   color: #e74c3c;
 }
 
-.order-summary .total{
+.subtotal {
   border-top: 2px solid #2c3e50;
   font-weight: bold;
   font-size: 16px;
   color: #2c3e50;
 }
 
-.order-summary .subtotal  {
+.discount {
   color: #e74c3c;
 }
 
-.order-summary .subtotal {
+.discount {
   border-top: 2px solid #2c3e50;
   font-weight: bold;
   font-size: 16px;
   color: #2c3e50;
 }
 
-.order-summary .discount {
+.total{
   color: #e74c3c;
 }
 
-.order-summary .discount {
+.total{
   border-top: 2px solid #2c3e50;
   font-weight: bold;
   font-size: 16px;
@@ -91,4 +90,39 @@ justify-content: space-between;
 
 .checkout-btn:hover {
   background: #2ecc71;
+}
+
+
+
+/* Style checkboxes & dropdowns */
+.cart ul li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cart input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-right: 5px;
+}
+
+.cart select {
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Delete bin button */
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #e74c3c;
+  margin-left: 10px;
+}
+
+.delete-btn:hover {
+  color: #c0392b;
 }
