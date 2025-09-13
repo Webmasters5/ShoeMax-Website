@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ShoeMax - Customer Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <aside class="sidebar">
+        <h2>My Account</h2>
+        <nav>
+            <ul>
+                <li><a href="{% url 'customer_profile' %}" class="{% if request.resolver_match.url_name == 'customer_profile' %}active{% endif %}">Profile</a></li>
+                <!--<li><a href="{% url 'customer_info' %}" class="{% if request.resolver_match.url_name == 'customer_info' %}active{% endif %}">Personal Info</a></li>-->
+                <li><a href="{% url 'customer_orders' %}" class="{% if request.resolver_match.url_name in 'customer_orders customer_order_detail' %}active{% endif %}">Orders</a></li>
+                <li><a href="{% url 'customer_password' %}" class="{% if request.resolver_match.url_name == 'customer_password' %}active{% endif %}">Change Password</a></li>
+                <li><a href="{% url 'customer_notifications' %}" class="{% if request.resolver_match.url_name == 'customer_notifications' %}active{% endif %}">Notifications</a></li>
+                <li><a href="{% url 'customer_settings' %}" class="{% if request.resolver_match.url_name == 'customer_settings' %}active{% endif %}">Settings</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="content">
+        {% block content %}
+        {% endblock %}
+    </main>
+</div>
+
+</body>
+</html>

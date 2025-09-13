@@ -1,0 +1,42 @@
+{% extends "customer/base.html" %}
+
+{% block content %}
+<h1>My Profile</h1>
+
+<div class="profile-section">
+    <h2>Personal Information</h2>
+    <div class="info-row">
+        <p><strong>Full Name:</strong> {{ customer.user.first_name }} {{ customer.user.last_name }}</p>
+        <p><strong>Date of Birth:</strong> {{ customer.date_of_birth }}</p>
+        <p><strong>Gender:</strong> {{ customer.gender }}</p>
+    </div>
+</div>
+
+<div class="profile-section addresses">
+    <div class="address-box">
+        <h2>Shipping Address</h2>
+        <p>{{ customer.shipping_address }}</p>
+    </div>
+
+    <div class="address-box">
+        <h2>Billing Address</h2>
+        <p>{{ customer.billing_address }}</p>
+    </div>
+</div>
+
+<div class="profile-section">
+    <h2>Contact Information</h2>
+    <div class="info-row">
+        <p><strong>Phone:</strong> {{ customer.phone }}</p>
+        <p><strong>Mobile:</strong> {{ customer.mobile }}</p>
+    </div>
+    <p><strong>Email:</strong> {{ customer.user.email }}</p>
+</div>
+
+<div class="profile-section">
+    <h2>Payment Information</h2>
+    <p><strong>Card Number:</strong> {{ customer.credit_card|slice:":4" }}-xxxx-xxxx-{{ customer.credit_card|slice:"-4:" }}</p>
+</div>
+
+<a href="{% url 'customer_info' %}" class="btn">Edit Profile</a>
+{% endblock %}
