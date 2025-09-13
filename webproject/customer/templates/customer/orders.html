@@ -1,0 +1,23 @@
+{% extends "customer/base.html" %}
+
+{% block content %}
+<h1>My Orders</h1>
+
+<div class="orders-cards">
+    {% for order in orders %}
+    <div class="order-card">
+        <h3>Order #{{ order.id }}</h3>
+        <p><strong>Date:</strong> {{ order.date|date:"Y-m-d" }}</p>
+        <p><strong>Status:</strong> 
+            <span class="status {% if order.status == 'Delivered' %}delivered{% elif order.status == 'Pending' %}pending{% else %}other{% endif %}">
+                {{ order.status }}
+            </span>
+        </p>
+        <p><strong>Total:</strong> ${{ order.total }}</p>
+        <a href="{% url 'customer_order_detail' order.id %}">View Details</a>
+    </div>
+    {% empty %}
+    <p>You have no orders yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

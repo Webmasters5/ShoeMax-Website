@@ -1,0 +1,25 @@
+{% extends "customer/base.html" %}
+
+{% block content %}
+<h1>Notifications</h1>
+
+<div class="profile-section">
+    <h2>Recent Notifications</h2>
+    <ul>
+        <li>Your order #1234 has been shipped.</li>
+        <li>Order #5678 has been delivered.</li>
+        <li>20% off on your next purchase - valid until 15 Sept 2025.</li>
+        <li>Your password will expire in 5 days.</li>
+    </ul>
+</div>
+
+<div class="profile-section">
+    <h2>Notification Preferences</h2>
+    <form>
+        <label><input type="checkbox" checked> Email notifications</label><br>
+        <label><input type="checkbox"> SMS notifications</label><br>
+        <label><input type="checkbox" checked> Push notifications</label><br>
+        <button type="submit" class="btn">Save Preferences</button>
+    </form>
+</div>
+{% endblock %}
