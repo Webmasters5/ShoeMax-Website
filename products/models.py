@@ -14,7 +14,6 @@ class Shoe(models.Model):
     image_url = models.ImageField(upload_to='shoes/')
     def __str__(self):
         return self.name
-    
 
 class ShoeVariant(models.Model):
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name='variants')
@@ -33,3 +32,43 @@ class Brand(models.Model):
     brand_id = models.AutoField(primary_key=True)
     def __str__(self):
         return self.name
+
+class Reviews(models.Model):
+    review_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=100)
+    comment = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+    
+class OrderItem(models.Model):
+   quantity = models.IntegerField()
+   price = models.DecimalField(max_digits=10, decimal_places=2)
+   
+   def __str__(self):
+       return f'OrderItem - Quantity: {self.quantity}, Price: {self.price}'
+   
+class Customer (models.Model):
+    customer_id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15)
+    address = models.TextField()
+    
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
+class Order(models.Model):
+    order_id = models.AutoField(primary_key=True)
+    status = models.CharField(max_length=50)
+    date_ordered = models.DateTimeField(auto_now_add=True)
+    date_delivered = models.DateTimeField(null=True, blank=True)
+    shipping_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    sub_total = models.DecimalField(max_digits=10, decimal_places=2)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    def __str__(self):
+        return f'Order {self.order_id} - {self.status}'
+
