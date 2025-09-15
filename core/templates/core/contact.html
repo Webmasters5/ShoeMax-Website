@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+    <title>Contact Us</title>
+                            <!-- header imports -->
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <!--import icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!--import font-->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="shop-header"> <!--The class designs the nav bar-->
+        <div class="menu-icon">
+            <i class="fas fa-bars"></i> <!--The specific icon for menu-->
+        </div>
+
+        <div class="shop-name">SHOP NAME</div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+            <i class="fas fa-search"></i> <!--search icon-->
+        </div>
+
+        <!-- removed div class icon-group  -->
+
+    </header>
+    <div class="container">
+        <div class="one">
+            <div class="contact-us-text">Contact Us!</div>
+            <br>
+            <div class="onepic"></div>
+        </div>
+        <div class="two">
+            <div class="twodiv">
+                <div class="twoform">
+                    <form>
+                        <div class="inputtext">
+                            <label class="label">First name </label>
+                            <input class="textbox" type="text" name="fname" id="fname">
+                        </div>
+                        <div class="inputtext">
+                            <label class="label">Last name </label>
+                            <input class="textbox" type="text" name="lname" id="lname">
+                        </div>
+                        <div class="inputtext">
+                            <label class="label">Email </label>
+                            <input class="textbox" type="email" name="email" id="email">
+                        </div>
+                        <div class="inputtext">
+                            <label class="label">Phone Number </label>
+                            <input class="textbox" type="tel" name="telnum" id="telnum">
+                        </div>
+                        <div  class="inputtext">
+                            <label class="label">Message </label>
+                            <textarea type="textarea" name="message" id="message" class="textarea" ></textarea>
+                        </div>
+                        <div class="button-div">
+                            <button class="button" type="submit" name="submit" id="submit" >Submit</button>
+                            <button class="button" type="reset">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
