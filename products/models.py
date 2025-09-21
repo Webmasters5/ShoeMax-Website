@@ -43,11 +43,16 @@ class Reviews(models.Model):
         return self.title
     
 class OrderItem(models.Model):
-   quantity = models.IntegerField()
-   price = models.DecimalField(max_digits=10, decimal_places=2)
-   
-   def __str__(self):
-       return f'OrderItem - Quantity: {self.quantity}, Price: {self.price}'
+    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='order_items')
+    variant = models.ForeignKey('ShoeVariant', on_delete=models.CASCADE, related_name='order_items')
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        unique_together = ('order', 'variant')
+
+    def __str__(self):
+        return f'OrderItem - {self.variant} x {self.quantity}'
    
 class Customer (models.Model):
     customer_id = models.AutoField(primary_key=True)
@@ -68,7 +73,9 @@ class Order(models.Model):
     shipping_cost = models.DecimalField(max_digits=10, decimal_places=2)
     sub_total = models.DecimalField(max_digits=10, decimal_places=2)
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
+    items = models.ManyToManyField('ShoeVariant', through='OrderItem', related_name='orders')
+
     def __str__(self):
         return f'Order {self.order_id} - {self.status}'
 
