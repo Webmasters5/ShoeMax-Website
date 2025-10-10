@@ -1,0 +1,127 @@
+.about-box{
+    display: flex;
+    justify-content:center ;
+    align-items: center;
+
+    background-color: rgba(0, 255, 255, 0);
+    height: 75vh;
+    width: 100vw;
+}
+
+.about-box-text{
+    display: flex;
+    flex-direction: column;
+    justify-content:center ;
+    align-items: center;
+
+    background-color: rgba(255, 0, 0, 0);
+    height: 75%;
+    width: 90%;
+    
+}
+
+div h1{
+    font-size: 120px;
+}
+
+div h2{
+    font-size: 37px;
+}
+
+div p{
+    font-size: 30px;
+}
+
+.about-para-box{
+    display: flex;
+    justify-content:center ;
+    align-items: center;
+
+    background-color: rgb(255, 0, 0);
+    height: 75vh;
+    width: 100vw;
+
+}
+
+.about-para-box-text{
+    display: flex;
+    justify-content:center ;
+    align-items: center;
+    flex-direction: column;
+
+    background-color: rgb(242, 187, 187);
+    height: 95%;
+    width: 90%;
+
+    text-align: center;
+
+}
+
+.mission-box{
+    display: flex;
+    justify-content:center ;
+    align-items: center;
+
+    background-color: rgb(98, 0, 255);
+    height: 75vh;
+    width: 100vw;
+}
+
+.mission{
+    display: flex;
+    justify-content:center ;
+    align-items: center;
+    flex-direction: column;
+
+    background-color: rgb(141, 85, 255);
+    height: 95%;
+    width: 90%;
+
+    text-align: center;
+}
+
+.different-box{
+    display: flex;
+    justify-content:center ;
+    align-items: center;
+
+    background-color: rgb(13, 104, 86);
+    height: 75vh;
+    width: 100vw;
+}
+
+.different{
+    display: flex;
+    justify-content:center ;
+    align-items: center;
+    flex-direction: column;
+
+    background-color: rgb(141, 85, 255);
+    height: 95%;
+    width: 90%;
+
+    text-align: center;
+}
+
+.vision-box{
+    display: flex;
+    justify-content:center ;
+    align-items: center;
+
+    background-color: rgb(107, 65, 65);
+    height: 75vh;
+    width: 100vw;
+}
+
+.vision{
+    display: flex;
+    justify-content:center ;
+    align-items: center;
+    flex-direction: column;
+
+    background-color: rgb(85, 215, 255);
+    height: 95%;
+    width: 90%;
+
+    text-align: center;
+}
