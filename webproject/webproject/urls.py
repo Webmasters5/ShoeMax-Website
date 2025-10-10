@@ -1,5 +1,5 @@
 """
-URL configuration for ShoeMax project.
+URL configuration for webproject project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -19,8 +19,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('homepage.urls')),
-    path('home/',include('homepage.urls')),
-    path('products/', include('products.urls')),
-    path('core/',include('core.urls')),
+    path("customer/", include("customer.urls")),
 ]

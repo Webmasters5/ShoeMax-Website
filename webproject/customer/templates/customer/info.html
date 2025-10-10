@@ -1,0 +1,92 @@
+{% extends "customer/base.html" %}
+
+{% block content %}
+<h1>Edit Personal Information</h1>
+
+<form method="POST" class="info-form">
+    {% csrf_token %}
+
+    <!-- Name Section -->
+    <div class="form-card">
+        <div class="card-header">
+            <h2>Name</h2>
+        </div>
+        <div class="card-body info-row">
+            <div class="form-group">
+                {{ user_form.first_name.label_tag }}
+                {{ user_form.first_name }}
+            </div>
+            <div class="form-group">
+                {{ user_form.last_name.label_tag }}
+                {{ user_form.last_name }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="form-card">
+        <div class="card-header">
+            <h2>Contact</h2>
+        </div>
+        <div class="card-body info-row">
+            <div class="form-group">
+                {{ customer_form.phone.label_tag }}
+                {{ customer_form.phone }}
+            </div>
+            <div class="form-group">
+                {{ customer_form.mobile.label_tag }}
+                {{ customer_form.mobile }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Section -->
+    <div class="form-card">
+        <div class="card-header">
+            <h2>Details</h2>
+        </div>
+        <div class="card-body info-row">
+            <div class="form-group">
+                {{ customer_form.date_of_birth.label_tag }}
+                {{ customer_form.date_of_birth }}
+            </div>
+            <div class="form-group">
+                {{ customer_form.gender.label_tag }}
+                {{ customer_form.gender }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Addresses Section -->
+    <div class="form-card">
+        <div class="card-header">
+            <h2>Addresses</h2>
+        </div>
+        <div class="card-body addresses">
+            <div class="form-group">
+                {{ customer_form.shipping_address.label_tag }}
+                {{ customer_form.shipping_address }}
+            </div>
+            <div class="form-group">
+                {{ customer_form.billing_address.label_tag }}
+                {{ customer_form.billing_address }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Section -->
+    <div class="form-card">
+        <div class="card-header">
+            <h2>Payment</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                {{ customer_form.credit_card.label_tag }}
+                {{ customer_form.credit_card }}
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn">Save Changes</button>
+</form>
+{% endblock %}
