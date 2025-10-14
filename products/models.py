@@ -33,27 +33,6 @@ class Brand(models.Model):
     def __str__(self):
         return self.name
 
-class Reviews(models.Model):
-    review_id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=100)
-    comment = models.TextField()
-    date_added = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
-    
-class OrderItem(models.Model):
-    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='order_items')
-    variant = models.ForeignKey('ShoeVariant', on_delete=models.CASCADE, related_name='order_items')
-    quantity = models.PositiveIntegerField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        unique_together = ('order', 'variant')
-
-    def __str__(self):
-        return f'OrderItem - {self.variant} x {self.quantity}'
-   
 class Customer (models.Model):
     customer_id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50)
@@ -79,3 +58,23 @@ class Order(models.Model):
     def __str__(self):
         return f'Order {self.order_id} - {self.status}'
 
+class OrderItem(models.Model):
+    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='order_items')
+    variant = models.ForeignKey('ShoeVariant', on_delete=models.CASCADE, related_name='order_items')
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        unique_together = ('order', 'variant')
+
+    def __str__(self):
+        return f'OrderItem - {self.variant} x {self.quantity}'
+
+class Reviews(models.Model):
+    review_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=100)
+    comment = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
