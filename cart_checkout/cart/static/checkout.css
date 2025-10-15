@@ -1,19 +1,16 @@
-
-
-
 /*checkout*/
 body{
- display: flex; 
- justify-content: space-between;
- font-family: Arial, sans-serif;
- background: #f4f6f8;
- align-items: center;
- height: 100vh;
- margin: 0;
+   margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
 }
 
 /* checkout */
 .checkout {
+  flex:2;
   background: white;
   padding: 20px 30px;
   border-radius: 10px;
@@ -38,13 +35,14 @@ body{
   color: #2c3e50;
 }
 
-.checkout h3 {
+.checkout h4 {
   text-align: center;
   margin-bottom: 20px;
   color: #2c3e50;
 }
 
 .order-summary {
+  flex:1;
   background: white;
   padding: 20px 30px;
   border-radius: 10px;
@@ -67,6 +65,17 @@ body{
 }
 
 .order-summary .discount {
+  border-top: 2px solid #2c3e50;
+  font-weight: bold;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.order-summary .shipping-fee {
+  color: #e74c3c;
+}
+
+.order-summary .shipping-fee {
   border-top: 2px solid #2c3e50;
   font-weight: bold;
   font-size: 16px;
