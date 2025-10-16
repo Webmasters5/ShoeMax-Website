@@ -1,14 +1,15 @@
 from django.shortcuts import render
+from django.db.models import Q
+from .models import Shoe
 #from django.http import HttpResponse
 
 # Create your views here.
 def product_details(request, product_id):
-    # Create a dummy brand object
+
     class DummyBrand:
         def __init__(self):
             self.name = "Nike"
     
-    # Create dummy variant objects
     class DummyVariant:
         def __init__(self, variant_id, color, size, stock):
             self.variant_id = variant_id
@@ -16,7 +17,6 @@ def product_details(request, product_id):
             self.size = size
             self.stock = stock
     
-    # Create dummy variants list
     variants = [
         DummyVariant(1, "Black", 8, 15),
         DummyVariant(2, "White", 8, 10),
@@ -25,7 +25,6 @@ def product_details(request, product_id):
         DummyVariant(5, "Red", 10, 5),
     ]
     
-    # Create dummy variants manager
     class DummyVariantsManager:
         def all(self):
             return variants
@@ -58,3 +57,60 @@ def product_details(request, product_id):
     }
     
     return render(request, 'details.html', context)
+
+
+def search(request):
+    """
+    Basic search page for Shoe models with filters:
+    - q: search text across name and description
+    - category: exact match on Shoe.category
+    - min_price, max_price: numeric filters on Shoe.price
+    """
+    q = request.GET.get('q', '').strip()
+    category = request.GET.get('category', '').strip()
+    min_price = request.GET.get('min_price', '').strip()
+    max_price = request.GET.get('max_price', '').strip()
+
+    shoes = Shoe.objects.all()
+
+    if q:
+        shoes = shoes.filter(
+            Q(name__icontains=q) | Q(description__icontains=q)
+        )
+
+    if category:
+        shoes = shoes.filter(category__iexact=category)
+
+    # Defensive parsing of price inputs
+    try:
+        if min_price:
+            shoes = shoes.filter(price__gte=float(min_price))
+    except (TypeError, ValueError):
+        pass
+
+    try:
+        if max_price:
+            shoes = shoes.filter(price__lte=float(max_price))
+    except (TypeError, ValueError):
+        pass
+
+    shoes = shoes.order_by('price', 'name')
+
+    categories = (
+        Shoe.objects.exclude(category__isnull=True)
+        .exclude(category__exact='')
+        .values_list('category', flat=True)
+        .distinct()
+        .order_by('category')
+    )
+
+    context = {
+        'shoes': shoes,
+        'categories': categories,
+        'q': q,
+        'selected_category': category,
+        'min_price': min_price,
+        'max_price': max_price,
+    }
+
+    return render(request, 'search.html', context)

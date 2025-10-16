@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
+from django.conf import settings
 
 # Create your models here.
 
@@ -60,12 +62,20 @@ class Brand(models.Model):
 
 class Customer (models.Model):
     customer_id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='customer_profile',
+        null=True,
+        blank=True
+    )
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)
     address = models.TextField()
-    
+    wishlist_items = models.ManyToManyField(ShoeVariant, through='WishlistItem', related_name='wishlisted_by_customers')
+
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
@@ -87,7 +97,8 @@ class Order(models.Model):
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     shoe_variants = models.ManyToManyField('ShoeVariant', through='OrderItem', related_name='orders')
-
+    coupon = models.ForeignKey('Coupon', on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
+    
     def total_amount(self):
         return self.sub_total + self.shipping_cost - self.discount_amount
     
@@ -123,3 +134,95 @@ class Review(models.Model):
     
     def __str__(self):
         return self.title
+
+# New models added below
+
+class Admin(models.Model):
+    admin_id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='admin_profile',
+        null=True,
+        blank=True
+    )
+    role = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f'Admin {self.admin_id} - {self.role}'
+
+
+class WishlistItem(models.Model):
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    variant = models.ForeignKey('ShoeVariant', on_delete=models.CASCADE, related_name='wishlisted_by')
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('customer', 'variant')
+
+    def __str__(self):
+        return f'WishlistItem {self.variant} for {self.customer}'
+
+
+class CartItem(models.Model):
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE, related_name='cart_items')
+    variant = models.ForeignKey('ShoeVariant', on_delete=models.CASCADE, related_name='in_carts')
+    date_added = models.DateTimeField(auto_now_add=True)
+    quantity = models.IntegerField(validators=[MinValueValidator(1)], default=1)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('customer', 'variant')
+
+    def __str__(self):
+        return f'CartItem {self.variant} x {self.quantity} for {self.customer}'
+
+
+class Coupon(models.Model):
+    coupon_id = models.AutoField(primary_key=True)
+    promo_code = models.CharField(max_length=50, unique=True)
+    description = models.TextField(blank=True)
+    percent_off = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    is_active = models.BooleanField(default=True)
+    exp_date = models.DateTimeField(null=True, blank=True)
+
+    def is_valid(self) -> bool:
+        if not self.is_active:
+            return False
+        if self.exp_date and self.exp_date < timezone.now():
+            return False
+        return True
+
+    def __str__(self):
+        return f'Coupon {self.promo_code} - {self.percent_off}%'
+
+
+class PaymentMethod(models.Model):
+    card_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE, related_name='payment_methods')
+    card_num = models.CharField(max_length=19)
+    exp_date = models.DateField()
+    card_type = models.CharField(max_length=50, blank=True)
+    holder_name = models.CharField(max_length=100)
+    is_default = models.BooleanField(default=False)
+
+    def __str__(self):
+        masked = self.card_num[-4:] if self.card_num else '----'
+        return f'PaymentMethod {self.card_id} - ****{masked} ({self.holder_name})'
+
+
+class Address(models.Model):
+    addr_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE, related_name='addresses')
+    street = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    zip_code = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    is_default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'Address {self.addr_id} - {self.street}, {self.city} ({self.customer})'
+
+
