@@ -1,4 +1,4 @@
-{% extends "base/nav.html" %}
+{% extends "BaseTemplate/nav.html" %}
 {% load static %}
 {% block title %}Shoemax-Homepage{% endblock title%}
 {% block extra_head %}
@@ -15,7 +15,7 @@
         Discover shoes that move you - crafted for comfort,
         built for every moment.
         </p>
-        <a href="" class="cta-button">Shop now</a>
+        <a href="{% url 'products:search' %}" class="cta-button">Shop now</a>
     </div>
 </section>
 <!--2 banners downwards-->

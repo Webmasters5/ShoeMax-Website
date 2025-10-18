@@ -1,0 +1,164 @@
+body{
+    background: #dbdedf;
+    margin: 0px;
+}
+.shop-header {
+  display: flex; /*to control the position of items inside horizontally and vertically*/
+  align-items: center; /* Vertically centers items within the header */
+  justify-content: space-between; /* Places first and last items at edges, with space in between */
+  background-color: #000;
+  color: white; /*for icons and text*/
+  padding: 10px 20px; /*space btw border and items inside*/
+}
+
+.menu-icon i {
+  font-size: 20px;
+  cursor: pointer; /*changes the mouse cursor to a hand icon when you hover over it*/
+}
+
+.shop-name{
+  padding-left: 7rem;
+  font-size: 2.0rem;
+  font-weight: bolder;
+  margin-left: 15px;
+  color: #ffffff;
+   text-decoration: none;
+}
+
+.search-bar { /*Search bar*/
+  display: flex;
+  align-items: center;
+  background-color: #333;
+  border-radius: 20px;
+  padding: 5px 10px;
+  width: 200px;
+}
+
+.search-bar input { /*Text inside*/
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+  width: 100%;
+  padding: 5px;
+}
+
+.search-bar i { /*Magnifying glass search icon*/
+  color: #ccc;
+  margin-left: 5px;
+}
+
+.icon-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon i { /*having the class icon + <i /i>*/
+  font-size: 22px;
+  color: white;
+}
+
+.cart-icon {
+  position: relative; /*Works together with absolute, it makes the
+                        cart the parent where the child(absolute) can
+                        design a dot on it*/
+}
+
+.cart-dot {
+  position: absolute; /*The child*/
+  top: 0;
+  right: -5px;
+  background-color: #9ACD32;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+}
+.shop-name:hover,.icon i:hover,.cart-icon i:hover{
+  color: #ccc;
+}
+footer{
+    margin-top: 3rem;
+    padding: 3rem;
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(0, 0, 0);
+}
+.footer-desc{
+  width: 60%;
+  padding-right: 2rem;
+}
+.footer-desc h3, footer h4{
+  font-family: Helvetica, serif;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+footer ul a{
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+footer ul a:hover{
+  color: #ccc;
+  text-decoration: underline;
+}
+footer p{
+  padding-right: 7rem; 
+  color: #ffffff; 
+  font-family: serif; 
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+nav>ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 17%;
+    background: linear-gradient(to bottom,black,rgb(66, 65, 65));
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    padding-top: 5rem;
+}
+nav>ul>li{
+  margin-bottom: 0.6rem;
+}
+nav>ul>ul>li>a {
+    display: block;
+    color: #ffffff;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-family: serif, Helvetica, sans-serif;
+    font-size:1.3rem ;
+    font-weight: bold;
+    padding-left: 2rem;
+}
+nav>ul>li>a {
+    display: block;
+    color: #ffffff;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-family: serif, Helvetica, sans-serif;
+    font-size:1.6rem ;
+    font-weight: bolder;
+    padding-left: 2rem;
+}
+
+li a.active {
+    color: white;
+    border-top: 2px solid #565656 ;
+    border-bottom:2px solid #565656;
+    background: #262525;
+}
+
+li a:hover:not(.active) {
+    background-color: #656565;
+    color: white;
+}
+.no-hover a:hover:not(.active){
+  background-color: transparent;
+}
