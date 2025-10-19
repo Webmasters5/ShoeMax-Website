@@ -16,9 +16,9 @@
             <li><a href="{% url 'homepage:home' %}" class="active">  Home</a></li>
             <li class="no-hover" style=" margin-bottom:0rem"><a>Categories</a></li>
             <ul style="color: rgb(255, 255, 255);">
-                <li><a href="">Men</a></li>
-                <li><a href="">Women</a></li>
-                <li style="margin-bottom: 0.6rem;"><a href="">Kids</a></li>
+                <li><a href="{% url 'homepage:prod_by_gender' 'M' %}">Men</a></li>
+                <li><a href="{% url 'homepage:prod_by_gender' 'W' %}">Women</a></li>
+                <li style="margin-bottom: 0.6rem;"><a href="{% url 'homepage:prod_by_gender' 'K' %}">Kids</a></li>
             </ul>
             <li><a href="">My cart</a></li>
             <li><a href="">Wishlist</a></li>
