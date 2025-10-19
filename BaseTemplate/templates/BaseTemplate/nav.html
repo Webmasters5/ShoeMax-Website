@@ -13,7 +13,7 @@
     <body>
           <nav>
             <ul>
-            <li><a href="" class="active">  Home</a></li>
+            <li><a href="{% url 'homepage:home' %}" class="active">  Home</a></li>
             <li class="no-hover" style=" margin-bottom:0rem"><a>Categories</a></li>
             <ul style="color: rgb(255, 255, 255);">
                 <li><a href="">Men</a></li>
@@ -31,7 +31,7 @@
         <div style="margin-left:17%;">
             <header class="shop-header"> <!--The class designs the nav bar-->
 
-                <a class="shop-name" style="font-family: Helvetica, sans-serif, serif;" href="">SHOEMAX</a>
+                <a class="shop-name" style="font-family: Helvetica, sans-serif, serif;" href="{% url 'homepage:home' %}">SHOEMAX</a>
 
                 <div class="search-bar">
                     <form action="{% url 'products:search' %}" method="get">
