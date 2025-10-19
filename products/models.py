@@ -30,9 +30,17 @@ class Shoe(models.Model):
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     shoe_id = models.AutoField(primary_key=True)
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE, related_name='shoes')
-    image_url = models.ImageField(upload_to='shoes/')
+
     def __str__(self):
         return self.name
+
+class ShoeImage(models.Model):
+    shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='shoe_images/')
+    alt_text = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f'Image for {self.shoe.name}'
 
 class ShoeVariant(models.Model):
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name='variants')
