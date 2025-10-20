@@ -8,24 +8,48 @@
         <!--import icons-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <title>{% block title %}My amazing site{% endblock  %}</title>
+        <style>
+            .logout{
+                display: block;
+                color: #ffffff;
+                padding: 8px 16px;
+                text-decoration: none;
+                font-family: serif, Helvetica, sans-serif;
+                font-size:1.3rem ;
+                font-weight: bolder;
+                margin-top: 1rem;
+                margin-left: 1.7rem;
+                padding: 3px 5px;
+                background: none;
+            }
+        </style>
         {% block extra_head %}{% endblock %}
     </head>
     <body>
           <nav>
             <ul>
-            <li><a href="{% url 'homepage:home' %}" class="active">  Home</a></li>
+            <li><a href="{% url 'homepage:home' %}" {% if active_class == 'home' %}class="active"{% endif %}>  Home</a></li>
             <li class="no-hover" style=" margin-bottom:0rem"><a>Categories</a></li>
             <ul style="color: rgb(255, 255, 255);">
-                <li><a href="{% url 'homepage:prod_by_gender' 'M' %}">Men</a></li>
-                <li><a href="{% url 'homepage:prod_by_gender' 'W' %}">Women</a></li>
-                <li style="margin-bottom: 0.6rem;"><a href="{% url 'homepage:prod_by_gender' 'K' %}">Kids</a></li>
+                <li><a href="{% url 'homepage:prod_by_gender' 'M' %}" {% if active_class == 'M' %}class="active"{% endif %}>Men</a></li>
+                <li><a href="{% url 'homepage:prod_by_gender' 'W' %}" {% if active_class == 'W' %}class="active"{% endif %}>Women</a></li>
+                <li style="margin-bottom: 0.6rem;"><a href="{% url 'homepage:prod_by_gender' 'K' %}" {% if active_class == 'K' %}class="active"{% endif %}>Kids</a></li>
             </ul>
-            <li><a href="">My cart</a></li>
-            <li><a href="">Wishlist</a></li>
-            <li><a href="">My account</a></li>
-            <li><a href="">Settings</a></li>
-            <li><a href="{% url 'core:contact' %}">Contact</a></li>
-            <li><a href="{% url 'core:about' %}">About us</a></li>
+            <li><a href="" {% if active_class == '' %}class="active"{% endif %}>My cart</a></li>
+            <li><a href="" {% if active_class == '' %}class="active"{% endif %}>Wishlist</a></li>
+            <li><a href="" {% if active_class == '' %}class="active"{% endif %}>My account</a></li>
+            <li><a href="" {% if active_class == '' %}class="active"{% endif %}>Settings</a></li>
+            <li><a {% if active_class == 'contactus' %}class="active"{% endif %} href="{% url 'core:contact' %}">Contact</a></li>
+            <li><a {% if active_class == 'aboutus' %}class="active"{% endif %} href="{% url 'core:about' %}">About us</a></li>
+            {% if user.is_authenticated %}
+            <li>
+            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout">Logout</button>
+            </form>
+            {% else %}
+            <li><a style="font-size: 1.3rem; margin-top:1.5rem;" {% if active_class == 'login' %}class="active"{% endif %} href="{% url 'login' %}">Log in</a></li>
+            {% endif %}
             </ul>
           </nav>
         <div style="margin-left:17%;">

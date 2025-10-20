@@ -3,7 +3,10 @@ from django.db.models import Q
 from products.models import Shoe
 from django.views.generic import ListView
 def home(request):
-    return render(request,'homepage/home.html')
+    context={
+        'active_class':'home'
+    }
+    return render(request,'homepage/home.html',context)
 
 
 class ProductsByGenderView(ListView):
@@ -18,6 +21,8 @@ class ProductsByGenderView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['gender'] = self.kwargs.get('gender')
+        context['active_class'] = self.kwargs.get('gender')
+
         return context
 
 def category(request,category):

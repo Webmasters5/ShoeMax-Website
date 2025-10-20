@@ -15,7 +15,7 @@
             <div style="padding: 1rem;">
                 <h2 class="name">{{ shoe.name }}</h2>
                 <h3 class="price">£ {{ shoe.price }}</h3>
-                <a href="{% url 'products:product_details' shoe.shoe_id %}" class="detailbtn">View Details</a>
+                <a class="detailbtn" href="{% url 'products:product_details' shoe.shoe_id %}" >View Details</a>
             </div>   
         </div>
       {% endfor %}
