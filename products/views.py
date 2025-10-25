@@ -12,12 +12,6 @@ def shoe_details(request, shoe_id):
     return render(request, 'details.html', context)
 
 def search(request):
-    """
-    Basic search page for Shoe models with filters:
-    - q: search text across name and description
-    - category: exact match on Shoe.category
-    - min_price, max_price: numeric filters on Shoe.price
-    """
     q = request.GET.get('q', '').strip()
     category = request.GET.get('category', '').strip()
     min_price = request.GET.get('min_price', '').strip()
@@ -33,7 +27,6 @@ def search(request):
     if category:
         shoes = shoes.filter(category__iexact=category)
 
-    # Defensive parsing of price inputs
     try:
         if min_price:
             shoes = shoes.filter(price__gte=float(min_price))
