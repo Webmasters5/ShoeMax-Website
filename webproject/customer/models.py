@@ -16,6 +16,12 @@ class Customer(models.Model):
     shipping_address = models.TextField(blank=True, default="")
     billing_address = models.TextField(blank=True, default="")
     credit_card = models.CharField(max_length=16, blank=True, default="")
+    theme_preference = models.CharField(
+        max_length=10,
+        choices=[("light", "Light"), ("dark", "Dark")],
+        default="light",
+    )
+
 
     def __str__(self):
         return self.user.username

@@ -4,33 +4,47 @@
 <h1>Settings</h1>
 
 <div class="profile-section">
-    <h2>Account Settings</h2>
-    <form>
-        <label>Preferred Language:
-            <select>
-                <option selected>English</option>
-                <option>French</option>
-                <option>Spanish</option>
-            </select>
-        </label><br><br>
-
-        <label>Currency:
-            <select>
-                <option selected>MUR</option>
-                <option>USD</option>
-                <option>EUR</option>
-            </select>
-        </label>
+    <h2>Appearance</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="theme">Theme:</label>
+        <select name="theme" id="theme">
+            <option value="light" {% if customer.theme_preference == "light" %}selected{% endif %}>Light</option>
+            <option value="dark" {% if customer.theme_preference == "dark" %}selected{% endif %}>Dark</option>
+        </select>
+        <br><br>
+        <button type="submit" class="btn">Save</button>
     </form>
 </div>
 
 <div class="profile-section">
-    <h2>Privacy & Security</h2>
-    <form>
-        <label><input type="checkbox" checked> Enable two-factor authentication</label><br>
-        <label><input type="checkbox"> Log out from other devices</label><br>
-        <label><input type="checkbox" checked> Receive newsletters</label><br>
-        <button type="submit" class="btn">Save Settings</button>
+    <h2>Account Settings (Coming Soon)</h2>
+    <form> 
+        <label>Preferred Language: 
+            <select> 
+                <option selected>English</option> 
+                <option>French</option> 
+                <option>Spanish</option> 
+            </select> 
+        </label><br><br> 
+
+        <label>Currency: 
+            <select> 
+                <option selected>MUR</option> 
+                <option>USD</option> 
+                <option>EUR</option> 
+            </select> 
+        </label> 
+    </form>
+</div>
+
+<div class="profile-section">
+    <h2>Privacy & Security (Coming Soon)</h2>
+    <form> 
+        <label><input type="checkbox"> Enable two-factor authentication</label><br> 
+        <label><input type="checkbox"> Log out from other devices</label><br> 
+        <label><input type="checkbox"> Receive newsletters</label><br> 
+        <button type="submit" class="btn">Save Settings</button> 
     </form>
 </div>
 {% endblock %}
