@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer, Order, OrderItem
-
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from .forms import CustomerForm, UserForm
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -45,10 +47,27 @@ def order_detail(request, order_id):
     return render(request, "customer/order_detail.html", {"order": order})
 
 def password(request):
-    return render(request, "customer/password.html")
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Keep the user logged in after changing password
+            update_session_auth_hash(request, user)
+            return redirect("customer_profile")  # or another success page
+    else:
+        form = PasswordChangeForm(request.user)
+    
+    return render(request, "customer/password.html", {"form": form})
 
 def notifications(request):
     return render(request, "customer/notifications.html")
 
 def settings(request):
-    return render(request, "customer/settings.html")
+    customer = request.user.customer
+    if request.method == "POST":
+        theme = request.POST.get("theme")
+        if theme in ["light", "dark"]:
+            customer.theme_preference = theme
+            customer.save()
+        return redirect("customer_settings")
+    return render(request, "customer/settings.html", {"customer": customer})

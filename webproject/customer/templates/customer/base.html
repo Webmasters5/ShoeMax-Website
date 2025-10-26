@@ -7,7 +7,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-<body>
+<body class="{{ request.user.customer.theme_preference|default:'light' }}">
 
 <div class="container">
     <aside class="sidebar">
