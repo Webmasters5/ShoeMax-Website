@@ -228,3 +228,9 @@
     color: aquamarine;
     background-color: black;
 }
+
+.error p {
+  color: red;
+  font-size: 0.9em;
+  margin: 4px 0;
+}

@@ -1,42 +1,72 @@
 from django.shortcuts import render,redirect
-from django.contrib.auth import aauthenticate, login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import RegisterForm
+from .forms import signupform , loginform
 from django.http import HttpResponse
 
 
 
 # Create your views here.
+###       about page
 def about(request):
     return render(request,"core/about.html")
 
+
+###       contact page
 def contact(request):
     return render(request,"core/contact.html")
 
+
+###      login 
 def log_in(request):
 
     if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = aauthenticate(request,username=username,password=password)
+        form = loginform(request.POST)
+        
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            login(request,user)
-            return redirect('homepage/home.html')
+            if user is not None:
+                login(request,user)
+                messages.success(request,'You have successfully logged in.')
+                return redirect('home')
+            else:
+                messages.error(request,'Error.')
+                
+        
         else:
             messages.success(request,"There was an error logging in.") 
-            return redirect('core/login.html')
-    else:
-        return render(request,"core/login.html")
+            # return redirect('core/login.html')
 
+    form = loginform()
+    return render(request,"core/login.html", {"loginform" : form})
+    
+
+
+
+
+###           logout
+def logOut(request):
+    logout(request)
+    messages.success(request,"You have successfully logged out.")
+    return redirect('home')
+
+
+
+
+
+#######   sign up
 def signup(request):
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = signupform(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('core/login.html')  # or your dashboard
+            messages.success(request, 'Your account has successfully been created.')
+            return redirect('home')  # or your dashboard
     else:
-        form = RegisterForm()
+        form = signupform()
 
-    return render(request,"core/signup.html")
+    return render(request,"core/signup.html", {'form' : form})

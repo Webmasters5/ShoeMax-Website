@@ -37,21 +37,32 @@
                 <div class="login-text">Login</div>
                 <div class="information-input">
                     <form method="post">
+                        {%csrf_token%}
+
                         <div class="username-box">
                             <div class="username-label">Username</div>
                             <div class="username-input-box">
-                                <form>
-                                    <input type="text" name="username" class="username-input">
-                                </form>
+                                {{loginform.username}}
+                                    {% if loginform.username.errors %}
+                                        <div class="error">
+                                            {% for error in loginform.username.errors %}
+                                            <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                             </div>
                         </div>
                         <div class="password-box">
                             <div class="password-label">Password</div>
                             <div class="password-input-box">
-                                <form>
-                                    <input type="password" name="password" class="password-input">
-                                </form>
-                            </div>
+                                {{loginform.password}}
+                                    {% if loginform.password.errors %}
+                                        <div class="error">
+                                            {% for error in loginform.password.errors %}
+                                            <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                         </div>
 
                         <div class="forgot-password-box">
@@ -61,7 +72,7 @@
                         </div>
                         <form>
                         <div class="login-button-box">
-                            <button class="login-button" type="submit" method="POST">Login</button>
+                            <button class="login-button" type="submit">Login</button>
                         </div>
                         
                         <!-- <div class="choose-label" >Choose your login option</div>
@@ -72,7 +83,7 @@
                         </div> -->
                         <div class="register-box">
                             <div class="register-text">Don't have an account?</div>
-                            <button class="register-button" type="submit" name="register-button" method="POST">Register Now!</button>
+                            <button class="register-button" type="button" name="register-button">Register Now!</button>
                         </div>
                     </form>
                 </div>
