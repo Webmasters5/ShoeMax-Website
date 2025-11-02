@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from .models import Customer
 
-from .models import Order, OrderItem
+from .models import Order, OrderItem, Notification
 
 admin.site.register(Customer)
 
@@ -16,3 +16,4 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
 
 admin.site.register(Order, OrderAdmin)
+admin.site.register(Notification)
