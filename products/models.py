@@ -63,6 +63,7 @@ class Brand(models.Model):
     description = models.TextField()
     website = models.URLField()
     brand_id = models.AutoField(primary_key=True)
+    
     def __str__(self):
         return self.name
 
@@ -73,7 +74,8 @@ class Customer (models.Model):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)
     address = models.TextField()
-    
+    wishlist_items = models.ManyToManyField(Shoe, through='WishlistItem', related_name='wishlisted_by_customers')
+
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
@@ -131,3 +133,14 @@ class Review(models.Model):
     
     def __str__(self):
         return self.title
+
+class WishlistItem(models.Model):
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    shoe = models.ForeignKey('Shoe', on_delete=models.CASCADE, related_name='wishlisted_by')
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('customer', 'shoe')
+
+    def __str__(self):
+        return f'WishlistItem {self.shoe} for {self.customer}'
