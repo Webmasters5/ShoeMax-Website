@@ -10,12 +10,18 @@ from django.http import HttpResponse
 # Create your views here.
 ###       about page
 def about(request):
-    return render(request,"core/about.html")
+    context={
+        'active_class':'aboutus'
+    }
+    return render(request,"core/about.html",context)
 
 
 ###       contact page
 def contact(request):
-    return render(request,"core/contact.html")
+    context={
+        'active_class':'contactus'
+    }
+    return render(request,"core/contact.html",context)
 
 
 ###      login 

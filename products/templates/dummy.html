@@ -1,0 +1,4 @@
+<!--to dlt, CLICK TO GO TO REVIEWS-->
+{% for shoe in shoes %}
+<a href="{% url 'products:reviews' shoe.shoe_id%}" class="btn btn-outline-success">{{shoe.name}}</a>
+{% endfor %}

@@ -1,0 +1,78 @@
+body{
+    background: 
+        linear-gradient(rgb(0, 0, 0), rgba(0, 0, 0, 0.421)),
+        url('../images/image4.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: 20% left;
+    background-size: cover;
+}
+h1{
+    color: white;
+    margin-left: 6rem;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: underline;
+    margin-bottom: 1rem;
+}
+.button{
+    margin-left: 4rem;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: #ffffff;
+    padding: 6px 50px;
+    border-radius: 8px;
+    background-color: rgb(109, 109, 109);
+    display: inline-block;
+}
+.button:hover{
+    background-color: rgb(61, 61, 61);
+}
+.avg{
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 1.3rem;
+    margin-left: 4rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+.review{
+    border: 2px solid #ffffff;
+    border-radius: 25px;
+    background-color: #77777792;
+    margin-left: 4%;
+    margin-right: 12%;
+}
+.top{
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; 
+}
+.review h2{
+    font-family: Arial, Helvetica, sans-serif;
+    color: #ffffff;
+}
+.review h3{
+    margin: 0;
+    margin-left: 2rem;
+    color: #ded4d4;
+}
+.review p{
+    margin: 0;
+    margin-left: 1.7rem;
+    color: #ffffff;
+    font-size: 1.3rem;
+}
+.cta-button{
+    background-color: #ffffff;
+    color: black;
+    padding: 7px 12px;
+    font-family:Arial, Helvetica, sans-serif;
+    font-weight:bolder;
+    border-radius: 6px;
+    box-shadow: 2px 2px 10px #000000;
+}
+.cta-button:hover{
+    background-color: #7c7c7c;
+}
