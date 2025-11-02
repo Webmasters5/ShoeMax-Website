@@ -32,30 +32,32 @@ def log_in(request):
             if user is not None:
                 login(request,user)
                 messages.success(request,'You have successfully logged in.')
-                return redirect('home')
+                print('asfvs')
+                return redirect('signup')
             else:
-                messages.error(request,'Error.')
+                messages.error(request,'Error. User does not exist.')
+                print('pna')
                 
         
         else:
             messages.success(request,"There was an error logging in.") 
             # return redirect('core/login.html')
+    else:
+        form = loginform()
 
-    form = loginform()
+    # print("Form valid:", form.is_valid())
+    # print("Form errors:", form.errors)
+    # print("User:", user)
+    # print("Authenticated:", request.user.is_authenticated)
+
     return render(request,"core/login.html", {"loginform" : form})
     
-
-
-
 
 ###           logout
 def logOut(request):
     logout(request)
     messages.success(request,"You have successfully logged out.")
     return redirect('home')
-
-
-
 
 
 #######   sign up
