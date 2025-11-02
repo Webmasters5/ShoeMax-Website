@@ -1,0 +1,45 @@
+{% extends "templates/nav.html" %}
+{% load static %}
+
+{% block title %}My Wishlist - ShoeMax{% endblock %}
+
+{% block content %}
+<h1>My Wishlist</h1>
+
+{% if wishlist_items %}
+<ul>
+  {% for item in wishlist_items %}
+    <li style="margin-bottom:1rem;">
+      {% with item.shoe.images.all|first as main_image %}
+        {% if main_image %}
+          <img src="{{ main_image.image.url }}" alt="{{ item.shoe.name }}" width="120" style="margin-right:12px;">
+        {% endif %}
+      {% endwith %}
+
+      <strong>
+        <a href="{% url 'products:shoe_details' item.shoe.shoe_id %}">{{ item.shoe.name }}</a>
+      </strong>
+      — ${{ item.shoe.price }}
+      <div>
+        Added: {{ item.date_added }}
+      </div>
+    </li>
+  {% endfor %}
+</ul>
+
+<nav>
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+  {% endif %}
+
+  <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+  {% endif %}
+</nav>
+
+{% else %}
+<p>Your wishlist is empty.</p>
+{% endif %}
+{% endblock %}
