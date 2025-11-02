@@ -1,9 +1,31 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from . import models
+from django.views import generic
 #from django.http import HttpResponse
 
 # Create your views here.
+
+class WishlistView(generic.ListView):
+    model = models.WishlistItem
+    template_name = 'wishlist.html'
+    context_object_name = 'wishlist_items'
+    paginate_by = 5
+
+    def get_queryset(self):
+        qs = super().get_queryset().select_related('customer', 'shoe').prefetch_related('shoe__images')
+        customer_id = self.kwargs.get('customer_id') or self.request.GET.get('customer_id')
+        if customer_id:
+            return qs.filter(customer__pk=customer_id).order_by('-date_added')
+
+        return qs.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['shoes'] = [wi.shoe for wi in context.get('wishlist_items', [])]
+        return context
+
 def shoe_details(request, shoe_id):
     shoe = models.Shoe.objects.prefetch_related('images').get(pk=shoe_id)
        
@@ -59,4 +81,3 @@ def search(request):
     }
 
     return render(request, 'search.html', context)
-

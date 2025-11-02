@@ -8,6 +8,7 @@ app_name = 'products'
 urlpatterns = [
     path('search/', views.search, name='search'),
     path('<int:shoe_id>/', views.shoe_details, name='shoe_details'),
+    path('wishlist/', views.WishlistView.as_view(), name='wishlist'),
 ]
 
 if settings.DEBUG:
