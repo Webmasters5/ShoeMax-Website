@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.conf import settings
 
 # Create your models here.
 
@@ -75,7 +76,14 @@ class Customer (models.Model):
     phone_number = models.CharField(max_length=15)
     address = models.TextField()
     wishlist_items = models.ManyToManyField(Shoe, through='WishlistItem', related_name='wishlisted_by_customers')
-
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='customer_profile',
+        null=True,
+        blank=True
+    )
+    
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
