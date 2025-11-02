@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+@login_required
 def profile(request):
     customer = get_object_or_404(Customer, user=request.user)
     return render(request, "customer/profile.html", {"customer": customer})

@@ -10,5 +10,5 @@ urlpatterns = [
     path("password/", views.password, name="customer_password"),
     path("notifications/", views.notifications, name="customer_notifications"),
     path("settings/", views.settings, name="customer_settings"),
-    path("logout/", auth_views.LogoutView.as_view(next_page="/"), name="logout"),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
 ]
