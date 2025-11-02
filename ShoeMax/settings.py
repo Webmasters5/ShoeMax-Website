@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'core',
     'products.apps.ProductsConfig',
     'homepage.apps.HomepageConfig',
+    'models_app.apps.ModelsAppConfig',
 ]
 
 MIDDLEWARE = [
