@@ -67,3 +67,15 @@ from django.dispatch import receiver
 def create_customer_profile(sender, instance, created, **kwargs):
     if created and not hasattr(instance, 'customer'):
         Customer.objects.create(user=instance)
+
+class Notification(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="notifications")
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    related_order = models.ForeignKey(
+        Order, on_delete=models.SET_NULL, null=True, blank=True, related_name="notifications"
+    )
+
+    def __str__(self):
+        return f"Notification for {self.customer.user.username}: {self.message[:50]}"
