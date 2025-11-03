@@ -26,6 +26,7 @@ urlpatterns = [
     path('core/',include('core.urls')),
     path('accounts/',include('django.contrib.auth.urls')), #dummy acc for testing
     path('customer/', include('customer.urls')),
+    path('adminpanel/', include('adminpanel.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
