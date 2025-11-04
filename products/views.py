@@ -1,6 +1,7 @@
-from django.shortcuts import render
-from django.db.models import Q
-from .models import Shoe
+from django.shortcuts import render,get_object_or_404,redirect
+from django.db.models import Q,Avg
+from .models import Shoe,ShoeVariant,Review,OrderItem
+from .forms import Reviewform
 #from django.http import HttpResponse
 
 # Create your views here.
@@ -50,11 +51,17 @@ def product_details(request, product_id):
             self.variants = DummyVariantsManager()
     
     product = DummyProduct()
+
+    shoe=get_object_or_404(Shoe,shoe_id=product_id) #added this
+    reviews=Review.objects.filter(order_item__variant__shoe=shoe)
+    avg_rating = reviews.aggregate(average=Avg('rating'))['average']
     
     context = {
         'product': product,
-        'product_id': product_id
+        'product_id': product_id,
+        'avg_rating': avg_rating
     }
+
     
     return render(request, 'details.html', context)
 
@@ -114,3 +121,39 @@ def search(request):
     }
 
     return render(request, 'search.html', context)
+
+def reviews(request,product_id):
+    shoe=get_object_or_404(Shoe,shoe_id=product_id)
+    reviews=Review.objects.filter(order_item__variant__shoe=shoe)
+    avg_rating = reviews.aggregate(average=Avg('rating'))['average']
+    context={
+        'shoe':shoe,
+        'reviews':reviews,
+        'avg_rating':avg_rating,
+    }
+    return render(request,'reviews.html',context)
+#@login_required
+def review_product(request,product_id):
+    shoe=get_object_or_404(Shoe,shoe_id=product_id)
+    if request.method =='POST':
+        form=Reviewform(request.POST)
+        if form.is_valid():
+            Review=form.save(commit=False)
+            order_item=OrderItem.objects.filter(variant__shoe=shoe, order__customer__user=request.user)
+            if order_item:
+                Review.order_item = order_item
+                Review.save()
+                return redirect('products:reviews',product_id=shoe.shoe_id)
+            else:
+                form.add_error(None, 'You must purchase the product to review it.')
+    else:
+        form=Reviewform()
+    context={
+        'shoe':shoe,
+        'form':form,
+    }
+    return render(request,'reviewform.html',context)
+
+def dummy(request):
+    shoe=Shoe.objects.all()
+    return render(request,'dummy.html',{'shoes':shoe})

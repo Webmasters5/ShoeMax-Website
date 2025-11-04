@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'core',
     'products.apps.ProductsConfig',
     'homepage.apps.HomepageConfig',
+    'BaseTemplate.apps.BasetemplateConfig',
+    'models_app.apps.ModelsAppConfig',
+    'customer',
+    'adminpanel',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +62,8 @@ ROOT_URLCONF = 'ShoeMax.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        #'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')], #look for templates in project/ level as well
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,7 +76,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ShoeMax.wsgi.application'
-
+LOGIN_REDIRECT_URL='/' #when log in successful, send to homepage
+LOGOUT_REDIRECT_URL = '/'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -119,9 +125,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+MEDIA_URL = '/media/' #show pic on /media/ url
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #store uploaded pics in project/media
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

@@ -1,0 +1,32 @@
+{% extends "BaseTemplate/nav.html" %}
+{% load static %}
+
+{% block title %}{{ shoe.name }} Review page - Shoemax{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/reviewform.css' %}">
+{% endblock %}
+{% block content %}
+<body>
+<h1>Write a Review for {{ shoe.name }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="container">
+    {% if form.errors %}
+    {{form.errors}}
+    {% endif %}
+    {{form.title.errors}}
+    <h2>{{form.title.label}}:</h2>
+    {{form.title}}
+    {{form.comment.errors}}
+    <h2>{{form.comment.label}}:</h2>
+    {{form.comment}}
+    {{form.rating.errors}}
+    <h2>{{form.rating.label}}</h2>
+    {{form.rating}}
+    <button type="submit" class="cta-button" style="font-size: 1.1rem; margin-top: 2rem;">Submit Review</button>
+    </div>
+</form>
+<a class="cta-button" style="font-size: 1rem; margin-left: 3rem; margin-top: 3rem; display: inline-block;" href="{% url 'products:reviews' shoe.shoe_id %}">Back</a>
+</body>
+
+{% endblock %}
