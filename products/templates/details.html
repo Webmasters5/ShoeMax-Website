@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "BaseTemplate/nav.html" %}
 {% load static %}
 
 {% block title %}{{ product.name }} - ShoeMax{% endblock %}
@@ -82,7 +82,13 @@
         <p>
         {{ product.description }}
         </p>
+        <p>{% if avg_rating %} <!--Added this-->>
+        Rating: {{avg_rating}} / 5 ★
+        {% endif %}</p>
       </div>
+    </div>
+    <div> <!--And this-->>
+      <a href="{% url 'products:reviews' product.shoe_id%}" class="btn btn-outline-success">View reviews</a>
     </div>
   </main>
 </div>

@@ -13,14 +13,17 @@ class Shoe(models.Model):
     
     CATEGORY_CHOICES = [
         ('running', 'Running'),
-        ('casual', 'Casual'),
-        ('formal', 'Formal'),
         ('sports', 'Sports'),
+        ('casual', 'Casual'),
         ('sneakers', 'Sneakers'),
+        ('athletic', 'Athletic'),
+        ('formal', 'Formal'),
+        ('loafers', 'Loafers'),
+        ('crocs','Crocs'),
+        ('heels','Heels'),
+        ('dress pumps','Dress pumps'),
         ('boots', 'Boots'),
         ('sandals', 'Sandals'),
-        ('loafers', 'Loafers'),
-        ('athletic', 'Athletic'),
     ]
     
     name = models.CharField(max_length=100)
