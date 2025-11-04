@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer, Order, OrderItem
+from .models import Customer, Order, OrderItem, Notification
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from .forms import CustomerForm, UserForm
@@ -59,8 +59,19 @@ def password(request):
     
     return render(request, "customer/password.html", {"form": form})
 
+@login_required
 def notifications(request):
-    return render(request, "customer/notifications.html")
+    customer = request.user.customer
+    notifications = customer.notifications.all().order_by('-created_at')
+    return render(request, "customer/notifications.html", {"notifications": notifications})
+
+@login_required
+def mark_notification_read(request, notification_id):
+    notification = get_object_or_404(Notification, id=notification_id, customer=request.user.customer)
+    notification.is_read = True
+    notification.save()
+    return redirect("customer_notifications")
+
 
 def settings(request):
     customer = request.user.customer
@@ -71,3 +82,16 @@ def settings(request):
             customer.save()
         return redirect("customer_settings")
     return render(request, "customer/settings.html", {"customer": customer})
+
+@login_required
+def mark_notification_read(request, notification_id):
+    notification = Notification.objects.get(id=notification_id, customer=request.user.customer)
+    notification.is_read = True
+    notification.save()
+    return redirect('customer_notifications')
+
+@login_required
+def mark_all_notifications_read(request):
+    notifications = request.user.customer.notifications.all()
+    notifications.update(is_read=True)
+    return redirect('customer_notifications')

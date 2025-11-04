@@ -1,0 +1,30 @@
+{% extends 'adminpanel/base.html' %}
+
+{% block content %}
+<h2>Welcome to the Admin Dashboard</h2>
+
+<div class="stats-container">
+    <div class="stat-card total-customers">
+        <h3>Total Customers</h3>
+        <p>{{ total_customers }}</p>
+    </div>
+    <div class="stat-card total-orders">
+        <h3>Total Orders</h3>
+        <p>{{ total_orders }}</p>
+    </div>
+    <div class="stat-card delivered-orders">
+        <h3>Delivered Orders</h3>
+        <p>{{ delivered_orders }}</p>
+    </div>
+    <div class="stat-card pending-orders">
+        <h3>Pending Orders</h3>
+        <p>{{ pending_orders }}</p>
+    </div>
+</div>
+
+<div class="admin-actions">
+    <a href="{% url 'adminpanel:customers' %}" class="action-btn">Manage Customers</a>
+    <a href="{% url 'adminpanel:orders' %}" class="action-btn">Manage Orders</a>
+    <a href="{% url 'adminpanel:notifications' %}" class="action-btn">Notifications</a>
+</div>
+{% endblock %}

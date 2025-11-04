@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'BaseTemplate.apps.BasetemplateConfig',
     'models_app.apps.ModelsAppConfig',
     'customer',
+    'adminpanel',
 ]
 
 MIDDLEWARE = [
