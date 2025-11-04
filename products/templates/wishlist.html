@@ -1,4 +1,4 @@
-{% extends "templates/nav.html" %}
+{% extends "base/nav.html" %}
 {% load static %}
 
 {% block title %}My Wishlist - ShoeMax{% endblock %}
@@ -17,7 +17,7 @@
       {% endwith %}
 
       <strong>
-        <a href="{% url 'products:shoe_details' item.shoe.shoe_id %}">{{ item.shoe.name }}</a>
+        <a href="{{ item.shoe.get_absolute_url }}">{{ item.shoe.name }}</a>
       </strong>
       — ${{ item.shoe.price }}
       <div>

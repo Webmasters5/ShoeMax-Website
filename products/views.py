@@ -6,6 +6,7 @@ from django.views import generic
 
 # Create your views here.
 
+#@loginrequired
 class WishlistView(generic.ListView):
     model = models.WishlistItem
     template_name = 'wishlist.html'
