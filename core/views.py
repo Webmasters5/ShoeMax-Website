@@ -28,7 +28,7 @@ def contact(request):
 def log_in(request):
 
     if request.method == "POST":
-        form = loginform(request.POST)
+        form = loginform(request,data=request.POST)
         
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -38,23 +38,16 @@ def log_in(request):
             if user is not None:
                 login(request,user)
                 messages.success(request,'You have successfully logged in.')
-                print('asfvs')
-                return redirect('signup')
+                return redirect('homepage:home')
             else:
                 messages.error(request,'Error. User does not exist.')
-                print('pna')
                 
         
         else:
             messages.success(request,"There was an error logging in.") 
-            # return redirect('core/login.html')
+            # return redirect('core:login')
     else:
         form = loginform()
-
-    # print("Form valid:", form.is_valid())
-    # print("Form errors:", form.errors)
-    # print("User:", user)
-    # print("Authenticated:", request.user.is_authenticated)
 
     return render(request,"core/login.html", {"loginform" : form})
     
@@ -73,7 +66,7 @@ def signup(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your account has successfully been created.')
-            return redirect('home')  # or your dashboard
+            return redirect('core:login')  # or your dashboard
     else:
         form = signupform()
 

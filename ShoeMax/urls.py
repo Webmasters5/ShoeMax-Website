@@ -21,10 +21,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('homepage.urls')),
-    #path('home/',include('homepage.urls')),
+    path('home/',include('homepage.urls')),
     path('products/', include('products.urls')),
     path('core/',include('core.urls')),
-    path('accounts/',include('django.contrib.auth.urls')), #dummy acc for testing
+    # path('accounts/',include('django.contrib.auth.urls')), #dummy acc for testing
     path('customer/', include('customer.urls')),
 ]
 if settings.DEBUG:

@@ -64,13 +64,20 @@
                                         </div>
                                     {% endif %}
                         </div>
+                        {% if loginform.non_field_errors %}
+                            <div class="error">
+                                {% for error in loginform.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
 
                         <div class="forgot-password-box">
                             <div class="forgot-password">
                                 <button type="button" class="forgot-password-button">Forgot Password</button>
                             </div>
                         </div>
-                        <form>
                         <div class="login-button-box">
                             <button class="login-button" type="submit">Login</button>
                         </div>

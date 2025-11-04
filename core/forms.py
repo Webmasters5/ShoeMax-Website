@@ -22,8 +22,8 @@ class loginform(AuthenticationForm):
             'placeholder' : 'Password'
         })
 
-    class Meta:
-        fields = ['username', 'password']
+    # class Meta:
+        # fields = ['username', 'password']
 
 class signupform(UserCreationForm):
 
