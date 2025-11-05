@@ -1,10 +1,26 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from . import models
 from django.views import generic
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 #from django.http import HttpResponse
 
 # Create your views here.
+
+def add_wishlist_item(request, shoe_id):
+    if request.method != "POST":
+        return redirect('products:shoe_details', shoe_id=shoe_id)
+
+    shoe = get_object_or_404(models.Shoe, pk=shoe_id)
+    customer = request.user.customer_profile
+    
+    if not customer:
+        return redirect('products:shoe_details', shoe_id=shoe_id)
+
+    models.WishlistItem.objects.get_or_create(customer=customer, shoe=shoe)
+    
+    return redirect(shoe.get_absolute_url())
 
 #@loginrequired
 class WishlistView(generic.ListView):

@@ -11,5 +11,6 @@ urlpatterns = [
     path('wishlist/', views.WishlistView.as_view(), name='wishlist'),
 ]
 
+#Images don't load without this configuration in debug mode:
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
