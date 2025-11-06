@@ -10,5 +10,6 @@ urlpatterns=[
     path('contact/',views.contact,name='contact'),
     path('login/',views.log_in,name='login'),
     path('login/',views.logOut,name='logout'),
-    path('signup/',views.signup,name='signup')
+    path('signup/',views.signup,name='signup'),
+    path('forgot/',views.forgot_password_view,name='forgot')
 ]

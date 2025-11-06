@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from products.models import Shoe
 from django.views.generic import ListView
+
 def home(request):
     context={
         'active_class':'home'

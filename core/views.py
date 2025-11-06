@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import signupform , loginform
+from .forms import signupform , loginform,forgotPassword
 from django.http import HttpResponse
 
 
@@ -71,3 +71,25 @@ def signup(request):
         form = signupform()
 
     return render(request,"core/signup.html", {'form' : form})
+
+
+
+############# FORGOT PASSWORD ##########################
+
+def forgot_password_view(request):
+    if request.method == 'POST':
+        form = forgotPassword(request.POST)
+        if form.is_valid():
+            form.save(
+                request=request,
+                use_https=request.is_secure(),
+                email_template_name='core/password_reset_email.html',
+                subject_template_name='core/password_reset_subject.txt',
+                from_email=None,  # Or set a custom sender
+            )
+            messages.success(request, "Password reset link sent to your email.")
+            return redirect('core:login')  # Create this view or template
+    else:
+        form = forgotPassword()
+
+    return render(request, 'core/forgotPassword.html', {'form': form})
