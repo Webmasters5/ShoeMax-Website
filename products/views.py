@@ -1,3 +1,4 @@
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from . import models
@@ -21,6 +22,18 @@ def add_wishlist_item(request, shoe_id):
     models.WishlistItem.objects.get_or_create(customer=customer, shoe=shoe)
     
     return redirect(shoe.get_absolute_url())
+
+#@login_required
+def delete_wishlist_item(request, item_id):
+    item = get_object_or_404(models.WishlistItem, pk=item_id)
+
+    if not ((hasattr(item.customer, 'user') and item.customer.user == request.user)):
+        return HttpResponseForbidden("Not allowed")
+
+    if request.method == "POST":
+        item.delete()
+
+    return redirect(reverse('products:wishlist'))
 
 #@loginrequired
 class WishlistView(generic.ListView):

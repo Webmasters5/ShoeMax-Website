@@ -9,6 +9,7 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('<int:shoe_id>/', views.shoe_details, name='shoe_details'),
     path('wishlist/', views.WishlistView.as_view(), name='wishlist'),
+    path('wishlist/delete/<int:item_id>/', views.delete_wishlist_item, name='wishlist_delete')
 ]
 
 #Images don't load without this configuration in debug mode:

@@ -24,6 +24,14 @@
         Added: {{ item.date_added }}
       </div>
     </li>
+
+    <form method="post" action="{% url 'products:wishlist_delete' item.id %}" style="margin:0;">
+        {% csrf_token %}
+        <button type="submit" title="Remove from wishlist" style="background:none;border:none;">
+          <i class="fas fa-trash"></i>
+        </button>
+      </form>
+    </li>
   {% endfor %}
 </ul>
 
