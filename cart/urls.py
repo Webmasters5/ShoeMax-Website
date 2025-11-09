@@ -1,14 +1,11 @@
 from django.urls import path
 from . import views
 
+# cart/urls.py
+app_name = 'cart'
+
 urlpatterns=[
-    #cart
-    path('',views.cart_summary,name="cart_summary"),
-
-    #checkout
-    path('checkout/',views.checkout,name="checkout"),
-    
-    #search
-    path("search/", views.search_view, name="search"),
-
+    path('', views.cart_summary, name="cart_summary"),
+    path('checkout/', views.checkout, name="checkout"),
+    path('search/', views.search_view, name="search"),
 ]

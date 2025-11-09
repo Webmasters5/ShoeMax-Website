@@ -4,11 +4,11 @@ from django.shortcuts import render
 
 #cart
 def cart_summary(request):
-  return render(request,"cart_summary.html",{})
+  return render(request,"cart/cart_summary.html",{})
 
 #checkout
 def checkout(request):
-  return render(request,"checkout.html",{})
+  return render(request,"cart/checkout.html",{})
 
 #search
 def search_view(request):

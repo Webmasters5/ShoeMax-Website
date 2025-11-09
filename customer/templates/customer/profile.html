@@ -38,5 +38,5 @@
     <p><strong>Card Number:</strong> {{ customer.credit_card|slice:":4" }}-xxxx-xxxx-{{ customer.credit_card|slice:"-4:" }}</p>
 </div>
 
-<a href="{% url 'customer_info' %}" class="btn">Edit Profile</a>
+<a href="{% url 'customer:customer_info' %}" class="btn">Edit Profile</a>
 {% endblock %}
