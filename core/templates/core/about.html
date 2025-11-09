@@ -2,37 +2,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <!-- <title>Document</title> -->
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+                            <!-- header imports -->
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <!--import icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!--import font-->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 </head>
 <title>About Us</title>
 <body>
-    <div class="aboutus">
-        <h1>About Us!</h1>
-        <p>“Good shoes take you good places" – Seo Min Hyun </p>
+    <header class="shop-header"> <!--The class designs the nav bar-->
+        <div class="menu-icon">
+            <i class="fas fa-bars"></i> <!--The specific icon for menu-->
+        </div>
+
+        <div class="shop-name">SHOP NAME</div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+            <i class="fas fa-search"></i> <!--search icon-->
+        </div>
+
+        <!-- removed div class icon-group  -->
+
+    </header>
+    <div class="container">
+        <div class="about-box">
+            <div class="about-box-text">
+                <h1 style="font-size: 1000;">About Us!</h1>
+                <p>“Good shoes take you good places" – Seo Min Hyun </p>
+            </div>
+        </div>
+        <div class="about-para-box">
+            <div class="about-para-box-text">
+                <h2 style="padding-top: 5%;">At Shoemax, we believe that great shoes take you great places—whether you're chasing dreams, conquering city streets, or simply walking into your next adventure.</h2>
+                <h2>Founded with a passion for style, comfort, and innovation, Shoemax is your go-to destination for premium footwear that blends fashion with function.</h2>
+                <h2>From timeless classics to bold new trends, we curate a collection that speaks to every step of your journey.</h2>
+            </div>
+        </div>
+        <div class="mission-box">
+            <div class="mission">
+                <h2>Our Mission</h2>
+                <p>To empower every customer with shoes that elevate their lifestyle—through quality craftsmanship, seamless shopping, and standout service.</p>
+            </div>
+        </div>
+        <div class="different-box">
+            <div class="different">
+                <h2>What Makes Us Different</h2>
+                <p>We handpick every pair for style, durability, and comfort.
+                Our intuitive platform makes browsing, buying, and tracking effortless.
+                From easy returns to responsive support, we’re here for you every step of the way.</p>
+            </div >
+        </div>
+        <div class="vision-box">
+            <div class="vision">
+                <h2>Our Vision</h2>
+                <p>To become a global leader in footwear e-commerce by combining cutting-edge tech with timeless design—making Shoemax not just a store, but a movement.
+                Whether you're looking for sleek sneakers, rugged boots, or elegant heels, Shoemax is where your perfect pair begins.</p>
+            </div>
+        </div>
     </div>
-    <div class="abouttext">
-        <h2 style="padding-top: 5%;">At Shoemax, we believe that great shoes take you great places—whether you're chasing dreams, conquering city streets, or simply walking into your next adventure.</h2>
-        <h2>Founded with a passion for style, comfort, and innovation, Shoemax is your go-to destination for premium footwear that blends fashion with function.</h2>
-        <h2>From timeless classics to bold new trends, we curate a collection that speaks to every step of your journey.</h2>
-        
-    </div>
-    <div class="mission">
-        <h2>Our Mission</h2>
-        <p>To empower every customer with shoes that elevate their lifestyle—through quality craftsmanship, seamless shopping, and standout service.</p>
-    </div>
-    <div class="different">
-        <h2>What Makes Us Different</h2>
-        <p>We handpick every pair for style, durability, and comfort.
-Our intuitive platform makes browsing, buying, and tracking effortless.
-From easy returns to responsive support, we’re here for you every step of the way.</p>
-    </div >
+
+
+<!--
+    
+    
+   
     <div class="vision">
         <h2>Our Vision</h2>
         <p>To become a global leader in footwear e-commerce by combining cutting-edge tech with timeless design—making Shoemax not just a store, but a movement.
 Whether you're looking for sleek sneakers, rugged boots, or elegant heels, Shoemax is where your perfect pair begins.</p>
-    </div>
+    </div> -->
 </body>
 </html>

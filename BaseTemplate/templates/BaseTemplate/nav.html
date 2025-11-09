@@ -40,6 +40,9 @@
             <li><a href="" {% if active_class == '' %}class="active"{% endif %}>Wishlist</a></li>
             <li><a href="" {% if active_class == '' %}class="active"{% endif %}>My account</a></li>
             <li><a href="" {% if active_class == '' %}class="active"{% endif %}>Settings</a></li>
+            {% if user.is_staff %}
+                <li><a href="{% url 'adminpanel:dashboard' %}" {% if active_class == 'admin' %}class="active"{% endif %}>Admin Dashboard</a></li>
+            {% endif %}
             <li><a {% if active_class == 'contactus' %}class="active"{% endif %} href="{% url 'core:contact' %}">Contact</a></li>
             <li><a {% if active_class == 'aboutus' %}class="active"{% endif %} href="{% url 'core:about' %}">About us</a></li>
             {% if user.is_authenticated %}

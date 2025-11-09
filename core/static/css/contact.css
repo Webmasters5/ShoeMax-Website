@@ -29,7 +29,7 @@
     background-color: rgb(255, 255, 255);
     width:75%;
     height: 75%;
-    border-radius: 10%;
+    border-radius: 25px;
 
     background-image: url('../images/img4.jpg');
     background-size: cover;
@@ -53,7 +53,7 @@
     background-color: rgb(218, 250, 255);
     width:95%;
     height: 95%;
-    border-radius: 5%;
+    border-radius: 25px;
 }
 
 .twoform{
@@ -62,13 +62,13 @@
     align-items: flex-start;
     justify-content: start;
 
-    border-radius: 5%;
+    border-radius: 25px;
     background-image: url('../images/img2.jpg');
     background-size: cover;
     background-blend-mode: luminosity;
     background-color: rgba(255, 0, 0, 0);
 
-    width:80%;
+    width:85%;
     height: 90%;
 }
 
@@ -90,14 +90,14 @@
 .textbox{
     width: 800%;
     height: 50%;
-    border-radius: 5%;
+    border-radius: 25px;
 }
 
 .textarea{
     resize: none;
     width: 800%;
     height: 100%;
-    border-radius: 5%;
+    border-radius: 20px;
 }
 
 .label{
@@ -111,7 +111,7 @@
 .button {
     width: 7vw;
     height:5vh;
-    border-radius: 10%;
+    border-radius: 30px;
     margin-top: 5%;
     font-weight: 900;
     font-size: 100%;

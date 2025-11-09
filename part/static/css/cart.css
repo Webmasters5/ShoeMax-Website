@@ -1,12 +1,10 @@
+/*cart*/
 body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  display: flex;
-  gap:20px;
-justify-content: space-between;
-  align-items: center;
-  height: 100vh;
   margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
 }
 
 
@@ -28,11 +26,6 @@ justify-content: space-between;
   color: #2c3e50;
 }
 
-.shopping-cart p {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #2c3e50;
-}
 
 .order-summary {
 
@@ -91,4 +84,18 @@ justify-content: space-between;
 
 .checkout-btn:hover {
   background: #2ecc71;
+}
+
+/* Delete bin button */
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #e74c3c;
+  margin-left: 10px;
+}
+
+.delete-btn:hover {
+  color: #c0392b;
 }
