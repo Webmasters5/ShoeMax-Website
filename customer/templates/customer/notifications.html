@@ -30,7 +30,7 @@
                 </td>
                 <td>
                     {% if not n.is_read %}
-                        <a href="{% url 'mark_notification_read' n.id %}" class="btn-small">Mark as read</a>
+                        <a href="{% url 'customer:mark_notification_read' n.id %}" class="btn-small">Mark as read</a>
                     {% else %}
                         <span>—</span>
                     {% endif %}
@@ -40,7 +40,7 @@
         </tbody>
     </table>
 
-    <form method="post" action="{% url 'mark_all_notifications_read' %}">
+    <form method="post" action="{% url 'customer:mark_all_notifications_read' %}">
         {% csrf_token %}
         <button type="submit" class="btn">Mark All as Read</button>
     </form>

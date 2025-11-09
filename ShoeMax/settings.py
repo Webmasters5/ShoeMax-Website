@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'models_app.apps.ModelsAppConfig',
     'customer',
     'adminpanel',
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ShoeMax.wsgi.application'
+LOGIN_URL = '/core/login/'
 LOGIN_REDIRECT_URL='/' #when log in successful, send to homepage
 LOGOUT_REDIRECT_URL = '/'
 
