@@ -39,7 +39,9 @@ h2{
     font-weight:bolder;
     border-radius: 6px;
     box-shadow: 2px 2px 10px #000000;
+    transition: transform 0.3s ease-in, background-color 0.3s ease-in;
 }
 .cta-button:hover{
     background-color: #7c7c7c;
+    transform: scale(1.1);
 }

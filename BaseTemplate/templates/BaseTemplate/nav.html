@@ -29,17 +29,18 @@
     <body>
           <nav>
             <ul>
+            <img src="/static/images/logo-removebg-preview.png">
             <li><a href="{% url 'homepage:home' %}" {% if active_class == 'home' %}class="active"{% endif %}>  Home</a></li>
-            <li class="no-hover" style=" margin-bottom:0rem"><a>Categories</a></li>
+            <li id="no-hover" style=" margin-bottom:0rem"><a>Categories</a></li>
             <ul style="color: rgb(255, 255, 255);">
                 <li><a href="{% url 'homepage:prod_by_gender' 'M' %}" {% if active_class == 'M' %}class="active"{% endif %}>Men</a></li>
                 <li><a href="{% url 'homepage:prod_by_gender' 'W' %}" {% if active_class == 'W' %}class="active"{% endif %}>Women</a></li>
                 <li style="margin-bottom: 0.6rem;"><a href="{% url 'homepage:prod_by_gender' 'K' %}" {% if active_class == 'K' %}class="active"{% endif %}>Kids</a></li>
             </ul>
-            <li><a href="" {% if active_class == '' %}class="active"{% endif %}>My cart</a></li>
+            <li><a href=""{% if active_class == '' %}class="active"{% endif %}>My cart</a></li>
             <li><a href="" {% if active_class == '' %}class="active"{% endif %}>Wishlist</a></li>
-            <li><a href="" {% if active_class == '' %}class="active"{% endif %}>My account</a></li>
-            <li><a href="" {% if active_class == '' %}class="active"{% endif %}>Settings</a></li>
+            <li><a href="{% url 'customer_profile' %}" {% if active_class == '' %}class="active"{% endif %}>My account</a></li>
+            <li><a href="{% url 'customer_settings' %}" {% if active_class == '' %}class="active"{% endif %}>Settings</a></li>
             {% if user.is_staff %}
                 <li><a href="{% url 'adminpanel:dashboard' %}" {% if active_class == 'admin' %}class="active"{% endif %}>Admin Dashboard</a></li>
             {% endif %}
@@ -47,19 +48,20 @@
             <li><a {% if active_class == 'aboutus' %}class="active"{% endif %} href="{% url 'core:about' %}">About us</a></li>
             {% if user.is_authenticated %}
             <li>
-            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            <form method="post" action="{% url 'core:logout' %}" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="logout">Logout</button>
             </form>
+            </li>
             {% else %}
-            <li><a style="font-size: 1.3rem; margin-top:1.5rem;" {% if active_class == 'login' %}class="active"{% endif %} href="{% url 'login' %}">Log in</a></li>
+            <li><a style="font-size: 1.3rem; margin-top:1.5rem;" {% if active_class == 'login' %}class="active"{% endif %} href="{% url 'core:login' %}">Log in</a></li>
             {% endif %}
             </ul>
           </nav>
-        <div style="margin-left:17%;">
+        <div style="margin-left:17%; width: 83%;">
             <header class="shop-header"> <!--The class designs the nav bar-->
 
-                <a class="shop-name" style="font-family: Helvetica, sans-serif, serif;" href="{% url 'homepage:home' %}">SHOEMAX</a>
+                <a class="shop-name" style="font-family: Georgia, 'Times New Roman', Times, serif" href="{% url 'homepage:home' %}">SHOEMAX</a>
 
                 <div class="search-bar">
                     <form action="{% url 'products:search' %}" method="get">
@@ -80,8 +82,10 @@
                 </a>
                 </div>
             </header>
+            <div style="padding-top: 60px;">
             {% block content %}
             {% endblock %}
+            </div>
             <footer>
                 <div class="footer-desc">
                     <h3>About ShoeMax</h3>
