@@ -1,7 +1,7 @@
 /*Main banner*/
 .hero{
     height: 70vh;
-    background: url("/static/images/homepage/herobannerrr.jpg") 
+    background: url("/static/images/homepage/hero.jpg") 
     no-repeat right center;
     background-size: cover;
     position: relative;
@@ -42,13 +42,16 @@
     font-size: clamo(1.0rem,4vw,2.0rem);
     border-radius: 6px;
     box-shadow: 5px 5px 10px #000000;
-    display: inline;
+    display: inline-block;
     margin-top: 15px;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+
 }
 
 .cta-button:hover{
     background-color: #000000;
     color:white ;
+    transform: scale(1.2,1.2);
 }
 /*2 banners*/
 .banner{
@@ -93,22 +96,11 @@
     font-size: clamp(0.8rem,4vw,2.1rem);
 }
 .banner .cta-button{
-    background-color: #ffffff;
-    color: black;
     padding: 12px 24px;
-    text-decoration: none;
-    font-family:Helvetica, sans-serif;
-    font-weight:bolder;
     font-size: (0.8rem,4vw,1.7rem);
-    border-radius: 6px;
-    box-shadow: 2px 2px 5px #000000;
-    display: inline;
     margin-top: 15px;
 }
-.banner .cta-button:hover{
-    background-color: #000000;
-    color:white ;
-}
+
 /*Shop by gender*/
 .genderclass{
     display: flex;
@@ -166,6 +158,10 @@
     height: auto;
     object-fit: contain;
     display: block;
+    transition: transform 0.3s ease;
+}
+.category img:hover{
+    transform: scale(1.1,1.1);
 }
 .category>div{ 
     max-width: 380px;
@@ -194,5 +190,11 @@
 .stretched-link {
   position: absolute;
   inset: 0; /* shorthand for top: 0; bottom: 0; left: 0; right: 0; stretch the link around the div */
-  z-index: 10; /*puts the link on top of the image*/
+  z-index: 10; /*puts the link on top of the image*/ 
+}
+.category-box:hover {
+  box-shadow:
+    0 0 15px 5px rgba(255, 255, 200, 0.6), /* warm light glow */
+    2px 2px 10px rgba(0, 0, 0, 0.4);       /* soft shadow for depth */
+  transition: box-shadow 0.4s ease;
 }
