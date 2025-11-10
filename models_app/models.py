@@ -181,6 +181,9 @@ class CartItem(models.Model):
     def __str__(self):
         return f'CartItem {self.variant} x {self.quantity} for {self.customer}'
 
+    @property
+    def total_price(self):
+        return self.variant.shoe.price * self.quantit
 
 class Coupon(models.Model):
     coupon_id = models.AutoField(primary_key=True)

@@ -1,88 +1,65 @@
-/*cart*/
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
+.cart-container {
   display: flex;
-  gap: 20px;
-  padding: 20px;
-}
-
-
-
-/* shopping cart */
-.shopping-cart {
   justify-content: space-between;
-  flex:2;
-  background: white;
-  padding: 20px 30px;
+  padding: 20px;
+  gap: 20px;
+}
+
+.cart,
+.order-summary {
+  background: #fff;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  width: 350px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.shopping-cart h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #2c3e50;
+.cart {
+  flex: 2;
 }
-
 
 .order-summary {
-
-  flex:1;
-  background: white;
-  padding: 20px 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  width: 350px;
-}
-.order-summary .total{
-  color: #e74c3c;
+  flex: 1;
+  align-self: flex-start;
 }
 
-.order-summary .total{
-  border-top: 2px solid #2c3e50;
-  font-weight: bold;
-  font-size: 16px;
-  color: #2c3e50;
+.cart-list {
+  list-style: none;
+  padding: 0;
 }
 
-.order-summary .subtotal  {
-  color: #e74c3c;
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.order-summary .subtotal {
-  border-top: 2px solid #2c3e50;
-  font-weight: bold;
-  font-size: 16px;
-  color: #2c3e50;
+.cart-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 15px;
 }
 
-.order-summary .discount {
-  color: #e74c3c;
+.cart-details {
+  flex-grow: 1;
 }
 
-.order-summary .discount {
-  border-top: 2px solid #2c3e50;
-  font-weight: bold;
-  font-size: 16px;
-  color: #2c3e50;
-}
-
-/* Checkout button */
+.remove-btn,
 .checkout-btn {
-  width: 100%;
-  margin-top: 20px;
-  background: #27ae60;
-  color: white;
-  padding: 12px;
+  background: #c0392b;
+  color: #fff;
   border: none;
+  padding: 10px 15px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
 }
 
-.checkout-btn:hover {
-  background: #2ecc71;
+.checkout-btn {
+  background: #27ae60;
+  width: 100%;
+}
+
+.remove-btn:hover {
+  background: #e74c3c;
 }

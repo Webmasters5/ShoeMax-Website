@@ -3,89 +3,83 @@
 {%block title%} Cart{%endblock%}
 {%block content %}
 
-   <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css">
+
 <body>
-   <div class="container">
+  <div class="container">
     <div class=" shopping-cart">
-          <br/><br/>
-           <p><h1>Shopping cart</h1>
-           <p >View your cart</p></p>
-         <hr>
-         <form method="post">
-        <ul>
-            <li>
-              <!-- Selection checkbox -->
-              <input type="checkbox" >
-              <img src="{% static 'static/image/' %}" alt="My image"> <!--image of products-->
-              <!-- Product name -->
-              <span class="item-name"></span>
+      <br /><br />
+      <p>
+      <h1>Shopping cart</h1>
+      <p>View your cart</p>
+      {% if cart_items %}
+      <ul class="cart-list">
+        {% for item in cart_items %}
+        <li class="cart-item">
+          <img src="{{ item.variant.shoe.image_url.url }}" alt="{{ item.variant.shoe.name }}" class="cart-img">
 
-              <!-- Quantity dropdown -->
-              <select name="quantity">
- 
-              </select>
+          <div class="cart-details">
+            <h3>{{ item.variant.shoe.name }}</h3>
+            <p>Color: {{ item.variant.color }}</p>
+            <p>Size: {{ item.variant.size }}</p>
+            <p>Quantity: {{ item.quantity }}</p>
+            <p>Price: ${{ item.total_price }}</p>
+          </div>
 
-              <!-- Price -->
-              <span class="item-price"></span>
-
-              <button type="submit" name="delete_item" class="delete-btn">
-                🗑
-              </button>
-            </li>
-             <li>
-              <!-- Selection checkbox -->
-              <input type="checkbox" >
-              <img src="{% static 'static/image/' %}" alt="My image2"> <!--image of products-->
-              <!-- Product name -->
-              <span class="item-name"></span>
-
-              <!-- Quantity dropdown -->
-              <select name="quantity">
- 
-              </select>
-
-              <!-- Price -->
-              <span class="item-price"></span>
-
-              <button type="submit" name="delete_item" class="delete-btn">
-                🗑
-              </button>
-            </li>
-        </ul>
-
-      </form>
+          <form action="{% url 'remove_from_cart' item.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="remove-btn">🗑️ Remove</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>Your cart is empty.</p>
+      {% endif %}
     </div>
 
-    <div>
-    <br/><br/>
-    <div class="order-summary" >
-    <br/><br/>
-     <p><h2>Order Summary</h2>
-     
+    <!-- Right: Order Summary -->
+    <div class="order-summary">
+      <h3>Order Summary</h3>
+      <p>Subtotal: ${{ total }}</p>
+      <p>Discount: ${{ discount }}</p>
+      <hr>
+      <h4>Total: ${{ final_total }}</h4>
+      <button class="checkout-btn">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  {% endblock %}
+
+  <div>
+    <br /><br />
+    <div class="order-summary">
+      <br /><br />
+      <p>
+      <h2>Order Summary</h2>
+
       <div class="subtotal">
         <span>Subtotal</span>
         <span>${{ subtotal }}</span>
       </div>
-      <br/>
+      <br />
       <div class="discount">
         <span>Discount</span>
         <span>${{ discount }}</span>
       </div>
-      <hr><div class="total">
-           <span>Total</span>
-           <span>${{ total }}</span>
-         </div>
-      <br/><br/><br/>
+      <hr>
+      <div class="total">
+        <span>Total</span>
+        <span>${{ total }}</span>
+      </div>
+      <br /><br /><br />
       <a href="/checkout/">
         <button class="checkout-btn">Proceed to Checkout</button>
-       </a>  </div>
+      </a>
     </div>
-   </div>
+  </div>
+  </div>
 </body>
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
 {%endblock%}
-
-
-
-  

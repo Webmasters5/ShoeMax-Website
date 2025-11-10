@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'models_app.apps.ModelsAppConfig',
     'customer',
     'adminpanel',
+   
+    
 ]
 
 MIDDLEWARE = [
