@@ -4,7 +4,13 @@
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/homepage/home.css' %}">
 <!--import font-->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Story+Script&display=swap" rel="stylesheet">
+<script
+      src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js"
+      type="module"
+></script>
 {% endblock %}
 {% block content %}
 <!--main banner-->
@@ -39,7 +45,18 @@
         </div>
     </div>
 </section>
-<br><br><br><br>
+<br><br>
+<div id="animationDiv">
+    <!-- Lottie Animation -->
+    <dotlottie-wc
+      src="https://lottie.host/18edacbc-4314-49ee-83d9-79b6f11245cd/gus85cpFil.lottie"
+      id="animation"
+      autoplay
+      loop
+    ></dotlottie-wc>
+    <h2><span id="animationTitle">SHOEMAX</span> - YOUR STEP TOWARDS PERFECTION</h2>
+</div>
+<br><br>
 <!--Shop men/women/kid-->
 <section class="genderclass">
     <div class="innergender">
