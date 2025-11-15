@@ -80,7 +80,7 @@ class Customer (models.Model):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)
     address = models.TextField()
-    wishlist_items = models.ManyToManyField(Shoe, through='WishlistItem', related_name='wishlisted_by_customers')
+    wishlist = models.ManyToManyField(Shoe, through='WishlistItem', related_name='wishlisted_by_customers')
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -148,7 +148,7 @@ class Review(models.Model):
         return self.title
 
 class WishlistItem(models.Model):
-    customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE, related_name='wishlist_items')
     shoe = models.ForeignKey('Shoe', on_delete=models.CASCADE, related_name='wishlisted_by')
     date_added = models.DateTimeField(auto_now_add=True)
 

@@ -4,6 +4,7 @@ from django.db.models import Q
 from . import models
 from django.views import generic
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 #from django.http import HttpResponse
 
@@ -14,7 +15,7 @@ def add_wishlist_item(request, shoe_id):
         return redirect('products:shoe_details', shoe_id=shoe_id)
 
     shoe = get_object_or_404(models.Shoe, pk=shoe_id)
-    customer = request.user.customer_profile
+    customer = request.user.customer_profile if request.user.is_authenticated else None    
     
     if not customer:
         return redirect('products:shoe_details', shoe_id=shoe_id)
@@ -36,25 +37,19 @@ def delete_wishlist_item(request, item_id):
     return redirect(reverse('products:wishlist'))
 
 #@loginrequired
-class WishlistView(generic.ListView):
+class WishlistView(LoginRequiredMixin,generic.ListView):
     model = models.WishlistItem
     template_name = 'wishlist.html'
     context_object_name = 'wishlist_items'
     paginate_by = 5
-
+    
+    
     def get_queryset(self):
         qs = super().get_queryset().select_related('customer', 'shoe').prefetch_related('shoe__images')
-        customer_id = self.kwargs.get('customer_id') or self.request.GET.get('customer_id')
-        if customer_id:
-            return qs.filter(customer__pk=customer_id).order_by('-date_added')
-
+        customer = self.request.user.customer_profile if self.request.user.is_authenticated else None
+        if customer:
+            return customer.wishlist_items.all()
         return qs.none()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['shoes'] = [wi.shoe for wi in context.get('wishlist_items', [])]
-        return context
 
 def shoe_details(request, shoe_id):
     shoe = models.Shoe.objects.prefetch_related('images').get(pk=shoe_id)
