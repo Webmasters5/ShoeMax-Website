@@ -10,6 +10,7 @@ from django.urls import reverse
 
 # Create your views here.
 
+@login_required
 def add_wishlist_item(request, shoe_id):
     if request.method != "POST":
         return redirect('products:shoe_details', shoe_id=shoe_id)
@@ -24,10 +25,11 @@ def add_wishlist_item(request, shoe_id):
     
     return redirect(shoe.get_absolute_url())
 
-#@login_required
+@login_required
 def delete_wishlist_item(request, item_id):
     item = get_object_or_404(models.WishlistItem, pk=item_id)
 
+    #customers can only delete their own wishlist items
     if not ((hasattr(item.customer, 'user') and item.customer.user == request.user)):
         return HttpResponseForbidden("Not allowed")
 
@@ -36,13 +38,11 @@ def delete_wishlist_item(request, item_id):
 
     return redirect(reverse('products:wishlist'))
 
-#@loginrequired
 class WishlistView(LoginRequiredMixin,generic.ListView):
     model = models.WishlistItem
     template_name = 'wishlist.html'
     context_object_name = 'wishlist_items'
     paginate_by = 5
-    
     
     def get_queryset(self):
         qs = super().get_queryset().select_related('customer', 'shoe').prefetch_related('shoe__images')
