@@ -49,7 +49,6 @@ class ShoeImage(models.Model):
     def __str__(self):
         return f'Image for {self.shoe.name}'
 
-
 class ShoeVariant(models.Model):
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name='variants')
     color = models.CharField(max_length=50)

@@ -5,6 +5,7 @@ from django.urls import reverse
 
 # Create your models here.
 
+""" 
 class Shoe(models.Model):
     GENDER_CHOICES = [
         ('M', 'Men'),
@@ -157,3 +158,4 @@ class WishlistItem(models.Model):
 
     def __str__(self):
         return f'WishlistItem {self.shoe} for {self.customer}'
+ """
