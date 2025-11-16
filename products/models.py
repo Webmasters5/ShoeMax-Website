@@ -1,8 +1,11 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.conf import settings
+from django.urls import reverse
 
 # Create your models here.
 
+""" 
 class Shoe(models.Model):
     GENDER_CHOICES = [
         ('M', 'Men'),
@@ -33,9 +36,21 @@ class Shoe(models.Model):
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     shoe_id = models.AutoField(primary_key=True)
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE, related_name='shoes')
-    image_url = models.ImageField(upload_to='shoes/')
+
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('products:shoe_details', args=[self.shoe_id])
+    
+
+class ShoeImage(models.Model):
+    shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='shoe_images/')
+    alt_text = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f'Image for {self.shoe.name}'
 
 class ShoeVariant(models.Model):
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name='variants')
@@ -58,6 +73,7 @@ class Brand(models.Model):
     description = models.TextField()
     website = models.URLField()
     brand_id = models.AutoField(primary_key=True)
+    
     def __str__(self):
         return self.name
 
@@ -68,6 +84,14 @@ class Customer (models.Model):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)
     address = models.TextField()
+    wishlist = models.ManyToManyField(Shoe, through='WishlistItem', related_name='wishlisted_by_customers')
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='customer_profile',
+        null=True,
+        blank=True
+    )
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -126,3 +150,15 @@ class Review(models.Model):
     
     def __str__(self):
         return self.title
+
+class WishlistItem(models.Model):
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE, related_name='wishlist_items')
+    shoe = models.ForeignKey('Shoe', on_delete=models.CASCADE, related_name='wishlisted_by')
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('customer', 'shoe')
+
+    def __str__(self):
+        return f'WishlistItem {self.shoe} for {self.customer}'
+ """

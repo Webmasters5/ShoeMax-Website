@@ -52,7 +52,7 @@
 	<ul class="results">
 		{% for shoe in shoes %}
 			<li class="card">
-				<a href="{% url 'products:product_details' shoe.shoe_id %}" class="card-link">
+				<a href="{% url 'products:shoe_details' shoe.shoe_id %}" class="card-link">
 					<div class="thumb">
 						{% if shoe.image_url %}
 							<img src="{{ shoe.image_url.url }}" alt="{{ shoe.name }}">

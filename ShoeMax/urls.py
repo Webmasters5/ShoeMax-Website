@@ -18,17 +18,20 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('homepage.urls')),
     # path('home/',include('homepage.urls')),
-    path('products/', include('products.urls')),
+    path('products/', include('products.urls'), name='products'),
     path('core/',include('core.urls')),
     # path('accounts/',include('django.contrib.auth.urls')), #dummy acc for testing
     path('customer/', include('customer.urls')),
     path('adminpanel/', include('adminpanel.urls')),
     path('cart/', include('cart.urls')),
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
     #to store and show uploaded pics, not for production
