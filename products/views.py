@@ -109,8 +109,8 @@ def search(request):
 
     return render(request, 'search.html', context)
 def reviews(request,product_id):
-    shoe=get_object_or_404(Shoe,shoe_id=product_id)
-    reviews=Review.objects.filter(order_item__variant__shoe=shoe)
+    shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
+    reviews= models.Review.objects.filter(order_item__variant__shoe=shoe)
     avg_rating = reviews.aggregate(average=Avg('rating'))['average']
     context={
         'shoe':shoe,
@@ -120,12 +120,12 @@ def reviews(request,product_id):
     return render(request,'reviews.html',context)
 #@login_required
 def review_product(request,product_id):
-    shoe=get_object_or_404(Shoe,shoe_id=product_id)
+    shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
     if request.method =='POST':
         form=Reviewform(request.POST)
         if form.is_valid():
             Review=form.save(commit=False)
-            order_item=OrderItem.objects.filter(variant__shoe=shoe, order__customer__user=request.user)
+            order_item= models.OrderItem.objects.filter(variant__shoe=shoe, order__customer__user=request.user)
             if order_item:
                 Review.order_item = order_item
                 Review.save()
@@ -141,5 +141,5 @@ def review_product(request,product_id):
     return render(request,'reviewform.html',context)
 
 def dummy(request):
-    shoe=Shoe.objects.all()
+    shoe=models.Shoe.objects.all()
     return render(request,'dummy.html',{'shoes':shoe})

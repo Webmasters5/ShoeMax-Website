@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from products.models import ShoeVariant
-from .models import CartItem
+from models_app.models import ShoeVariant
+from models_app.models import CartItem
 from customer.models import Customer, Order, OrderItem, Notification
 
 @login_required

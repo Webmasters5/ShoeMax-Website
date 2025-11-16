@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 
-from products.models import ShoeVariant
+from models_app.models import ShoeVariant
 from customer.models import Customer
 
 class CartItem(models.Model):
