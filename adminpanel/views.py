@@ -3,10 +3,10 @@ from django.shortcuts import render
 # Create your views here.
 
 from django.shortcuts import render
-from customer.models import Customer, Order
+from models_app.models import Customer, Order
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404, redirect
-from customer.models import Notification  # assuming you have this model
+from models_app.models import Notification  # assuming you have this model
 
 # Only staff users can access
 def staff_required(view_func):
@@ -24,7 +24,7 @@ def dashboard(request):
         'delivered_orders': delivered_orders,
         'pending_orders': pending_orders,
     })
-
+"""
 @staff_required
 def customer_list(request):
     customers = Customer.objects.all()
@@ -53,4 +53,4 @@ def notifications(request):
 def delete_notification(request, notif_id):
     notif = get_object_or_404(Notification, id=notif_id)
     notif.delete()
-    return redirect('adminpanel:notifications')
+    return redirect('adminpanel:notifications') """

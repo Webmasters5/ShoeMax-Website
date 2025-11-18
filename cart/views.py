@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from models_app.models import ShoeVariant
 from models_app.models import CartItem
-from customer.models import Customer, Order, OrderItem, Notification
+from models_app.models import Order, OrderItem, Notification
 
 @login_required
 def add_to_cart(request, variant_id):
@@ -77,7 +77,7 @@ def checkout(request):
                 order=order,
                 product_name=f"{item.variant.shoe.name} — {item.variant.color} (Size {item.variant.size})",
                 quantity=item.quantity,
-                 price=item.variant.shoe.price
+                price=item.variant.shoe.price
             )
 
         # create notification

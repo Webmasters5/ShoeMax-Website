@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 
+""" 
 from models_app.models import ShoeVariant
 from customer.models import Customer
 
@@ -17,3 +18,4 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.variant} (x{self.quantity})"
+ """

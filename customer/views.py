@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer, Order, OrderItem, Notification
+from models_app.models import Customer, Order, OrderItem, Notification
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from .forms import CustomerForm, UserForm
-from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
@@ -13,11 +12,7 @@ def profile(request):
     customer = get_object_or_404(Customer, user=request.user)
     return render(request, "customer/profile.html", {"customer": customer})
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name']
-
+# Use UserForm defined in customer.forms (remove local duplicate)
 @login_required
 def info(request):
     customer = request.user.customer
@@ -68,13 +63,6 @@ def notifications(request):
     customer = request.user.customer
     notifications = customer.notifications.all().order_by('-created_at')
     return render(request, "customer/notifications.html", {"notifications": notifications})
-
-@login_required
-def mark_notification_read(request, notification_id):
-    notification = get_object_or_404(Notification, id=notification_id, customer=request.user.customer)
-    notification.is_read = True
-    notification.save()
-    return redirect("customer:customer_notifications")
 
 @login_required
 def settings(request):

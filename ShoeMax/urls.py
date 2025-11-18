@@ -25,7 +25,7 @@ urlpatterns = [
     # path('home/',include('homepage.urls')),
     path('products/', include('products.urls'), name='products'),
     path('core/',include('core.urls')),
-    # path('accounts/',include('django.contrib.auth.urls')), #dummy acc for testing
+    path('accounts/',include('django.contrib.auth.urls')), #dummy acc for testing
     path('customer/', include('customer.urls')),
     path('adminpanel/', include('adminpanel.urls')),
     path('cart/', include('cart.urls')),
