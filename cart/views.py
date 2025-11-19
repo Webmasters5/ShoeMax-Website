@@ -20,7 +20,7 @@ def add_to_cart(request):
         cart_item.quantity += 1
         cart_item.save()
 
-    return redirect('cart:cart_summary')
+    return redirect('cart:summary')
 
 
 @login_required
@@ -32,7 +32,7 @@ def cart_summary(request):
     discount = 0
     final_total = total - discount
 
-    return render(request, 'cart/cart_summary.html', {
+    return render(request, 'cart/summary.html', {
         'cart_items': cart_items,
         'total': total,
         'discount': discount,
@@ -44,7 +44,7 @@ def cart_summary(request):
 def remove_from_cart(request, item_id):
     item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer_profile)
     item.delete()
-    return redirect('cart:cart_summary')
+    return redirect('cart:summary')
 
 
 @login_required
@@ -116,3 +116,23 @@ def search_view(request):
         results = [f"Result for '{query}'"]
 
     return render(request, "search_results.html", {"query": query, "results": results})
+
+
+@login_required
+def update_quantity(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer_profile)
+    
+    if request.method == 'POST':
+        
+        action = request.POST.get('action')
+        
+        if action == 'increment':
+            item.quantity += 1
+            item.save()
+            
+        elif action == 'decrement':
+            if item.quantity > 1: 
+                item.quantity -= 1
+                item.save()
+
+    return redirect('cart:summary')

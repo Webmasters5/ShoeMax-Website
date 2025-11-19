@@ -37,7 +37,7 @@
                 <li><a href="{% url 'homepage:prod_by_gender' 'W' %}" {% if active_class == 'W' %}class="active"{% endif %}>Women</a></li>
                 <li style="margin-bottom: 0.6rem;"><a href="{% url 'homepage:prod_by_gender' 'K' %}" {% if active_class == 'K' %}class="active"{% endif %}>Kids</a></li>
             </ul>
-            <li><a href="{% url 'cart:cart_summary' %}" {% if active_class == 'cart' %}class="active"{% endif %}>My cart</a></li>
+            <li><a href="{% url 'cart:summary' %}" {% if active_class == 'cart' %}class="active"{% endif %}>My cart</a></li>
             <li><a href="{% url 'customer:customer_profile' %}" {% if active_class == 'wishlist' %}class="active"{% endif %}>Wishlist</a></li>
             <li><a href="{% url 'customer:customer_profile' %}" {% if active_class == 'account' %}class="active"{% endif %}>My account</a></li>
             <li><a href="{% url 'customer:customer_settings' %}" {% if active_class == 'settings' %}class="active"{% endif %}>Settings</a></li>
@@ -73,7 +73,7 @@
                 <div class="icon-group">
                 <a href="{% url 'customer:customer_profile' %}" class="icon"><i class="fas fa-user-circle"></i></a>
                 <a href="{% url 'products:wishlist' %}" class="icon"><i class="far fa-heart"></i></a>
-                <a href="{% url 'cart:cart_summary' %}" class="icon cart-icon">
+                <a href="{% url 'cart:summary' %}" class="icon cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-dot"></span> <!--To design the dot-->
                 </a>
