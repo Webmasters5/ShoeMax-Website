@@ -1,0 +1,84 @@
+{% extends "BaseTemplate/nav.html" %}
+{% load static %}
+{% block title %}Cart{% endblock %}
+
+{% block extra_head %}
+<!-- <link rel="stylesheet" href="{% static 'cart.css' %}"> -->
+{% endblock %}
+
+{% block content %}
+
+<div id="shopping-cart">
+  <h1>Shopping Cart</h1>
+  <p>View your selected items</p>
+  <hr>
+
+  {% if cart_items %}
+    <div id="items-list">
+      {% for item in cart_items %}
+      <div>
+        {% with main_image=item.variant.shoe.images.first %}
+        <div>
+          {% if main_image %}
+            <img src="{{ main_image.image.url }}" alt="{{ item.variant.shoe.name }}" width="100">
+          {% else %}
+            <img src="{% static 'images/image-placeholder.png' %}" alt="No image available" width="100">
+          {% endif %}
+        </div>
+        {% endwith %}
+
+        <div>
+          <div>{{ item.variant.shoe.name }}</div>
+          <div>{{ item.variant.color }} — Size {{ item.variant.size }}</div>
+          <div>Price: Rs {{ item.variant.shoe.price }}</div>
+
+          <div>
+            <form method="post" action="{% url 'cart:update_quantity' item.id %}">
+              {% csrf_token %}
+              <button type="submit" name="action" value="decrement" title="Decrease quantity">-</button>
+              <span>{{ item.quantity }}</span>
+              <button type="submit" name="action" value="increment" title="Increase quantity">+</button>
+            </form>
+
+            <a href="{% url 'cart:remove_from_cart' item.id %}">Remove</a>
+          </div>
+        </div>
+
+        <div>
+          <div>Item total</div>
+          <div>Rs {{ item.total_price }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div id="order-summary">
+      <h2>Order Summary</h2>
+
+      <div>
+        <span>Subtotal</span>
+        <span>Rs {{ total }}</span>
+      </div>
+
+      <div>
+        <span>Discount</span>
+        <span>Rs {{ discount }}</span>
+      </div>
+
+      <hr>
+
+      <div>
+        <strong>Total</strong>
+        <strong>Rs {{ final_total }}</strong>
+      </div>
+
+      <div>
+        <a href="{% url 'cart:checkout' %}">Proceed to Checkout</a>
+      </div>
+    </div>
+
+  {% else %}
+    <p>Your cart is empty.</p>
+  {% endif %}
+</div>
+{% endblock %}
