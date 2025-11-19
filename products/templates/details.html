@@ -40,62 +40,72 @@
     </div>
 
     <div class="product-info">
-      <h1 class="product-title">
-        <form method="post" action="{% url 'products:wishlist_add' shoe.shoe_id %}" style="display:inline-block;margin-top:8px;">
+      <h1 class="product-title">{{ shoe.name }}</h1>
+      <form method="post" action="{% url 'products:wishlist_add' shoe.shoe_id %}" style="display:inline-block;margin-top:8px;">
         {% csrf_token %}
-          <button type="submit" aria-label="Add to wishlist" title="Add to wishlist"
-                  style="background:none;border:none;">
-              <i class="far fa-heart"></i>
-          </button>
-        </form>
-      <p class="product-price"> <b>Price:</b> ${{ shoe.price }}</p>
-      <p class="product-brand"> <b>Brand:</b> {{ shoe.brand.name }}</p>
-      <form method="post" action="#">
-        {% csrf_token %}
-        <input type="hidden" name="product_id" value="{{ shoe.shoe_id }}">
-        
+        <button type="submit" aria-label="Add to wishlist" title="Add to wishlist" style="background:none;border:none;">
+          <i class="far fa-heart"></i>
+        </button>
+      </form>
+      <p class="product-price"><b>Price:</b> ${{ shoe.price }}</p>
+      <p class="product-brand"><b>Brand:</b> {{ shoe.brand.name }}</p>
+ 
+      <form method="get" id="colorForm">
         <h2 class="section-title">Color Options</h2>
         <div class="color-options">
-          {% if shoe.variants.all %}
-            {% for variant in shoe.variants.all %}
+          {% if color_available %}
+            {% for color, available in color_available.items %}
             <div class="color-item">
-              <input type="radio" id="color_{{ variant.color }}" name="selected_color" value="{{ variant.color}}" {% if forloop.first %}checked{% endif %} class="color-input">
-              <label for="color_{{ variant.color }}" class="color-option">{{ variant.color }}</label>
+              <input
+                type="radio"
+                id="color_{{ color }}"
+                name="color"
+                value="{{ color }}"
+                {% if color == selected_color %}checked{% endif %}
+                class="color-input"
+                {% if not available %}disabled{% endif %}
+                onchange="this.form.submit();"
+              >
+              <label for="color_{{ color }}" class="color-option">{{ color }}</label>
             </div>
             {% endfor %}
           {% else %}
             <p>No color options available.</p>
           {% endif %}
         </div>
-
-        <h2 class="section-title">Available Sizes</h2>
-        <div class="variant-options">
-          {% if shoe.variants.all %}
-            {% for variant in shoe.variants.all %}
-            <div class="variant-item">
-              <input type="radio" id="variant_{{ variant.variant_id }}" name="variant" value="{{ variant.variant_id }}" {% if forloop.first %}checked{% endif %} class="variant-input">
-              <label for="variant_{{ variant.variant_id }}" class="variant-option">{{ variant.color }} - Size {{ variant.size }} </label>
-            </div>
-            {% endfor %}
-          {% else %}
-            <p>No variants available for this product.</p>
-          {% endif %}
-        </div>
-        <button type="submit" class="add-to-cart">Add to Cart</button>
       </form>
-      <div class="product-description">
-        <h2 class="section-title">Product Description</h2>
-        <p>
-        {{ shoe.description }}
-        </p>
-        <p>{% if avg_rating %} <!--Added this-->>
-        Rating: {{avg_rating}} / 5 ★
-        {% endif %}</p>
-      </div>
-    </div>
-    <div> <!--And this-->>
-      <a href="{% url 'products:reviews' shoe.shoe_id%}" class="btn btn-outline-success">View reviews</a>
-    </div>
-  </main>
-</div>
-{% endblock %}
+ 
+       <form id="sizeForm" method="post" action="{% url 'cart:add_to_cart'%}">
+         {% csrf_token %}
+         <h2 class="section-title">Available Sizes</h2>
+         <div class="variant-options">
+           {% if variants %}
+             {% for variant in variants %}
+             <div class="variant-item">
+              <input type="radio" id="variant_{{ variant.variant_id }}" name="variant" value="{{ variant.variant_id }}" class="variant-input" {% if forloop.first %}checked{% endif %} {% if variant.stock <= 0 %}disabled{% endif %}>
+              <label for="variant_{{ variant.variant_id }}" class="variant-option">{{ variant.size }}</label>
+             </div>
+             {% endfor %}
+           {% else %}
+             <p>No variants available for this product.</p>
+           {% endif %}
+         </div>
+         <input type="hidden" name="color" value="{{ selected_color }}">
+         <button type="submit" class="add-to-cart">Add to Cart</button>
+       </form>
+       <div class="product-description">
+         <h2 class="section-title">Product Description</h2>
+         <p>
+         {{ shoe.description }}
+         </p>
+        {% if avg_rating %}
+        <p>Rating: {{ avg_rating }} / 5 ★</p>
+        {% endif %}
+       </div>
+     </div>
+    <div> <!--And this-->
+       <a href="{% url 'products:reviews' shoe.shoe_id%}" class="btn btn-outline-success">View reviews</a>
+     </div>
+   </main>
+ </div>
+ {% endblock %}

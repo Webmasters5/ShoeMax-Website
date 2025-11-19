@@ -1,6 +1,6 @@
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Sum
 from models_app import models
 from .forms import Reviewform
 #from .models import Shoe,ShoeVariant,Review,OrderItem
@@ -54,11 +54,43 @@ class WishlistView(LoginRequiredMixin,generic.ListView):
         return qs.none()
 
 def shoe_details(request, shoe_id):
-    shoe = models.Shoe.objects.prefetch_related('images').get(pk=shoe_id)
+    """ shoe = models.Shoe.objects.prefetch_related('images').get(pk=shoe_id)
        
     main_image = shoe.images.first() if shoe.images.exists() else None
+    models.Shoe.
     context = {'shoe': shoe, 'main_image': main_image}
+    
+    return render(request, 'details.html', context) """
+    shoe = models.Shoe.objects.prefetch_related('images', 'variants').get(pk=shoe_id)
+    
+    #Query set equivalent to SELECT color, SUM(stock) as total_stock FROM ShoeVariant WHERE shoe_id=shoe_id GROUP BY color
+    qs = shoe.variants.values('color').annotate(total_stock=Sum('stock'))
+    
+    #create dictionary for colour availability
+    color_available = {entry['color']: (entry['total_stock'] > 0) for entry in qs}
+    
+    main_image = shoe.images.first() if shoe.images.exists() else None
+    
+    #get selected colour from query parameters
+    selected_color = request.GET.get('color')
+    
+    if selected_color is None: selected_color = list(color_available.keys())[0]
+   
+    variants = shoe.variants.filter(color=selected_color).order_by('size') if selected_color else None
+        
+    context = {
+        'shoe': shoe,
+        'main_image': main_image,
+        'color_available': color_available,
+        'selected_color': selected_color,
+        'variants': variants,
+    }
+    
+    print(color_available)
+    print(variants)
+    print(selected_color)
     return render(request, 'details.html', context)
+    
 
 def search(request):
     q = request.GET.get('q', '').strip()

@@ -5,9 +5,10 @@ from models_app.models import CartItem
 from models_app.models import Order, OrderItem, Notification
 
 @login_required
-def add_to_cart(request, variant_id):
+def add_to_cart(request):
+    variant_id = request.POST.get('variant')
     variant = get_object_or_404(ShoeVariant, variant_id=variant_id)
-    customer = request.user.customer
+    customer = request.user.customer_profile
 
     cart_item, created = CartItem.objects.get_or_create(
         customer=customer,
@@ -24,7 +25,7 @@ def add_to_cart(request, variant_id):
 
 @login_required
 def cart_summary(request):
-    customer = request.user.customer
+    customer = request.user.customer_profile
     cart_items = CartItem.objects.filter(customer=customer)
 
     total = sum(item.total_price for item in cart_items)
@@ -41,14 +42,14 @@ def cart_summary(request):
 
 @login_required
 def remove_from_cart(request, item_id):
-    item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer)
+    item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer_profile)
     item.delete()
     return redirect('cart:cart_summary')
 
 
 @login_required
 def checkout(request):
-    customer = request.user.customer
+    customer = request.user.customer_profile
     cart_items = CartItem.objects.filter(customer=customer)
 
     if request.method == 'POST':
