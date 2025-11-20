@@ -15,7 +15,7 @@ def profile(request):
 # Use UserForm defined in customer.forms (remove local duplicate)
 @login_required
 def info(request):
-    customer = request.user.customer
+    customer = request.user.customer_profile
 
     if request.method == "POST":
         user_form = UserForm(request.POST, instance=request.user)
@@ -36,12 +36,12 @@ def info(request):
 
 @login_required
 def orders(request):
-    orders = request.user.customer.orders.all()
+    orders = request.user.customer_profile.orders.all()
     return render(request, "customer/orders.html", {"orders": orders})
 
 @login_required
 def order_detail(request, order_id):
-    order = get_object_or_404(Order, id=order_id, customer=request.user.customer)
+    order = get_object_or_404(Order, id=order_id, customer=request.user.customer_profile)
     return render(request, "customer/order_detail.html", {"order": order})
 
 @login_required
@@ -60,13 +60,13 @@ def password(request):
 
 @login_required
 def notifications(request):
-    customer = request.user.customer
+    customer = request.user.customer_profile
     notifications = customer.notifications.all().order_by('-created_at')
     return render(request, "customer/notifications.html", {"notifications": notifications})
 
 @login_required
 def settings(request):
-    customer = request.user.customer
+    customer = request.user.customer_profile
     if request.method == "POST":
         theme = request.POST.get("theme")
         if theme in ["light", "dark"]:
@@ -77,13 +77,13 @@ def settings(request):
 
 @login_required
 def mark_notification_read(request, notification_id):
-    notification = Notification.objects.get(id=notification_id, customer=request.user.customer)
+    notification = Notification.objects.get(id=notification_id, customer=request.user.customer_profile)
     notification.is_read = True
     notification.save()
     return redirect('customer:customer_notifications')
 
 @login_required
 def mark_all_notifications_read(request):
-    notifications = request.user.customer.notifications.all()
+    notifications = request.user.customer_profile.notifications.all()
     notifications.update(is_read=True)
     return redirect('customer:customer_notifications')
