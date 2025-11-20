@@ -47,7 +47,7 @@
           <i class="far fa-heart"></i>
         </button>
       </form>
-      <p class="product-price"><b>Price:</b> ${{ shoe.price }}</p>
+      <p class="product-price"><b>Price:</b> Rs {{ shoe.price }}</p>
       <p class="product-brand"><b>Brand:</b> {{ shoe.brand.name }}</p>
  
       <form method="get" id="colorForm">
@@ -75,7 +75,7 @@
         </div>
       </form>
  
-       <form id="sizeForm" method="post" action="{% url 'cart:add_to_cart'%}">
+       <form id="sizeForm" method="post" action="{% url 'cart:add_item'%}">
          {% csrf_token %}
          <h2 class="section-title">Available Sizes</h2>
          <div class="variant-options">
