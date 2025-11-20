@@ -1,59 +1,85 @@
 {% extends 'cart/top-bar.html' %}
 {% load static %}
 {% block title %}Checkout{% endblock %}
+
+{% block extra_head %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<!-- <link rel="stylesheet" href="{% static 'checkout.css' %}"> -->
+<div class="container-fluid" style="margin-top: 72px;"> <!-- ensure not hidden behind fixed top bar -->
+  <div class="row gx-4">
+    <div class="col-12 col-md-8">
+      <h1 class="mb-4">Checkout</h1>
 
-<div class="checkout-container">
-  <div class="checkout-form">
-    <h1>Checkout</h1>
-    <form method="POST">
-      {% csrf_token %}
+      <form method="POST" class="row g-3">
+        {% csrf_token %}
 
-      <label for="full_name">Full Name</label>
-      <input type="text" name="full_name" required
-             value="{{ customer.user.get_full_name|default:customer.user.username }}"
+        <div class="col-12">
+          <label for="full_name" class="form-label">Full Name</label>
+          <input id="full_name" name="full_name" type="text" class="form-control" required
+                 value="{{ customer.user.get_full_name|default:customer.user.username }}">
+        </div>
 
-      <label for="email">Email</label>
-      <input type="email" name="email" required
-             value="{{ customer.user.email|default_if_none:'' }}">
+        <div class="col-12">
+          <label for="email" class="form-label">Email</label>
+          <input id="email" name="email" type="email" class="form-control" required
+                 value="{{ customer.user.email|default_if_none:'' }}">
+        </div>
 
-      <label for="address">Shipping Address</label>
-      <textarea name="address" rows="3" required>{{ customer.shipping_address|default_if_none:'' }}</textarea>
+        <div class="col-12">
+          <label for="address" class="form-label">Shipping Address</label>
+          <textarea id="address" name="address" class="form-control" rows="3" required>{{ customer.shipping_address|default_if_none:'' }}</textarea>
+        </div>
 
-      <label for="payment">Payment Method</label>
-      <select name="payment" required>
-        <option value="">Select</option>
-        <option value="card">Credit/Debit Card</option>
-        <option value="cod">Cash on Delivery</option>
-      </select>
+        <div class="col-12 col-md-6">
+          <label for="payment" class="form-label">Payment Method</label>
+          <select id="payment" name="payment" class="form-select" required>
+            <option value="">Select</option>
+            <option value="card">Credit/Debit Card</option>
+            <option value="cod">Cash on Delivery</option>
+          </select>
+        </div>
 
-      <button type="submit" class="place-order-btn">Place Order</button>
-    </form>
-  </div>
-
-  <div class="checkout-summary">
-    <h2>Order Summary</h2>
-    {% for item in cart_items %}
-    <div class="summary-item">
-      <span>{{ item.variant.shoe.name }} x{{ item.quantity }}</span>
-      <span>Rs {{ item.total_price }}</span>
-    </div>
-    {% endfor %}
-
-    <div class="summary-item">
-      <span>Subtotal</span>
-      <span>Rs {{ total }}</span>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Place Order</button>
+        </div>
+      </form>
     </div>
 
-    <div class="summary-item">
-      <span>Discount</span>
-      <span>Rs {{ discount }}</span>
-    </div>
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Order Summary</h5>
 
-    <div class="summary-total">
-      <span>Total</span>
-      <span>Rs {{ final_total }}</span>
+          <ul class="list-group list-group-flush mb-3">
+            {% for item in cart_items %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+              <div>
+                <div class="fw-semibold">{{ item.variant.shoe.name }}</div>
+                <small class="text-muted">Quantity: {{ item.quantity }}</small>
+              </div>
+              <span class="ms-2">Rs {{ item.total_price }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Subtotal</span>
+              <strong>Rs {{ total }}</strong>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Discount</span>
+              <strong>Rs {{ discount }}</strong>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Total</span>
+              <strong>Rs {{ final_total }}</strong>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>
