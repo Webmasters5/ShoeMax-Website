@@ -22,6 +22,3 @@ admin.site.register(models.Review)
 admin.site.register(models.Admin) 
 admin.site.register(models.WishlistItem)
 admin.site.register(models.CartItem)
-admin.site.register(models.PaymentMethod)
-admin.site.register(models.Address)
-

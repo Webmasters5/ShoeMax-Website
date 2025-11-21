@@ -82,25 +82,6 @@ class Brand(models.Model):
     
     def __str__(self):
         return self.name
-""" 
-class Customer(models.Model):
-    customer_id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='customer_profile',
-        null=True,
-        blank=True
-    )
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.EmailField(unique=True)
-    phone_number = models.CharField(max_length=15)
-    wishlist_items = models.ManyToManyField(Shoe, through='WishlistItem', related_name='wishlisted_by_customers')
-
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
-"""
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer_profile')
@@ -126,35 +107,6 @@ class Customer(models.Model):
     def __str__(self):
         return self.user.username
 
-
-"""
-class Order(models.Model):
-    STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('processing', 'Processing'),
-        ('shipped', 'Shipped'),
-        ('delivered', 'Delivered'),
-        ('cancelled', 'Cancelled'),
-    ]
-    
-    order_id = models.AutoField(primary_key=True)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pending')
-    date_ordered = models.DateTimeField(auto_now_add=True)
-    date_delivered = models.DateTimeField(null=True, blank=True)
-    shipping_cost = models.DecimalField(max_digits=10, decimal_places=2)
-    sub_total = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
-    discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
-    shoe_variants = models.ManyToManyField('ShoeVariant', through='OrderItem', related_name='orders')
-    coupon = models.ForeignKey('Coupon', on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
-    
-    def total_amount(self):
-        return self.sub_total + self.shipping_cost - self.discount_amount
-    
-    def __str__(self):
-        return f'Order {self.order_id} - {self.status}'
-"""
-
 class Order(models.Model):
     STATUS_CHOICES = [
         ('Pending', 'Pending'),
@@ -172,26 +124,6 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order #{self.id} - {self.customer.user.username}"
-""" 
-class OrderItem(models.Model):
-    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='order_items')
-    variant = models.ForeignKey('ShoeVariant', on_delete=models.CASCADE, related_name='order_items')
-    quantity = models.PositiveIntegerField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        unique_together = ('order', 'variant')
-
-    def __str__(self):
-        return f'OrderItem - {self.variant} x {self.quantity}'
-    
-    def save(self, *args, **kwargs):
-        if not self.price:
-            self.price = self.variant.shoe.price * self.quantity
-        super().save(*args, **kwargs)
-        self.order.sub_total = sum(item.price for item in self.order.order_items.all()) + self.price
-        self.order.save()
-"""
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -255,26 +187,6 @@ class WishlistItem(models.Model):
     def __str__(self):
         return f'WishlistItem {self.shoe} for {self.customer}'
 
-""" 
-class Coupon(models.Model):
-    coupon_id = models.AutoField(primary_key=True)
-    promo_code = models.CharField(max_length=50, unique=True)
-    description = models.TextField(blank=True)
-    percent_off = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    is_active = models.BooleanField(default=True)
-    exp_date = models.DateTimeField(null=True, blank=True)
-
-    def is_valid(self) -> bool:
-        if not self.is_active:
-            return False
-        if self.exp_date and self.exp_date < timezone.now():
-            return False
-        return True
-
-    def __str__(self):
-        return f'Coupon {self.promo_code} - {self.percent_off}%'
-"""
-
 class CartItem(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='cart_items')
     variant = models.ForeignKey(ShoeVariant, on_delete=models.CASCADE)
@@ -286,31 +198,3 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.variant} (x{self.quantity})"
-
-class PaymentMethod(models.Model):
-    card_id = models.AutoField(primary_key=True)
-    customer = models.ForeignKey('Customer', on_delete=models.CASCADE, related_name='payment_methods')
-    card_num = models.CharField(max_length=19)
-    exp_date = models.DateField()
-    card_type = models.CharField(max_length=50, blank=True)
-    holder_name = models.CharField(max_length=100)
-    is_default = models.BooleanField(default=False)
-
-    def __str__(self):
-        masked = self.card_num[-4:] if self.card_num else '----'
-        return f'PaymentMethod {self.card_id} - ****{masked} ({self.holder_name})'
-
-
-class Address(models.Model):
-    addr_id = models.AutoField(primary_key=True)
-    customer = models.ForeignKey('Customer', on_delete=models.CASCADE, related_name='addresses')
-    street = models.CharField(max_length=255)
-    city = models.CharField(max_length=100)
-    zip_code = models.CharField(max_length=20)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    is_default = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f'Address {self.addr_id} - {self.street}, {self.city} ({self.customer})'
-
