@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    #'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'BaseTemplate.apps.BasetemplateConfig',
     'models_app.apps.ModelsAppConfig',
     'customer.apps.CustomerConfig',
-    'adminpanel',
-    'cart',
+    'cart.apps.CartConfig',
+    'admin_panel.apps.AdminPanelConfig',
 ]
 
 MIDDLEWARE = [
