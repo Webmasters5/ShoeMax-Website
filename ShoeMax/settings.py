@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     #'django.contrib.admin',
+    'admin_panel.apps.AdminPanelConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -45,7 +46,6 @@ INSTALLED_APPS = [
     'models_app.apps.ModelsAppConfig',
     'customer.apps.CustomerConfig',
     'cart.apps.CartConfig',
-    'admin_panel.apps.AdminPanelConfig',
 ]
 
 MIDDLEWARE = [
@@ -63,8 +63,8 @@ ROOT_URLCONF = 'ShoeMax.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        #'DIRS': [],
-        'DIRS': [os.path.join(BASE_DIR,'templates')], #look for templates in project/ level as well
+        'DIRS': [ BASE_DIR / 'admin_panel/templates' ], #look for templates in project/ level as well
+        #'DIRS': [os.path.join(BASE_DIR,'templates')], #look for templates in project/ level as well
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
