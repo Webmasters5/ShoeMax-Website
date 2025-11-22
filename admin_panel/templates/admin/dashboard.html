@@ -1,11 +1,57 @@
 {% extends "admin/base_site.html" %}
-
+{% block extrastyle %}{% endblock %}
 {% block content %}
-<p>Welcome to the dashboard, {{ username }}</p>
-<p>You can view the following statistics</p>
-<ul>
-    <li><a href="#">Change E-Mail Address</a></li>
-    <li><a href="#">Add Profile Picture</a></li>
-</ul>
+<h1>Admin Dashboard</h1>
+
+<div>
+  <div>
+    <h3>Total Customers</h3>
+    <p>{{ total_customers }}</p>
+  </div>
+
+  <div>
+    <h3>Total Orders</h3>
+    <p>{{ total_orders }}</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Count</th>
+          <th>Percent</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for status, data in status_summary.items %}
+        <tr>
+          <td>{{ status }}</td>
+          <td>{{ data.count }}</td>
+          <td>{{ data.percent }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <h3>Total Sales</h3>
+    <p>${{ total_sales }}</p>
+  </div>
+</div>
+
+<section>
+  <h3>Top Sold Items</h3>
+  {% if most_sold %}
+    <ol>
+      {% for item in most_sold %}
+        <li>
+          {{ item.product_name }} — <strong>{{ item.total_sold }}</strong> sold
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p>No sales yet.</p>
+  {% endif %}
+</section>
 
 {% endblock %}
