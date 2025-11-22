@@ -1,45 +1,48 @@
 {% extends "admin/base_site.html" %}
-{% block extrastyle %}{% endblock %}
+{% load static %}
+{% block extrastyle %}
+  <link rel="stylesheet" href="{% static "admin/dashboard.css" %}">
+{%endblock %}
 {% block content %}
-<h1>Admin Dashboard</h1>
+<h1 class="dashboard-heading">Admin Dashboard</h1>
 
-<div>
-  <div>
+<div class="dashboard-container">
+  <div class="card">
     <h3>Total Customers</h3>
-    <p>{{ total_customers }}</p>
+    <p class="stat-value--customers">{{ total_customers }}</p>
   </div>
 
-  <div>
+  <div class="card card--large">
     <h3>Total Orders</h3>
-    <p>{{ total_orders }}</p>
+    <p class="stat-value--orders">{{ total_orders }}</p>
 
-    <table>
+    <table class="summary-table">
       <thead>
         <tr>
           <th>Status</th>
-          <th>Count</th>
-          <th>Percent</th>
+          <th class="text-right">Count</th>
+          <th class="text-right">Percent</th>
         </tr>
       </thead>
       <tbody>
         {% for status, data in status_summary.items %}
         <tr>
           <td>{{ status }}</td>
-          <td>{{ data.count }}</td>
-          <td>{{ data.percent }}%</td>
+          <td class="text-right">{{ data.count }}</td>
+          <td class="text-right">{{ data.percent }}%</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 
-  <div>
+  <div class="card">
     <h3>Total Sales</h3>
-    <p>${{ total_sales }}</p>
+    <p class="stat-value--sales">${{ total_sales }}</p>
   </div>
 </div>
 
-<section>
+<section style="margin-top:1.25rem">
   <h3>Top Sold Items</h3>
   {% if most_sold %}
     <ol>
