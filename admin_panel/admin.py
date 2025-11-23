@@ -62,7 +62,7 @@ class ShoeMaxAdmin(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
 
-        print(urls)
+        #print(urls)
         url_patterns = [
             path("", self.admin_view(self.dashboard_view), name="dashboard"),
         ] 
