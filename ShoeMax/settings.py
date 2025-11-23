@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'models_app.apps.ModelsAppConfig',
     'customer.apps.CustomerConfig',
     'cart.apps.CartConfig',
+    'admin_panel.apps.AdminAppConfig',
 ]
 
 MIDDLEWARE = [
