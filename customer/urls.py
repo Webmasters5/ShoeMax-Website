@@ -1,6 +1,9 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from django.contrib.auth.views import LogoutView
+
+app_name = 'customer'
 
 urlpatterns = [
     path("profile/", views.profile, name="customer_profile"),
@@ -12,5 +15,5 @@ urlpatterns = [
     path("notifications/mark-read/<int:notification_id>/", views.mark_notification_read, name="mark_notification_read"),
     path("notifications/mark-all/", views.mark_all_notifications_read, name="mark_all_notifications_read"),
     path("settings/", views.settings, name="customer_settings"),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
 ]

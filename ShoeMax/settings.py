@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'homepage.apps.HomepageConfig',
     'BaseTemplate.apps.BasetemplateConfig',
     'models_app.apps.ModelsAppConfig',
-    'customer',
+    'customer.apps.CustomerConfig',
     'adminpanel',
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ShoeMax.wsgi.application'
+LOGIN_URL = '/core/login/'
 LOGIN_REDIRECT_URL='/' #when log in successful, send to homepage
 LOGOUT_REDIRECT_URL = '/'
 
@@ -126,7 +128,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    #os.path.join(BASE_DIR, "static"),
 ]
 MEDIA_URL = '/media/' #show pic on /media/ url
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #store uploaded pics in project/media

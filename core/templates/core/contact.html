@@ -38,7 +38,8 @@
         <div class="two">
             <div class="twodiv">
                 <div class="twoform">
-                    <form>
+                    <form method="post">
+                        {% csrf_token %}
                         <div class="inputtext">
                             <label class="label">First name </label>
                             <input class="textbox" type="text" name="fname" id="fname">

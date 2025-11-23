@@ -1,0 +1,65 @@
+{% extends 'cart/base.html' %}
+{% load static %}
+{% block title %}Cart{% endblock %}
+{% block content %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'cart.css' %}">
+{% endblock %}
+
+<div class="container">
+  <div class="shopping-cart">
+    <h1>Shopping Cart</h1>
+    <p>View your selected items</p>
+    <hr>
+
+    {% if cart_items %}
+      <ul>
+        {% for item in cart_items %}
+        <li class="cart-item">
+          <img src="{{ item.variant.shoe.image.url }}" alt="{{ item.variant.shoe.name }}" width="80">
+
+          <span class="item-name">
+            {{ item.variant.shoe.name }} — {{ item.variant.color }} (Size {{ item.variant.size }})
+          </span>
+
+          <span class="item-quantity">x {{ item.quantity }}</span>
+
+          <span class="item-price">Rs {{ item.total_price }}</span>
+
+          <a href="{% url 'cart:remove_from_cart' item.id %}" class="delete-btn">🗑 Remove</a>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <div class="order-summary">
+        <h2>Order Summary</h2>
+
+        <div class="subtotal">
+          <span>Subtotal</span>
+          <span>Rs {{ total }}</span>
+        </div>
+
+        <div class="discount">
+          <span>Discount</span>
+          <span>Rs {{ discount }}</span>
+        </div>
+
+        <hr>
+        <div class="total">
+          <span>Total</span>
+          <span>Rs {{ final_total }}</span>
+        </div>
+
+        <a href="{% url 'cart:checkout' %}">
+          <button class="checkout-btn">Proceed to Checkout</button>
+        </a>
+      </div>
+
+    {% else %}
+      <p>Your cart is empty.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'cart/base.html' %}
+{% load static %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'checkout.css' %}">
+
+<div class="checkout-container">
+  <div class="checkout-form">
+    <h1>Checkout</h1>
+    <form method="POST">
+      {% csrf_token %}
+
+      <label for="full_name">Full Name</label>
+      <input type="text" name="full_name" required
+             value="{{ customer.user.get_full_name|default:customer.user.username }}"
+
+      <label for="email">Email</label>
+      <input type="email" name="email" required
+             value="{{ customer.user.email|default_if_none:'' }}">
+
+      <label for="address">Shipping Address</label>
+      <textarea name="address" rows="3" required>{{ customer.shipping_address|default_if_none:'' }}</textarea>
+
+      <label for="payment">Payment Method</label>
+      <select name="payment" required>
+        <option value="">Select</option>
+        <option value="card">Credit/Debit Card</option>
+        <option value="cod">Cash on Delivery</option>
+      </select>
+
+      <button type="submit" class="place-order-btn">Place Order</button>
+    </form>
+  </div>
+
+  <div class="checkout-summary">
+    <h2>Order Summary</h2>
+    {% for item in cart_items %}
+    <div class="summary-item">
+      <span>{{ item.variant.shoe.name }} x{{ item.quantity }}</span>
+      <span>Rs {{ item.total_price }}</span>
+    </div>
+    {% endfor %}
+
+    <div class="summary-item">
+      <span>Subtotal</span>
+      <span>Rs {{ total }}</span>
+    </div>
+
+    <div class="summary-item">
+      <span>Discount</span>
+      <span>Rs {{ discount }}</span>
+    </div>
+
+    <div class="summary-total">
+      <span>Total</span>
+      <span>Rs {{ final_total }}</span>
+    </div>
+  </div>
+</div>
+{% endblock %}

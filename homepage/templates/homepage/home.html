@@ -4,7 +4,13 @@
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/homepage/home.css' %}">
 <!--import font-->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Story+Script&display=swap" rel="stylesheet">
+<script
+      src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js"
+      type="module"
+></script>
 {% endblock %}
 {% block content %}
 <!--main banner-->
@@ -39,7 +45,18 @@
         </div>
     </div>
 </section>
-<br><br><br><br>
+<br><br>
+<div id="animationDiv">
+    <!-- Lottie Animation -->
+    <dotlottie-wc
+      src="https://lottie.host/18edacbc-4314-49ee-83d9-79b6f11245cd/gus85cpFil.lottie"
+      id="animation"
+      autoplay
+      loop
+    ></dotlottie-wc>
+    <h2><span id="animationTitle">SHOEMAX</span> - YOUR STEP TOWARDS PERFECTION</h2>
+</div>
+<br><br>
 <!--Shop men/women/kid-->
 <section class="genderclass">
     <div class="innergender">
@@ -58,19 +75,19 @@
 <!--Shop by category-->
 <div class="subtitle">Categories</div><br>
 <section class="category">
-    <div>
+    <div class="category-box">
         <a href="{% url 'homepage:categories' 'trainers' %}" class="stretched-link" aria-label="Go page x"></a>
         <img src="/static/images/homepage/cat1.jpg">
         <h1>Trainers</h1>
         <p>Lightweight, comfortable shoes designed for everyday wear, workouts, or just keeping it effortlessly casual</p>
     </div>
-    <div>
+    <div class="category-box">
         <a href="{% url 'homepage:categories' 'formals' %}" class="stretched-link" aria-label="Go page x"></a>
         <img src="/static/images/homepage/cat2.jpg">
         <h1>Formal Shoes</h1>
         <p>Polished, stylish footwear ideal for office, weddings, or special occasions — where looking sharp matters most</p>
     </div>
-    <div>
+    <div class="category-box">
         <a href="{% url 'homepage:categories' 'crocs' %}" class="stretched-link" aria-label="Go page x"></a>
         <img src="/static/images/homepage/cat3.jpg">
         <h1>Crocs</h1>
@@ -79,19 +96,19 @@
 </section>
 <br><br>
 <section class="category">
-    <div>
+    <div class="category-box">
         <a href="{% url 'homepage:categories' 'dress-shoes' %}" class="stretched-link" aria-label="Go page x"></a>
         <img src="/static/images/homepage/cat4new.png">
         <h1>Dress Shoes</h1>
         <p>Elegant and refined styles for every occasion — from classic heels to chic pumps and sophisticated silhouettes.</p>
     </div>
-    <div>
+    <div class="category-box">
         <a href="{% url 'homepage:categories' 'sandals' %}" class="stretched-link" aria-label="Go page x"></a>
         <img src="/static/images/homepage/cat5new.jpg">
         <h1>Sandals</h1>
         <p>Open-toe styles built for sunshine. Breezy, stylish, and ideal for warm days or casual getaways.</p>
     </div>
-    <div>
+    <div class="category-box">
         <a href="{% url 'homepage:categories' 'boots' %}" class="stretched-link" aria-label="Go page x"></a>
         <img src="/static/images/homepage/cat6.jpg">
         <h1>Boots</h1>
