@@ -93,35 +93,31 @@ def shoe_details(request, shoe_id):
     
 
 def search(request):
+    #retrieve GET query parameters
     q = request.GET.get('q', '').strip()
     category = request.GET.get('category', '').strip()
     min_price = request.GET.get('min_price', '').strip()
     max_price = request.GET.get('max_price', '').strip()
 
-    shoes = models.Shoe.objects.all()
+    shoes = models.Shoe.objects.all().prefetch_related('images')
 
     if q:
         shoes = shoes.filter(
-            Q(name__icontains=q) | Q(description__icontains=q)
+            Q(name__icontains=q) | Q(description__icontains=q) #combine sets 
         )
 
     if category:
         shoes = shoes.filter(category__iexact=category)
 
-    try:
-        if min_price:
-            shoes = shoes.filter(price__gte=float(min_price))
-    except (TypeError, ValueError):
-        pass
+    if min_price:
+        shoes = shoes.filter(price__gte=float(min_price))
 
-    try:
-        if max_price:
-            shoes = shoes.filter(price__lte=float(max_price))
-    except (TypeError, ValueError):
-        pass
+    if max_price:
+        shoes = shoes.filter(price__lte=float(max_price))
 
     shoes = shoes.order_by('price', 'name')
 
+    #remove duplicates if any
     categories = (
         models.Shoe.objects.exclude(category__isnull=True)
         .exclude(category__exact='')
@@ -140,6 +136,7 @@ def search(request):
     }
 
     return render(request, 'search.html', context)
+
 def reviews(request,product_id):
     shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
     reviews= models.Review.objects.filter(order_item__variant__shoe=shoe)
@@ -150,6 +147,7 @@ def reviews(request,product_id):
         'avg_rating':avg_rating,
     }
     return render(request,'reviews.html',context)
+
 #@login_required
 def review_product(request,product_id):
     shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
