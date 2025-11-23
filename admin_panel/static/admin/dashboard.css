@@ -72,3 +72,11 @@ body {
 @media (max-width: 720px) {
   .dashboard-container { flex-direction: column; }
 }
+
+#recent-actions-container {
+    float: none;
+    margin: 2% auto 0 auto;
+    position: static !important;
+    padding-top: 2rem;
+    clear: both;
+}

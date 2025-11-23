@@ -4,16 +4,13 @@ from django.contrib.auth import update_session_auth_hash
 from .forms import CustomerForm, UserForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
 from models_app.models import Customer, Order, OrderItem, Notification
-from django.urls import reverse  # added for clarity (optional)
+from django.urls import reverse 
 
-# helper: return customer or redirect to login
 def get_customer_or_redirect_login(request):
-	# request is expected to be authenticated due to @login_required on views
+	# check for customer profile
 	customer = getattr(request.user, "customer_profile", None)
 	if not customer:
-		# redirect to named login URL in core app
 		return redirect('core:login')
 	return customer
 
@@ -21,7 +18,7 @@ def get_customer_or_redirect_login(request):
 @login_required
 def profile(request):
 	customer = get_customer_or_redirect_login(request)
-	# if helper returned a redirect response, return it
+	
 	if not isinstance(customer, Customer):
 		return customer
 	return render(request, "customer/profile.html", {"customer": customer})
