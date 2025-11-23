@@ -16,6 +16,24 @@ class ShoeVariantInline(admin.TabularInline):
     extra = 1
     fields = ('color', 'size', 'stock', 'sku')
 
+# add/move inlines before CustomerAdmin
+class CartItemInline(admin.TabularInline):
+    model = models.CartItem
+    extra = 0
+    raw_id_fields = ('variant',)
+
+class WishlistItemInline(admin.TabularInline):
+    model = models.WishlistItem
+    extra = 0
+    raw_id_fields = ('shoe',)
+
+class NotificationInline(admin.TabularInline):
+    model = models.Notification
+    extra = 0
+    raw_id_fields = ('related_order',)
+    fields = ('message', 'is_read', 'created_at', 'related_order')
+    readonly_fields = ('created_at',)
+
 class ShoeAdmin(admin.ModelAdmin):
     list_display = ('name', 'brand', 'category', 'gender', 'price')
     list_filter = ('brand', 'category', 'gender')
@@ -28,11 +46,6 @@ class BrandAdmin(admin.ModelAdmin):
     list_display = ('name', 'website')
     search_fields = ('name',)
     ordering = ('name',)
-
-class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone', 'mobile', 'theme_preference')
-    search_fields = ('user__username', 'user__email', 'phone')
-    raw_id_fields = ('user',)
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'customer', 'order_date', 'status', 'total_price')
@@ -69,6 +82,13 @@ class CartItemAdmin(admin.ModelAdmin):
     list_display = ('customer', 'variant', 'quantity')
     search_fields = ('customer__user__username', 'variant__sku')
     raw_id_fields = ('customer', 'variant')
+    
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone', 'mobile', 'theme_preference')
+    search_fields = ('user__username', 'user__email', 'phone')
+    raw_id_fields = ('user',)
+    inlines = [CartItemInline, WishlistItemInline, NotificationInline]
+
 
 admin.site.register(models.Shoe, ShoeAdmin)
 admin.site.register(models.ShoeImage)
