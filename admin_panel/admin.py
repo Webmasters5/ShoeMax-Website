@@ -3,7 +3,6 @@ from django.template.response import TemplateResponse
 from django.urls import path
 from django.db.models import Sum, Count
 
-# add model imports
 from models_app.models import Customer, Order, OrderItem
 
 class ShoeMaxAdmin(admin.AdminSite):
@@ -62,7 +61,7 @@ class ShoeMaxAdmin(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
 
-        #print(urls)
+        #print(urls) # testing purposes
         url_patterns = [
             path("", self.admin_view(self.dashboard_view), name="dashboard"),
         ] 
