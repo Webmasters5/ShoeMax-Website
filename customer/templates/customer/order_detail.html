@@ -26,7 +26,7 @@
         <tbody>
             {% for item in order.items.all %}
             <tr>
-                <td style="padding: 8px;">{{ item.product_name }}</td>
+                <td style="padding: 8px;">{{ item.variant.shoe.name }}</td>
                 <td style="padding: 8px; text-align: center;">{{ item.quantity }}</td>
                 <td style="padding: 8px;">${{ item.price }}</td>
                 <td style="padding: 8px;">${{ item.subtotal }}</td>

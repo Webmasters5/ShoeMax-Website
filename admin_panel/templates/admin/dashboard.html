@@ -48,7 +48,7 @@
     <ol>
       {% for item in most_sold %}
         <li>
-          {{ item.product_name }} — <strong>{{ item.total_sold }}</strong> sold
+          {{ item.variant.shoe.name }} — <strong>{{ item.total_sold }}</strong> sold
         </li>
       {% endfor %}
     </ol>

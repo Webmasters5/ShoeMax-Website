@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.template.response import TemplateResponse
 from django.urls import path
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, F
 
 from models_app.models import Customer, Order, OrderItem, Shoe, ShoeVariant
 
@@ -43,7 +43,7 @@ class ShoeMaxAdmin(admin.AdminSite):
                 'status_summary': status_summary,
                 'total_sales': total_sales,
                 'most_sold': list(
-                    OrderItem.objects.values('product_name').annotate(total_sold=Sum('quantity')).order_by('-total_sold')[:10]
+                    OrderItem.objects.values().annotate(total_sold=Sum('quantity')).order_by('-total_sold')[:10]
                 ),
             })
             return TemplateResponse(request, template, context)
@@ -98,7 +98,7 @@ class ShoeMaxAdmin(admin.AdminSite):
             'status_summary': status_summary,
             'total_sales': total_sales,
             'most_sold': list(
-                OrderItem.objects.values('product_name').annotate(total_sold=Sum('quantity')).order_by('-total_sold')[:10]
+                OrderItem.objects.values().annotate(total_sold=Sum('quantity')).order_by('-total_sold')[:10]
             ),
         })
         return TemplateResponse(request, template, context)

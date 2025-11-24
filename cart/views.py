@@ -69,16 +69,17 @@ def checkout(request):
             total_price=final_total,
             shipping_address=shipping_address,
             billing_address=billing_address,
-            status='Pending',
+            status='pending',
         )
 
         # create OrderItems
         for item in cart_items:
             OrderItem.objects.create(
                 order=order,
-                product_name=f"{item.variant.shoe.name} — {item.variant.color} (Size {item.variant.size})",
+                variant=item.variant,
                 quantity=item.quantity,
                 price=item.variant.shoe.price
+                
             )
 
         # create notification

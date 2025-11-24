@@ -14,7 +14,7 @@
         <strong>Order #{{ order.order_id }}</strong> — {{ order.customer.user.username }} — {{ order.order_date }}
         <ul>
           {% for item in order.items.all %}
-            <li>{{ item.product_name }} x {{ item.quantity }}</li>
+            <li>{{ item.variant.shoe.name }} x {{ item.quantity }}</li>
           {% endfor %}
         </ul>
       </li>

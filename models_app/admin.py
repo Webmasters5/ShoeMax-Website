@@ -55,9 +55,13 @@ class OrderAdmin(admin.ModelAdmin):
     raw_id_fields = ('customer',)
 
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ('order', 'product_name', 'quantity', 'price')
-    search_fields = ('product_name', 'order__id')
+    list_display = ('order', 'get_product_name', 'quantity', 'price')
+    search_fields = ('order__id', 'variant__shoe__name')
     raw_id_fields = ('order',)
+
+    def get_product_name(self, obj):
+        return obj.variant.shoe.name if obj.variant and obj.variant.shoe else 'Unknown'
+    get_product_name.short_description = 'Product'
 
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ('customer', 'message', 'is_read', 'created_at', 'related_order')
@@ -67,7 +71,7 @@ class NotificationAdmin(admin.ModelAdmin):
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('title', 'rating', 'date_added', 'order_item')
-    search_fields = ('title', 'order_item__product_name')
+    search_fields = ('title', 'order_item__variant__shoe__name')
 
 class SiteAdminAdmin(admin.ModelAdmin):
     list_display = ('admin_id', 'user', 'role')

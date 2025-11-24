@@ -132,7 +132,6 @@ class Order(models.Model):
     
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product_name = models.CharField(max_length=100) # to remove
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     variant = models.ForeignKey('ShoeVariant', on_delete=models.CASCADE, related_name='order_items')
@@ -142,7 +141,7 @@ class OrderItem(models.Model):
         return self.quantity * self.price
 
     def __str__(self):
-        return f"{self.product_name} x {self.quantity}"
+        return f"{self.variant.shoe.name} x {self.quantity}"
 
     def save(self, *args, **kwargs):
         if not self.price:
