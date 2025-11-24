@@ -109,27 +109,33 @@ class Customer(models.Model):
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('Pending', 'Pending'),
-        ('Shipped', 'Shipped'),
-        ('Delivered', 'Delivered'),
-        ('Cancelled', 'Cancelled'),
+        ('pending', 'Pending'),
+        ('shipped', 'Shipped'),
+        ('delivered', 'Delivered'),
+        ('cancelled', 'Cancelled'),
     ]
-
+    
+    order_id = models.AutoField(primary_key=True)
     customer = models.ForeignKey('Customer', on_delete=models.CASCADE, related_name='orders')
     order_date = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
-    total_price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    delivery_date = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    total_price = models.DecimalField(max_digits=8, decimal_places=2, default=0) #to replace
     shipping_address = models.TextField(blank=True, null=True)
     billing_address = models.TextField(blank=True, null=True)
-
+    shipping_cost = models.DecimalField(max_digits=8, decimal_places=2, default=100.00)
+    sub_total = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
+    discount_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+        
     def __str__(self):
-        return f"Order #{self.id} - {self.customer.user.username}"
-
+        return f"Order #{self.order_id} - {self.customer.user.username}"
+    
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product_name = models.CharField(max_length=100)
+    product_name = models.CharField(max_length=100) # to remove
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=8, decimal_places=2)
+    variant = models.ForeignKey('ShoeVariant', on_delete=models.CASCADE, related_name='order_items')
 
     @property
     def subtotal(self):
@@ -137,6 +143,11 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product_name} x {self.quantity}"
+
+    def save(self, *args, **kwargs):
+        if not self.price:
+            self.price = self.variant.shoe.price * self.quantity
+        super().save(*args, **kwargs)
 
 class Notification(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="notifications")
