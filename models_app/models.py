@@ -58,7 +58,7 @@ class ShoeVariant(models.Model):
     color = models.CharField(max_length=50)
     size = models.IntegerField(validators=[MinValueValidator(35), MaxValueValidator(49)])
     stock = models.IntegerField(validators=[MinValueValidator(0)])
-    sku = models.CharField(max_length=100, unique=True, blank=True)
+    sku = models.CharField(max_length=100, blank=True)
     variant_id = models.AutoField(primary_key=True)
 
     def save(self, *args, **kwargs):
@@ -124,7 +124,7 @@ class Order(models.Model):
     shipping_address = models.TextField(blank=True, null=True)
     billing_address = models.TextField(blank=True, null=True)
     shipping_cost = models.DecimalField(max_digits=8, decimal_places=2, default=100.00)
-    sub_total = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
+    subtotal = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
     discount_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
         
     def __str__(self):
@@ -146,7 +146,7 @@ class OrderItem(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.price:
-            self.price = self.variant.shoe.price * self.quantity
+            self.price = self.variant.shoe.price
         super().save(*args, **kwargs)
 
 class Notification(models.Model):

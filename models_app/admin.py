@@ -48,7 +48,7 @@ class BrandAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer', 'order_date', 'status', 'total_price')
+    list_display = ('order_id', 'customer', 'order_date', 'status', 'total_price')
     list_filter = ('status', 'order_date')
     search_fields = ('customer__user__username', 'id')
     inlines = [OrderItemInline]

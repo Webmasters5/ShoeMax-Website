@@ -84,7 +84,7 @@ def checkout(request):
         # create notification
         Notification.objects.create(
             customer=customer,
-            message=f"Your order #{order.id} has been confirmed!",
+            message=f"Your order #{order.order_id} has been confirmed!",
             related_order=order
         )
 

@@ -24,7 +24,7 @@ class ShoeMaxAdmin(admin.AdminSite):
         orders_qs = Order.objects.all()
         total_orders = orders_qs.count()
 
-        status_counts = orders_qs.values('status').annotate(count=Count('id'))
+        status_counts = orders_qs.values('status').annotate(count=Count('order_id'))
         status_summary = {}
         for entry in status_counts:
             name = entry['status'] or 'Unknown'
