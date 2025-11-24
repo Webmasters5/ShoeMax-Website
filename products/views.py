@@ -54,13 +54,6 @@ class WishlistView(LoginRequiredMixin,generic.ListView):
         return qs.none()
 
 def shoe_details(request, shoe_id):
-    """ shoe = models.Shoe.objects.prefetch_related('images').get(pk=shoe_id)
-       
-    main_image = shoe.images.first() if shoe.images.exists() else None
-    models.Shoe.
-    context = {'shoe': shoe, 'main_image': main_image}
-    
-    return render(request, 'details.html', context) """
     shoe = models.Shoe.objects.prefetch_related('images', 'variants').get(pk=shoe_id)
     
     #Query set equivalent to SELECT color, SUM(stock) as total_stock FROM ShoeVariant WHERE shoe_id=shoe_id GROUP BY color
@@ -91,7 +84,6 @@ def shoe_details(request, shoe_id):
     print(selected_color)
     return render(request, 'details.html', context)
     
-
 def search(request):
     #retrieve GET query parameters
     q = request.GET.get('q', '').strip()
@@ -141,10 +133,10 @@ def reviews(request,product_id):
     shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
     reviews= models.Review.objects.filter(order_item__variant__shoe=shoe)
     avg_rating = reviews.aggregate(average=Avg('rating'))['average']
-    context={
-        'shoe':shoe,
-        'reviews':reviews,
-        'avg_rating':avg_rating,
+    context = {
+        'shoe': shoe,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
     }
     return render(request,'reviews.html',context)
 
