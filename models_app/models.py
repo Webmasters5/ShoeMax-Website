@@ -116,7 +116,7 @@ class Order(models.Model):
     ]
     
     order_id = models.AutoField(primary_key=True)
-    customer = models.ForeignKey('Customer', on_delete=models.CASCADE, related_name='orders')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     order_date = models.DateField(auto_now_add=True)
     delivery_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
@@ -124,12 +124,12 @@ class Order(models.Model):
     shipping_address = models.TextField(blank=True, null=True)
     billing_address = models.TextField(blank=True, null=True)
     shipping_cost = models.DecimalField(max_digits=8, decimal_places=2, default=100.00)
-    subtotal = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
+    subtotal = models.DecimalField(max_digits=8, decimal_places=2, blank=True, default=0.00)
     discount_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
         
     def __str__(self):
         return f"Order #{self.order_id} - {self.customer.user.username}"
-    
+        
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     quantity = models.PositiveIntegerField(default=1)
@@ -146,6 +146,9 @@ class OrderItem(models.Model):
     def save(self, *args, **kwargs):
         if not self.price:
             self.price = self.variant.shoe.price
+        
+        self.order.subtotal = sum(item.subtotal for item in self.order.items.all()) 
+        self.order.save()
         super().save(*args, **kwargs)
 
 class Notification(models.Model):

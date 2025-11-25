@@ -60,7 +60,7 @@ def order_detail(request, order_id):
 	customer = get_customer_or_redirect_login(request)
 	if not isinstance(customer, Customer):
 		return customer
-	order = get_object_or_404(Order, id=order_id, customer=customer)
+	order = get_object_or_404(Order, order_id=order_id, customer=customer)
 	return render(request, "customer/order_detail.html", {"order": order})
 
 @login_required

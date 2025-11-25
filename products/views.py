@@ -47,10 +47,12 @@ class WishlistView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
     
     def get_queryset(self):
+        # base queryset already refers to WishlistItem objects
         qs = super().get_queryset().select_related('customer', 'shoe').prefetch_related('shoe__images')
         customer = self.request.user.customer_profile if self.request.user.is_authenticated else None
         if customer:
-            return customer.wishlist_items.all()
+            # filter WishlistItem rows for this customer so template receives objects
+            return qs.filter(customer=customer)
         return qs.none()
 
 def shoe_details(request, shoe_id):
