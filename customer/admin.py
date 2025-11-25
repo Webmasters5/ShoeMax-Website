@@ -1,12 +1,11 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Customer
+""" from models_app.models import Customer
 
-from .models import Order, OrderItem, Notification
+from models_app.models import Order, OrderItem, Notification
 
 admin.site.register(Customer)
-
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
@@ -16,4 +15,4 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
 
 admin.site.register(Order, OrderAdmin)
-admin.site.register(Notification)
+admin.site.register(Notification) """

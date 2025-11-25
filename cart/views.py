@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from models_app.models import ShoeVariant
 from models_app.models import CartItem
-from customer.models import Customer, Order, OrderItem, Notification
+from models_app.models import Order, OrderItem, Notification
 
 @login_required
-def add_to_cart(request, variant_id):
+def add_to_cart(request):
+    variant_id = request.POST.get('variant')
     variant = get_object_or_404(ShoeVariant, variant_id=variant_id)
-    customer = request.user.customer
+    customer = request.user.customer_profile
 
     cart_item, created = CartItem.objects.get_or_create(
         customer=customer,
@@ -19,19 +20,19 @@ def add_to_cart(request, variant_id):
         cart_item.quantity += 1
         cart_item.save()
 
-    return redirect('cart:cart_summary')
+    return redirect('cart:summary')
 
 
 @login_required
 def cart_summary(request):
-    customer = request.user.customer
+    customer = request.user.customer_profile
     cart_items = CartItem.objects.filter(customer=customer)
 
     total = sum(item.total_price for item in cart_items)
     discount = 0
     final_total = total - discount
 
-    return render(request, 'cart/cart_summary.html', {
+    return render(request, 'cart/summary.html', {
         'cart_items': cart_items,
         'total': total,
         'discount': discount,
@@ -41,14 +42,14 @@ def cart_summary(request):
 
 @login_required
 def remove_from_cart(request, item_id):
-    item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer)
+    item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer_profile)
     item.delete()
-    return redirect('cart:cart_summary')
+    return redirect('cart:summary')
 
 
 @login_required
 def checkout(request):
-    customer = request.user.customer
+    customer = request.user.customer_profile
     cart_items = CartItem.objects.filter(customer=customer)
 
     if request.method == 'POST':
@@ -68,22 +69,23 @@ def checkout(request):
             total_price=final_total,
             shipping_address=shipping_address,
             billing_address=billing_address,
-            status='Pending',
+            status='pending',
         )
 
         # create OrderItems
         for item in cart_items:
             OrderItem.objects.create(
                 order=order,
-                product_name=f"{item.variant.shoe.name} — {item.variant.color} (Size {item.variant.size})",
+                variant=item.variant,
                 quantity=item.quantity,
-                 price=item.variant.shoe.price
+                price=item.variant.shoe.price
+                
             )
 
         # create notification
         Notification.objects.create(
             customer=customer,
-            message=f"Your order #{order.id} has been confirmed!",
+            message=f"Your order #{order.order_id} has been confirmed!",
             related_order=order
         )
 
@@ -115,3 +117,23 @@ def search_view(request):
         results = [f"Result for '{query}'"]
 
     return render(request, "search_results.html", {"query": query, "results": results})
+
+
+@login_required
+def update_quantity(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer_profile)
+    
+    if request.method == 'POST':
+        
+        action = request.POST.get('action')
+        
+        if action == 'increment':
+            item.quantity += 1
+            item.save()
+            
+        elif action == 'decrement':
+            if item.quantity > 1: 
+                item.quantity -= 1
+                item.save()
+
+    return redirect('cart:summary')

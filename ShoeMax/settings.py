@@ -32,20 +32,21 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    #'django.contrib.admin',
+    'admin_panel.apps.AdminPanelConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
+    'core.apps.CoreConfig',
     'products.apps.ProductsConfig',
     'homepage.apps.HomepageConfig',
     'BaseTemplate.apps.BasetemplateConfig',
     'models_app.apps.ModelsAppConfig',
     'customer.apps.CustomerConfig',
-    'adminpanel',
-    'cart',
+    'cart.apps.CartConfig',
+    'admin_panel.apps.AdminAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -63,8 +64,8 @@ ROOT_URLCONF = 'ShoeMax.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        #'DIRS': [],
-        'DIRS': [os.path.join(BASE_DIR,'templates')], #look for templates in project/ level as well
+        'DIRS': [ BASE_DIR / 'admin_panel/templates' ], #look for templates in project/ level as well
+        #'DIRS': [os.path.join(BASE_DIR,'templates')], #look for templates in project/ level as well
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,7 +129,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    #os.path.join(BASE_DIR, "static"),
+    BASE_DIR / 'admin_panel/static'
 ]
 MEDIA_URL = '/media/' #show pic on /media/ url
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #store uploaded pics in project/media

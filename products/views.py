@@ -1,6 +1,6 @@
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Sum
 from models_app import models
 from .forms import Reviewform
 #from .models import Shoe,ShoeVariant,Review,OrderItem
@@ -47,49 +47,71 @@ class WishlistView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
     
     def get_queryset(self):
+        # base queryset already refers to WishlistItem objects
         qs = super().get_queryset().select_related('customer', 'shoe').prefetch_related('shoe__images')
         customer = self.request.user.customer_profile if self.request.user.is_authenticated else None
         if customer:
-            return customer.wishlist_items.all()
+            # filter WishlistItem rows for this customer so template receives objects
+            return qs.filter(customer=customer)
         return qs.none()
 
 def shoe_details(request, shoe_id):
-    shoe = models.Shoe.objects.prefetch_related('images').get(pk=shoe_id)
-       
+    shoe = models.Shoe.objects.prefetch_related('images', 'variants').get(pk=shoe_id)
+    
+    #Query set equivalent to SELECT color, SUM(stock) as total_stock FROM ShoeVariant WHERE shoe_id=shoe_id GROUP BY color
+    qs = shoe.variants.values('color').annotate(total_stock=Sum('stock'))
+    
+    #create dictionary for colour availability
+    color_available = {entry['color']: (entry['total_stock'] > 0) for entry in qs}
+    
     main_image = shoe.images.first() if shoe.images.exists() else None
-    context = {'shoe': shoe, 'main_image': main_image}
+    
+    #get selected colour from query parameters
+    selected_color = request.GET.get('color')
+    
+    if selected_color is None: selected_color = list(color_available.keys())[0]
+   
+    variants = shoe.variants.filter(color=selected_color).order_by('size') if selected_color else None
+        
+    context = {
+        'shoe': shoe,
+        'main_image': main_image,
+        'color_available': color_available,
+        'selected_color': selected_color,
+        'variants': variants,
+    }
+    
+    print(color_available)
+    print(variants)
+    print(selected_color)
     return render(request, 'details.html', context)
-
+    
 def search(request):
+    #retrieve GET query parameters
     q = request.GET.get('q', '').strip()
     category = request.GET.get('category', '').strip()
     min_price = request.GET.get('min_price', '').strip()
     max_price = request.GET.get('max_price', '').strip()
 
-    shoes = models.Shoe.objects.all()
+    shoes = models.Shoe.objects.all().prefetch_related('images')
 
     if q:
         shoes = shoes.filter(
-            Q(name__icontains=q) | Q(description__icontains=q)
+            Q(name__icontains=q) | Q(description__icontains=q) #combine sets 
         )
 
     if category:
         shoes = shoes.filter(category__iexact=category)
 
-    try:
-        if min_price:
-            shoes = shoes.filter(price__gte=float(min_price))
-    except (TypeError, ValueError):
-        pass
+    if min_price:
+        shoes = shoes.filter(price__gte=float(min_price))
 
-    try:
-        if max_price:
-            shoes = shoes.filter(price__lte=float(max_price))
-    except (TypeError, ValueError):
-        pass
+    if max_price:
+        shoes = shoes.filter(price__lte=float(max_price))
 
     shoes = shoes.order_by('price', 'name')
 
+    #remove duplicates if any
     categories = (
         models.Shoe.objects.exclude(category__isnull=True)
         .exclude(category__exact='')
@@ -108,16 +130,18 @@ def search(request):
     }
 
     return render(request, 'search.html', context)
+
 def reviews(request,product_id):
     shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
     reviews= models.Review.objects.filter(order_item__variant__shoe=shoe)
     avg_rating = reviews.aggregate(average=Avg('rating'))['average']
-    context={
-        'shoe':shoe,
-        'reviews':reviews,
-        'avg_rating':avg_rating,
+    context = {
+        'shoe': shoe,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
     }
     return render(request,'reviews.html',context)
+
 #@login_required
 def review_product(request,product_id):
     shoe=get_object_or_404(models.Shoe,shoe_id=product_id)

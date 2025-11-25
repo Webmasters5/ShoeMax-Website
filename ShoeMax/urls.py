@@ -18,16 +18,18 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+#from admin_panel.admin import admin_site
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #path('admin/', admin_site.urls), #custom admin site
     path('',include('homepage.urls')),
     # path('home/',include('homepage.urls')),
     path('products/', include('products.urls'), name='products'),
     path('core/',include('core.urls')),
-    # path('accounts/',include('django.contrib.auth.urls')), #dummy acc for testing
+    path('accounts/',include('django.contrib.auth.urls')), #dummy acc for testing
     path('customer/', include('customer.urls')),
-    path('adminpanel/', include('adminpanel.urls')),
+    #path('adminpanel/', include('adminpanel.urls')),
     path('cart/', include('cart.urls')),
 ]
 
