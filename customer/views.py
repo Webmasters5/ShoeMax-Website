@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from models_app.models import Customer, Order, OrderItem, Notification
 from django.urls import reverse 
+from django.views.decorators.http import require_POST
+from django.contrib import messages
 
 def get_customer_or_redirect_login(request):
 	# check for customer profile
@@ -62,6 +64,35 @@ def order_detail(request, order_id):
 		return customer
 	order = get_object_or_404(Order, order_id=order_id, customer=customer)
 	return render(request, "customer/order_detail.html", {"order": order})
+
+
+@login_required
+@require_POST
+def cancel_order(request, order_id):
+	"""Allow a customer to cancel their order only if it's still pending."""
+	customer = get_customer_or_redirect_login(request)
+	if not isinstance(customer, Customer):
+		return customer
+
+	order = get_object_or_404(Order, order_id=order_id, customer=customer)
+
+	# Only allow cancel if order is pending
+	if order.status.lower() != 'pending':
+		messages.error(request, "Only pending orders can be cancelled.")
+		return redirect(reverse('customer:customer_order_detail', args=[order.order_id]))
+
+	order.status = 'cancelled'
+	order.save()
+
+	# Create a notification for the customer
+	Notification.objects.create(
+		customer=customer,
+		message=f"Your order #{order.order_id} has been cancelled.",
+		related_order=order
+	)
+
+	messages.success(request, f"Order #{order.order_id} cancelled.")
+	return redirect(reverse('customer:customer_orders'))
 
 @login_required
 def password(request):
