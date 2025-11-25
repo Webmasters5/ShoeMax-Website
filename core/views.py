@@ -5,6 +5,10 @@ from django.contrib import messages
 from .forms import signupform , loginform,forgotPassword
 from django.http import HttpResponse
 
+#for email sending
+from django.core.mail import send_mail
+from django.conf import settings
+
 
 
 # Create your views here.
@@ -18,10 +22,40 @@ def about(request):
 
 ###       contact page
 def contact(request):
-    context={
-        'active_class':'contactus'
-    }
-    return render(request,"core/contact.html",context)
+
+    if request.method == 'POST':
+
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        email = request.POST.get('email')
+        phone = request.POST.get('telnum')
+        message = request.POST.get('message')
+
+        # Build email content
+        subject = f"New Contact Us Message from {fname} {lname}"
+        body = f"""
+        You have received a new message from the Contact Us form:
+
+        Name: {fname} {lname}
+        Email: {email}
+        Phone Number: {phone}
+        Message:
+        {message}
+        """
+
+        # Send email
+        send_mail(
+            subject,
+            body,
+            settings.EMAIL_HOST_USER,        # sender (your account)
+            ['shoemaxtest@gmail.com'],       # recipient (your inbox)
+            fail_silently=False,
+        )
+
+        # … process form and send email …
+        messages.success(request, f"Thank you {fname}, your message has been sent!", extra_tags='contactSuccess')
+        return redirect('core:contact')
+    return render(request, 'core/contact.html')
 
 
 ###      login 
@@ -84,7 +118,7 @@ def forgot_password_view(request):
                 request=request,
                 use_https=request.is_secure(),
                 email_template_name='core/password_reset_email.html',
-                subject_template_name='core/password_reset_subject.txt',
+                subject_template_name='core/passwordResetSubject.txt',
                 from_email=None,  # Or set a custom sender
             )
             messages.success(request, "Password reset link sent to your email.")
@@ -93,3 +127,6 @@ def forgot_password_view(request):
         form = forgotPassword()
 
     return render(request, 'core/forgotPassword.html', {'form': form})
+
+
+
