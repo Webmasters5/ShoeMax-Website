@@ -227,3 +227,60 @@ body.dark button.btn {
 body.dark button.btn:hover {
     background-color: #555;
 }
+
+/* Logout link styled like sidebar buttons */
+.sidebar-link {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background: none;
+    color: #2c3e50;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Light theme match */
+body.light .sidebar-link:hover,
+body.light .sidebar-link:focus {
+    background: #c0c0c0;
+    color: #000;
+    font-weight: bold;
+}
+
+/* Dark theme match */
+body.dark .sidebar-link:hover,
+body.dark .sidebar-link:focus {
+    background: #333;
+    color: #fff;
+    font-weight: bold;
+}
+
+body.light {
+    background: linear-gradient(270deg, #1f4864, #54bce6, #99e3f5);
+    background-size: 400% 400%;
+    animation: gradientMove 10s ease infinite;
+    color: #222;
+}
+
+body.dark {
+    background: linear-gradient(270deg, #ca3a3a, #2a2a2a, #0f0f0f);
+    background-size: 400% 400%;
+    animation: gradientMove 10s ease infinite;
+    color: #ddd;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}

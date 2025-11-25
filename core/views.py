@@ -56,7 +56,7 @@ def log_in(request):
 def logOut(request):
     logout(request)
     messages.success(request,"You have successfully logged out.")
-    return redirect('home')
+    return redirect('homepage:home')
 
 
 #######   sign up

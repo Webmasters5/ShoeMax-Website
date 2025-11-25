@@ -47,6 +47,6 @@
     <p>Card ending in: {{ order.customer.credit_card|slice:"-4:" }}</p>
 </div>
 
-<a href="{% url 'customer_orders' %}" class="btn">Back to Orders</a>
+<a href="{% url 'customer:customer_orders' %}" class="btn">Back to Orders</a>
 
 {% endblock %}

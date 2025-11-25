@@ -14,7 +14,7 @@
             </span>
         </p>
         <p><strong>Total:</strong> ${{ order.total }}</p>
-        <a href="{% url 'customer_order_detail' order.id %}">View Details</a>
+        <a href="{% url 'customer:customer_order_detail' order.id %}">View Details</a>
     </div>
     {% empty %}
     <p>You have no orders yet.</p>

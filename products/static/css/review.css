@@ -25,6 +25,7 @@ h1{
     border-radius: 8px;
     background-color: rgb(109, 109, 109);
     display: inline-block;
+    transition: background-color 0.3s ease-in;
 }
 .button:hover{
     background-color: rgb(61, 61, 61);
@@ -43,6 +44,16 @@ h1{
     background-color: #77777792;
     margin-left: 4%;
     margin-right: 12%;
+    transition: transform 0.3s ease-in;
+}
+.image{
+    transition: transform 0.3s ease-in;
+}
+.image:hover,.cta-button:hover{
+    transform: scale(1.1);
+}
+.review:hover{
+    transform: scale(1.02);
 }
 .top{
     display: flex; 
@@ -72,6 +83,7 @@ h1{
     font-weight:bolder;
     border-radius: 6px;
     box-shadow: 2px 2px 10px #000000;
+    transition: transform 0.3s ease-in, background-color 0.3s ease-in;
 }
 .cta-button:hover{
     background-color: #7c7c7c;

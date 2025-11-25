@@ -18,6 +18,7 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name']
 
+@login_required
 def info(request):
     customer = request.user.customer
 
@@ -28,7 +29,7 @@ def info(request):
         if user_form.is_valid() and customer_form.is_valid():
             user_form.save()
             customer_form.save()
-            return redirect("customer_profile")
+            return redirect("customer:customer_profile")
     else:
         user_form = UserForm(instance=request.user)
         customer_form = CustomerForm(instance=customer)
@@ -38,14 +39,17 @@ def info(request):
         "customer_form": customer_form
     })
 
+@login_required
 def orders(request):
     orders = request.user.customer.orders.all()
     return render(request, "customer/orders.html", {"orders": orders})
 
+@login_required
 def order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id, customer=request.user.customer)
     return render(request, "customer/order_detail.html", {"order": order})
 
+@login_required
 def password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
@@ -53,7 +57,7 @@ def password(request):
             user = form.save()
             # Keep the user logged in after changing password
             update_session_auth_hash(request, user)
-            return redirect("customer_profile")  # or another success page
+            return redirect("customer:customer_profile")  # or another success page
     else:
         form = PasswordChangeForm(request.user)
     
@@ -70,9 +74,9 @@ def mark_notification_read(request, notification_id):
     notification = get_object_or_404(Notification, id=notification_id, customer=request.user.customer)
     notification.is_read = True
     notification.save()
-    return redirect("customer_notifications")
+    return redirect("customer:customer_notifications")
 
-
+@login_required
 def settings(request):
     customer = request.user.customer
     if request.method == "POST":
@@ -80,7 +84,7 @@ def settings(request):
         if theme in ["light", "dark"]:
             customer.theme_preference = theme
             customer.save()
-        return redirect("customer_settings")
+        return redirect("customer:customer_settings")
     return render(request, "customer/settings.html", {"customer": customer})
 
 @login_required
@@ -88,10 +92,10 @@ def mark_notification_read(request, notification_id):
     notification = Notification.objects.get(id=notification_id, customer=request.user.customer)
     notification.is_read = True
     notification.save()
-    return redirect('customer_notifications')
+    return redirect('customer:customer_notifications')
 
 @login_required
 def mark_all_notifications_read(request):
     notifications = request.user.customer.notifications.all()
     notifications.update(is_read=True)
-    return redirect('customer_notifications')
+    return redirect('customer:customer_notifications')

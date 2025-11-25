@@ -20,8 +20,12 @@ body{
     padding: 0rem; 
     width: 280px; 
     height: auto; 
-    background-color: #64a3a7a7; 
+    background-color: #76a4c6a7; 
     overflow: hidden;
+    transition: transform 0.3s ease;
+}
+.shoebox:hover{
+    transform: scale(1.02);
 }
 .image{
     width: 100%; 
@@ -48,6 +52,7 @@ body{
     font-family:Helvetica, sans-serif; 
     font-weight:bolder; 
     border-radius: 8px;
+    transition: background-color 0.3s ease, border 0.3s ease;
 }
 .detailbtn:hover{
     border:#000000 2px solid;

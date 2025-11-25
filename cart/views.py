@@ -49,7 +49,7 @@ def remove_from_cart(request, item_id):
 
 #checkout
 def checkout(request):
-  return render(request,"checkout.html",{})
+  return render(request,"cart/checkout.html",{})
 
 #search
 def search_view(request):

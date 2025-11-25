@@ -1,0 +1,43 @@
+{% extends 'cart/base.html' %}
+{% load static %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="checkout">
+    <h3>Checkout</h3>
+    <p class="shipping-add">Shipping address</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <h4>Payment method</h4>
+        <ul>
+            <li><input type="radio" name="payment" value="credit_card"> Credit Card</li>
+            <li><input type="radio" name="payment" value="paypal"> PayPal</li>
+            <li><input type="radio" name="payment" value="cod"> Cash on Delivery</li>
+        </ul>
+    </form>
+</div>
+
+<div class="order-summary">
+    <h5>Order Summary</h5>
+    <div class="subtotal">
+        <span>Subtotal</span>
+        <span>${{ subtotal }}</span>
+    </div>
+    <div class="discount">
+        <span>Discount</span>
+        <span>${{ discount }}</span>
+    </div>
+    <hr>
+    <div class="shipping-fee">
+        <span>Shipping Fee</span>
+        <span>${{ shipping }}</span>
+    </div>
+    <hr>
+    <div class="total">
+        <span>Total</span>
+        <span>${{ total }}</span>
+    </div>
+    <button class="checkout-btn">Submit Order</button>
+</div>
+{% endblock %}
