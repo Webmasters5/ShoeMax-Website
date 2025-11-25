@@ -67,9 +67,7 @@ def order_detail(request, order_id):
 
 
 @login_required
-@require_POST
 def cancel_order(request, order_id):
-	"""Allow a customer to cancel their order only if it's still pending."""
 	customer = get_customer_or_redirect_login(request)
 	if not isinstance(customer, Customer):
 		return customer

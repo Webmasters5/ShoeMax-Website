@@ -26,7 +26,21 @@
         <tbody>
             {% for item in order.items.all %}
             <tr>
-                <td style="padding: 8px;">{{ item.variant.shoe.name }}</td>
+                <td style="padding: 8px;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        {% with item.variant.shoe.images.first as first_image %}
+                            {% if first_image %}
+                                <img src="{{ first_image.image.url }}" alt="{{ first_image.alt_text|default:item.variant.shoe.name }}" style="width:80px; height:80px; object-fit:cover; border-radius:4px;"/>
+                            {% else %}
+                                <div style="width:80px; height:80px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#888; font-size:12px; border-radius:4px;">No image</div>
+                            {% endif %}
+                        {% endwith %}
+                        <div>
+                            <div style="font-weight:600;">{{ item.variant.shoe.brand.name }} &mdash; {{ item.variant.shoe.name }}</div>
+                            <div style="color:#555; font-size:0.95rem;">Color: {{ item.variant.color }} &nbsp;|&nbsp; Size: {{ item.variant.size }}</div>
+                        </div>
+                    </div>
+                </td>
                 <td style="padding: 8px; text-align: center;">{{ item.quantity }}</td>
                 <td style="padding: 8px;">${{ item.price }}</td>
                 <td style="padding: 8px;">${{ item.subtotal }}</td>
