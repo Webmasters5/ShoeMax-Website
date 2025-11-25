@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from django.conf import settings
+#from django.db.models.signals import post_save
+#from django.dispatch import receive
 
 # Create your models here.
 
@@ -81,6 +83,10 @@ class Customer (models.Model):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+  
+
+
+
 
 class Order(models.Model):
     STATUS_CHOICES = [

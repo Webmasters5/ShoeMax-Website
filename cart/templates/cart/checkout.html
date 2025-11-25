@@ -2,42 +2,74 @@
 {% load static %}
 {% block title %}Checkout{% endblock %}
 
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+
 {% block content %}
-<div class="checkout">
+<div class="checkout-container">
     <h3>Checkout</h3>
-    <p class="shipping-add">Shipping address</p>
+
+    <div class="shipping-add">
+        <h4>Shipping Address</h4>
+        {% if customer %}
+        <p>{{ customer.first_name }} {{ customer.last_name }}</p>
+        <p>{{ customer.address }}</p>
+        <p>{{ customer.email }}</p>
+        <p>{{ customer.phone_number }}</p>
+        {% else %}
+        <p>No address found. <a href="{% url 'add_address' %}">Add one?</a></p>
+        {% endif %}
+    </div>
+    <div class="cart-items">
+        <h4>Your Items</h4>
+        <ul>
+            {% for item in cart_items %}
+            <li class="cart-item">
+                <span>{{ item.variant.shoe.name }} ({{ item.variant.color }}, Size {{ item.variant.size }})</span>
+                <span>Qty: {{ item.quantity }}</span>
+                <span>${{ item.variant.shoe.price|floatformat:2 }}</span>
+            </li>
+            {% empty %}
+            <p>Your cart is empty.</p>
+            {% endfor %}
+        </ul>
+    </div>
 
     <form method="post">
         {% csrf_token %}
-        <h4>Payment method</h4>
-        <ul>
+        <h4>Payment Method</h4>
+        <ul class="payment-options">
             <li><input type="radio" name="payment" value="credit_card"> Credit Card</li>
             <li><input type="radio" name="payment" value="paypal"> PayPal</li>
-            <li><input type="radio" name="payment" value="cod"> Cash on Delivery</li>
+            <li><input type="radio" name="payment" value="applePay"> ApplePay</li>
         </ul>
     </form>
 </div>
 
+<form method="get" action="">
+    <input type="text" name="coupon" placeholder="Enter coupon code">
+    <button type="submit">Apply</button>
+</form>
+
 <div class="order-summary">
-    <h5>Order Summary</h5>
-    <div class="subtotal">
+    <h4>Order Summary</h4>
+    <div class="summary-item">
         <span>Subtotal</span>
-        <span>${{ subtotal }}</span>
+        <span>${{ subtotal|floatformat:2 }}</span>
     </div>
-    <div class="discount">
+    <div class="summary-item">
         <span>Discount</span>
-        <span>${{ discount }}</span>
+        <span>-${{ discount|floatformat:2 }}</span>
+    </div>
+    <div class="summary-item">
+        <span>Shipping</span>
+        <span>${{ shipping|floatformat:2 }}</span>
     </div>
     <hr>
-    <div class="shipping-fee">
-        <span>Shipping Fee</span>
-        <span>${{ shipping }}</span>
+    <div class="summary-total">
+        <strong>Total</strong>
+        <strong>${{ total|floatformat:2 }}</strong>
     </div>
-    <hr>
-    <div class="total">
-        <span>Total</span>
-        <span>${{ total }}</span>
-    </div>
-    <button class="checkout-btn">Submit Order</button>
+    <button type="submit" class="checkout-btn">Submit Order</button>
+</div>
 </div>
 {% endblock %}
