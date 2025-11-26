@@ -132,8 +132,8 @@ def search(request):
     return render(request, 'search.html', context)
 
 def reviews(request,product_id):
-    shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
-    reviews= models.Review.objects.filter(order_item__variant__shoe=shoe)
+    shoe = get_object_or_404(models.Shoe,shoe_id=product_id)
+    reviews = models.Review.objects.filter(order_item__variant__shoe=shoe)
     avg_rating = reviews.aggregate(average=Avg('rating'))['average']
     context = {
         'shoe': shoe,

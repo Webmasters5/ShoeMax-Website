@@ -109,10 +109,10 @@ class Customer(models.Model):
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('shipped', 'Shipped'),
-        ('delivered', 'Delivered'),
-        ('cancelled', 'Cancelled'),
+        ('Pending', 'Pending'),
+        ('Shipped', 'Shipped'),
+        ('Delivered', 'Delivered'),
+        ('Cancelled', 'Cancelled'),
     ]
     
     order_id = models.AutoField(primary_key=True)
@@ -141,7 +141,7 @@ class OrderItem(models.Model):
         return self.quantity * self.price
 
     def __str__(self):
-        return f"{self.variant.shoe.name} x {self.quantity}"
+        return f"Order #{self.order.order_id}: {self.variant.shoe.name} x {self.quantity}"
 
     def save(self, *args, **kwargs):
         if not self.price:
@@ -169,7 +169,7 @@ class Review(models.Model):
     comment = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    order_item = models.OneToOneField('OrderItem', on_delete=models.CASCADE, related_name='review')
+    order_item = models.ForeignKey('OrderItem', on_delete=models.CASCADE, related_name='review')
     
     def __str__(self):
         return self.title
