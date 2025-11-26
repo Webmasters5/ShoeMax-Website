@@ -138,3 +138,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #store uploaded pics in project/med
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+###### FOR EMAILS #########
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# SMTP server details (Gmail)
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# Your email account
+EMAIL_HOST_USER = 'shoemaxtest@gmail.com'
+EMAIL_HOST_PASSWORD = 'tfij tiwy zsso nmml'

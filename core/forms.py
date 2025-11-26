@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,PasswordResetForm
 from django.contrib.auth.models import User
 
 
@@ -65,3 +65,20 @@ class signupform(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+
+############ forgot form #####################
+
+# core/forms.py
+from django.contrib.auth.forms import PasswordResetForm
+
+class forgotPassword(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['email'].widget.attrs.update({
+            'class': 'email-input', 
+            'placeholder': 'Enter your email'
+        })
+
+

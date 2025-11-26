@@ -38,7 +38,18 @@
         <div class="two">
             <div class="twodiv">
                 <div class="twoform">
-                    <form>
+                    {% if messages %}
+                        <ul>
+                            {% for message in messages|slice:"-1:" %}
+                                {% if "contactSuccess" in message.tags %}
+                                    <li>{{ message }}</li>
+                                {% endif %}    
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
                         <div class="inputtext">
                             <label class="label">First name </label>
                             <input class="textbox" type="text" name="fname" id="fname">
@@ -61,7 +72,7 @@
                         </div>
                         <div class="button-div">
                             <button class="button" type="submit" name="submit" id="submit" >Submit</button>
-                            <button class="button" type="reset">Reset</button>
+                            <button class="button" type="reset" onclick="window.location.reload()" >Reset</button>
                         </div>
                     </form>
                 </div>
