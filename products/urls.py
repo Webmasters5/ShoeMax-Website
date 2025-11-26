@@ -13,7 +13,7 @@ urlpatterns = [
     path('wishlist/add/<int:shoe_id>/', views.add_wishlist_item, name='wishlist_add'),
     path('dummy/',views.dummy,name='dummy'), #to delete
     path('review/<int:product_id>',views.reviews, name='reviews'),
-    path('reviewform/<int:product_id>',views.review_product, name='review_product'),
+    path('reviewform/<int:product_id>',views.add_review, name='add_review'),
 ]
 
 #Images don't load without this configuration in debug mode:
