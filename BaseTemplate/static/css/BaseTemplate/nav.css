@@ -1,0 +1,60 @@
+/* Main spacing to account for fixed navbar */
+main { padding-top: 70px; }
+
+/* Cart indicator dot */
+.cart-dot {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.1rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  background: #dc3545;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Footer styling */
+footer.site-footer {
+  background: #111827;
+  color: #e6edf3;
+}
+
+footer.site-footer a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+}
+
+footer.site-footer a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-desc p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.offcanvas.offcanvas-start { --bs-offcanvas-width: 260px; }
+
+.offcanvas .list-group-item { padding-top: .5rem; padding-bottom: .5rem; }
+
+/* Floating messages (Django messages) */
+.floating-messages {
+  position: fixed;
+  top: 76px; /* sits below the fixed navbar (navbar height + small gap) */
+  right: 1rem;
+  z-index: 1080; /* above normal content, below modals */
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  align-items: flex-end;
+  pointer-events: none; /* allow clicks to pass through except on the toasts themselves */
+}
+.floating-messages .toast {
+  pointer-events: auto; /* make toasts clickable (dismiss button) */
+  min-width: 260px;
+  max-width: 420px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.35);
+}
+.floating-messages .btn-close {
+  opacity: .95;
+}
