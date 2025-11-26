@@ -1,110 +1,119 @@
-from django.shortcuts import render,get_object_or_404,redirect
-from django.db.models import Q,Avg
-from .models import Shoe,ShoeVariant,Review,OrderItem
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Q, Avg, Sum
+from models_app import models
 from .forms import Reviewform
+#from .models import Shoe,ShoeVariant,Review,OrderItem
+from django.views import generic
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
 #from django.http import HttpResponse
 
 # Create your views here.
-def product_details(request, product_id):
 
-    class DummyBrand:
-        def __init__(self):
-            self.name = "Nike"
-    
-    class DummyVariant:
-        def __init__(self, variant_id, color, size, stock):
-            self.variant_id = variant_id
-            self.color = color
-            self.size = size
-            self.stock = stock
-    
-    variants = [
-        DummyVariant(1, "Black", 8, 15),
-        DummyVariant(2, "White", 8, 10),
-        DummyVariant(3, "Black", 9, 8),
-        DummyVariant(4, "White", 9, 12),
-        DummyVariant(5, "Red", 10, 5),
-    ]
-    
-    class DummyVariantsManager:
-        def all(self):
-            return variants
-    
-    # Create dummy image field
-    class DummyImageField:
-        def __init__(self):
-            self.url = "/static/images/nike-shoe-sample.jpg"
-    
-    # Create a dummy product object with all required attributes
-    class DummyProduct:
-        def __init__(self):
-            self.shoe_id = product_id
-            self.name = "Nike Air Max 270"
-            self.price = 129.99
-            self.brand = DummyBrand()
-            self.color = "Black/White"
-            self.size = 8
-            self.gender = "Men"
-            self.category = "Running Shoes"
-            self.description = "The Nike Air Max 270 delivers visible Air cushioning from heel to toe. Inspired by the Air Max 93 and Air Max 180, the 270 features Nike's biggest heel Air unit yet for a super-soft ride that feels as impossible as it looks."
-            self.image_url = DummyImageField()
-            self.variants = DummyVariantsManager()
-    
-    product = DummyProduct()
+@login_required
+def add_wishlist_item(request, shoe_id):
+    if request.method != "POST":
+        return redirect('products:shoe_details', shoe_id=shoe_id)
 
-    shoe=get_object_or_404(Shoe,shoe_id=product_id) #added this
-    reviews=Review.objects.filter(order_item__variant__shoe=shoe)
-    avg_rating = reviews.aggregate(average=Avg('rating'))['average']
+    shoe = get_object_or_404(models.Shoe, pk=shoe_id)
+    customer = request.user.customer_profile if request.user.is_authenticated else None    
     
+    if not customer:
+        return redirect('products:shoe_details', shoe_id=shoe_id)
+
+    models.WishlistItem.objects.get_or_create(customer=customer, shoe=shoe)
+    
+    return redirect(shoe.get_absolute_url())
+
+@login_required
+def delete_wishlist_item(request, item_id):
+    item = get_object_or_404(models.WishlistItem, pk=item_id)
+
+    #customers can only delete their own wishlist items
+    if not ((hasattr(item.customer, 'user') and item.customer.user == request.user)):
+        return HttpResponseForbidden("Not allowed")
+
+    if request.method == "POST":
+        item.delete()
+
+    return redirect(reverse('products:wishlist'))
+
+class WishlistView(LoginRequiredMixin,generic.ListView):
+    model = models.WishlistItem
+    template_name = 'wishlist.html'
+    context_object_name = 'wishlist_items'
+    paginate_by = 5
+    
+    def get_queryset(self):
+        # base queryset already refers to WishlistItem objects
+        qs = super().get_queryset().select_related('customer', 'shoe').prefetch_related('shoe__images')
+        customer = self.request.user.customer_profile if self.request.user.is_authenticated else None
+        if customer:
+            # filter WishlistItem rows for this customer so template receives objects
+            return qs.filter(customer=customer)
+        return qs.none()
+
+def shoe_details(request, shoe_id):
+    shoe = models.Shoe.objects.prefetch_related('images', 'variants').get(pk=shoe_id)
+    
+    #Query set equivalent to SELECT color, SUM(stock) as total_stock FROM ShoeVariant WHERE shoe_id=shoe_id GROUP BY color
+    qs = shoe.variants.values('color').annotate(total_stock=Sum('stock'))
+    
+    #create dictionary for colour availability
+    color_available = {entry['color']: (entry['total_stock'] > 0) for entry in qs}
+    
+    main_image = shoe.images.first() if shoe.images.exists() else None
+    
+    #get selected colour from query parameters
+    selected_color = request.GET.get('color')
+    
+    if selected_color is None: selected_color = list(color_available.keys())[0]
+   
+    variants = shoe.variants.filter(color=selected_color).order_by('size') if selected_color else None
+        
     context = {
-        'product': product,
-        'product_id': product_id,
-        'avg_rating': avg_rating
+        'shoe': shoe,
+        'main_image': main_image,
+        'color_available': color_available,
+        'selected_color': selected_color,
+        'variants': variants,
     }
-
     
+    print(color_available)
+    print(variants)
+    print(selected_color)
     return render(request, 'details.html', context)
-
-
+    
 def search(request):
-    """
-    Basic search page for Shoe models with filters:
-    - q: search text across name and description
-    - category: exact match on Shoe.category
-    - min_price, max_price: numeric filters on Shoe.price
-    """
+    #retrieve GET query parameters
     q = request.GET.get('q', '').strip()
     category = request.GET.get('category', '').strip()
     min_price = request.GET.get('min_price', '').strip()
     max_price = request.GET.get('max_price', '').strip()
 
-    shoes = Shoe.objects.all()
+    shoes = models.Shoe.objects.all().prefetch_related('images')
 
     if q:
         shoes = shoes.filter(
-            Q(name__icontains=q) | Q(description__icontains=q)
+            Q(name__icontains=q) | Q(description__icontains=q) #combine sets 
         )
 
     if category:
         shoes = shoes.filter(category__iexact=category)
 
-    # Defensive parsing of price inputs
-    try:
-        if min_price:
-            shoes = shoes.filter(price__gte=float(min_price))
-    except (TypeError, ValueError):
-        pass
+    if min_price:
+        shoes = shoes.filter(price__gte=float(min_price))
 
-    try:
-        if max_price:
-            shoes = shoes.filter(price__lte=float(max_price))
-    except (TypeError, ValueError):
-        pass
+    if max_price:
+        shoes = shoes.filter(price__lte=float(max_price))
 
     shoes = shoes.order_by('price', 'name')
 
+    #remove duplicates if any
     categories = (
-        Shoe.objects.exclude(category__isnull=True)
+        models.Shoe.objects.exclude(category__isnull=True)
         .exclude(category__exact='')
         .values_list('category', flat=True)
         .distinct()
@@ -123,23 +132,24 @@ def search(request):
     return render(request, 'search.html', context)
 
 def reviews(request,product_id):
-    shoe=get_object_or_404(Shoe,shoe_id=product_id)
-    reviews=Review.objects.filter(order_item__variant__shoe=shoe)
+    shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
+    reviews= models.Review.objects.filter(order_item__variant__shoe=shoe)
     avg_rating = reviews.aggregate(average=Avg('rating'))['average']
-    context={
-        'shoe':shoe,
-        'reviews':reviews,
-        'avg_rating':avg_rating,
+    context = {
+        'shoe': shoe,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
     }
     return render(request,'reviews.html',context)
+
 #@login_required
 def review_product(request,product_id):
-    shoe=get_object_or_404(Shoe,shoe_id=product_id)
+    shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
     if request.method =='POST':
         form=Reviewform(request.POST)
         if form.is_valid():
             Review=form.save(commit=False)
-            order_item=OrderItem.objects.filter(variant__shoe=shoe, order__customer__user=request.user)
+            order_item= models.OrderItem.objects.filter(variant__shoe=shoe, order__customer__user=request.user)
             if order_item:
                 Review.order_item = order_item
                 Review.save()
@@ -155,5 +165,5 @@ def review_product(request,product_id):
     return render(request,'reviewform.html',context)
 
 def dummy(request):
-    shoe=Shoe.objects.all()
+    shoe=models.Shoe.objects.all()
     return render(request,'dummy.html',{'shoes':shoe})

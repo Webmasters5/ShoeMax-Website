@@ -1,0 +1,33 @@
+{% extends "admin/dashboard.html" %}
+
+{% load static %}
+
+{% block content %}
+<h1 class="dashboard-heading">Pricing Manager — Price Highlights</h1>
+
+<section>
+  <h3>Highest Priced Shoes</h3>
+  {% if top_expensive %}
+    <ol>
+      {% for s in top_expensive %}
+        <li>{{ s.name }} — ${{ s.price }}</li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p>No shoes found.</p>
+  {% endif %}
+</section>
+
+<section style="margin-top:1rem">
+  <h3>Lowest Priced Shoes</h3>
+  {% if top_cheap %}
+    <ol>
+      {% for s in top_cheap %}
+        <li>{{ s.name }} — ${{ s.price }}</li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p>No shoes found.</p>
+  {% endif %}
+</section>
+{% endblock %}

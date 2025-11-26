@@ -11,9 +11,15 @@
 <form method="post">
     {% csrf_token %}
     <div class="container">
-    {% if form.errors %}
-    {{form.errors}}
+    <h4>
+    {% if form.non_field_errors %}
+    <ul>
+      {% for error in form.non_field_errors %}
+      <li style="color: white;">{{error}}</li>
+      {% endfor %}
+    </ul>
     {% endif %}
+    </h4>
     {{form.title.errors}}
     <h2>{{form.title.label}}:</h2>
     {{form.title}}

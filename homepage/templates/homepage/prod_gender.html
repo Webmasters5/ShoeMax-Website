@@ -29,11 +29,13 @@
     <div class="container">
       {% for shoe in page_obj %}
         <div class="shoebox">
-          <img src="{{ shoe.image_url.url }}" alt="{{ shoe.name }}" class="image">
+          {% if shoe.images.first %}
+            <img src="{{ shoe.images.first.image.url }}" alt="{{ shoe.name }}" class="image">
+          {% endif %}
           <div style="padding: 1rem;">
             <h2 class="name">{{ shoe.name }}</h2>
             <h3 class="price">£ {{ shoe.price }}</h3>
-            <a href="{% url 'products:product_details' shoe.shoe_id %}" class="detailbtn">View Details</a>
+            <a href="{% url 'products:shoe_details' shoe.shoe_id %}" class="detailbtn">View Details</a>
           </div>
         </div>
       {% endfor %}

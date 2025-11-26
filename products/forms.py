@@ -1,5 +1,5 @@
 from django import forms
-from .models import Review
+from models_app.models import Review
 
 class Reviewform(forms.ModelForm):
     RATING_CHOICES=[
