@@ -135,10 +135,22 @@ def reviews(request,product_id):
     shoe = get_object_or_404(models.Shoe,shoe_id=product_id)
     reviews = models.Review.objects.filter(order_item__variant__shoe=shoe)
     avg_rating = reviews.aggregate(average=Avg('rating'))['average']
+    # determine if the current user can leave a review: they must be authenticated
+    # and have at least one Order with status 'Delivered' containing this shoe
+    can_leave_review = False
+    if request.user.is_authenticated:
+        customer = getattr(request.user, 'customer_profile', None)
+        if customer:
+            delivered_orders = models.Order.objects.filter(customer=customer, status__iexact='delivered')
+            if delivered_orders.exists():
+                has_item = models.OrderItem.objects.filter(order__in=delivered_orders, variant__shoe=shoe).exists()
+                can_leave_review = bool(has_item)
+
     context = {
         'shoe': shoe,
         'reviews': reviews,
         'avg_rating': avg_rating,
+        'can_leave_review': can_leave_review,
     }
     return render(request,'reviews.html',context)
 

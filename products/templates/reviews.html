@@ -36,7 +36,9 @@
             {% endif %}
 
             <div class="mt-3">
+                {% if can_leave_review %}
                 <a href="{% url 'products:review_product' shoe.shoe_id %}" class="btn btn-primary me-2">Leave a review</a>
+                {% endif %}
                 <a href="{% url 'products:shoe_details' shoe.shoe_id %}" class="btn btn-outline-secondary">Back to product</a>
             </div>
         </div>
