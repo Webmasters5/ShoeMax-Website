@@ -14,10 +14,15 @@ class Reviewform(forms.ModelForm):
     ]
 
     # Return an int for rating (avoids string/integer confusion later)
-    rating = forms.TypedChoiceField(choices=RATING_CHOICES, coerce=int, widget=forms.RadioSelect(), label='Rating: ')
+    rating = forms.TypedChoiceField(
+        choices=RATING_CHOICES,
+        coerce=int, #HTML Post will send strings, so convert to int
+        widget=forms.RadioSelect(attrs={'class': 'form-check-input'}),
+        label='Rating: '
+    )
 
     # validation limits
-    TITLE_MIN = 1
+    TITLE_MIN = 5
     TITLE_MAX = 100
     COMMENT_MIN = 10
     COMMENT_MAX = 2000
@@ -34,10 +39,12 @@ class Reviewform(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={
                 'placeholder': 'Enter a review title',
+                'class': 'form-control',
             }),
             'comment': forms.Textarea(attrs={
                 'placeholder': 'Share your experience',
                 'rows': 4,
+                'class': 'form-control',
             })
         }
 
