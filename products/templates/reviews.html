@@ -60,6 +60,11 @@
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <div class="fw-bold text-warning">{{ review.rating }} <i class="fas fa-star star"></i></div>
+                                    {% if request.user.is_authenticated and request.user == review.order_item.order.customer.user %}
+                                    <div class="ms-3">
+                                        <a href="{% url 'products:edit_review' review.review_id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <p class="card-text mt-2">{{ review.comment }}</p>

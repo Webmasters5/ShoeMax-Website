@@ -6,7 +6,7 @@
 {% block content %}
 
 <div class="container mt-4">
-  <h1 class="mb-4">Write a Review for {{ shoe.name }}</h1>
+  <h1 class="mb-4">{% if editing %}Edit{% else %}Write{% endif %} a Review for {{ shoe.name }}</h1>
 
   {% if form.non_field_errors %}
     <div class="nonfield-errors alert alert-danger" role="alert">
@@ -60,7 +60,7 @@
       {% endif %}
     </fieldset>
 
-    <button type="submit" class="btn btn-primary">Submit Review</button>
+  <button type="submit" class="btn btn-primary">{% if editing %}Save Changes{% else %}Submit Review{% endif %}</button>
     <a href="{% url 'products:reviews' shoe.shoe_id %}" class="btn btn-secondary ms-2">Back</a>
   </form>
 
