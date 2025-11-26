@@ -38,7 +38,6 @@
                 <div class="information-input">
                     <form method="post">
                         {%csrf_token%}
-
                         <div class="username-box">
                             <div class="username-label">Username</div>
                             <div class="username-input-box">
@@ -75,7 +74,9 @@
 
                         <div class="forgot-password-box">
                             <div class="forgot-password">
-                                <button type="button" class="forgot-password-button">Forgot Password</button>
+                                <a href="/core/forgot">
+                                    <button type="button" class="forgot-password-button">Forgot Password</button>
+                                </a>
                             </div>
                         </div>
                         <div class="login-button-box">
@@ -90,7 +91,10 @@
                         </div> -->
                         <div class="register-box">
                             <div class="register-text">Don't have an account?</div>
-                            <a href="{% url 'core:signup' %}" class="register-button">Register Now!</a>
+                            <a href="/core/signup">
+                                <button class="register-button" type="button" name="register-button">Register Now!</button>
+                            </a>
+                            
                         </div>
                     </form>
                 </div>
