@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.forms import Textarea
+from django.db import models as dj_models
 from models_app import models
 
 class OrderItemInline(admin.TabularInline):
@@ -33,6 +35,21 @@ class NotificationInline(admin.TabularInline):
     raw_id_fields = ('related_order',)
     fields = ('message', 'is_read', 'created_at', 'related_order')
     readonly_fields = ('created_at',)
+    formfield_overrides = {
+        dj_models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 40})},
+    }
+
+
+class PaymentMethodInline(admin.StackedInline):
+    model = models.PaymentMethod
+    extra = 0
+    fields = ('title', 'card_type', 'card_num', 'exp_date', 'holder_name', 'is_default')
+
+
+class AddressInline(admin.TabularInline):
+    model = models.Address
+    extra = 0
+    fields = ('title', 'first_name', 'last_name', 'street', 'city', 'zip_code', 'is_default')
 
 class ShoeAdmin(admin.ModelAdmin):
     list_display = ('name', 'brand', 'category', 'gender', 'price')
@@ -68,11 +85,70 @@ class NotificationAdmin(admin.ModelAdmin):
     list_filter = ('is_read', 'created_at')
     search_fields = ('customer__user__username', 'message')
     raw_id_fields = ('customer', 'related_order')
+    formfield_overrides = {
+        dj_models.TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 60})},
+    }
+
+
+class PaymentMethodAdmin(admin.ModelAdmin):
+    list_display = ('card_id', 'title', 'customer', 'card_type', 'holder_name', 'is_default')
+    list_filter = ('card_type', 'is_default')
+    search_fields = ('customer__user__username', 'holder_name', 'card_num')
+    raw_id_fields = ('customer',)
+    actions = ('make_selected_default',)
+
+    def save_model(self, request, obj, form, change):
+        # If marking this payment method as default, unset others for the same customer
+        super().save_model(request, obj, form, change)
+        if obj.is_default and obj.customer:
+            models.PaymentMethod.objects.filter(customer=obj.customer).exclude(pk=obj.pk).update(is_default=False)
+
+    def make_selected_default(self, request, queryset):
+        # Custom action to make only the first selected as default
+        customers = {}
+        for pm in queryset:
+            if pm.customer:
+                customers.setdefault(pm.customer.pk, []).append(pm)
+
+        for cust_id, items in customers.items():
+            # unset existing defaults
+            models.PaymentMethod.objects.filter(customer_id=cust_id).update(is_default=False)
+            # mark the first selected as default
+            first = items[0]
+            first.is_default = True
+            first.save()
+
+    make_selected_default.short_description = 'Set selected payment method as default (per customer)'
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('title', 'rating', 'date_added', 'order_item')
     search_fields = ('title', 'order_item__variant__shoe__name')
 
+
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ('addr_id', 'title', 'customer', 'street', 'city', 'zip_code', 'is_default')
+    list_filter = ('city', 'is_default')
+    search_fields = ('customer__user__username', 'street', 'city', 'zip_code')
+    raw_id_fields = ('customer',)
+    actions = ('make_selected_default',)
+
+    def make_selected_default(self, request, queryset):
+        # Makes only the first selected address as default per customer
+        customers = {}
+        for addr in queryset:
+            if addr.customer:
+                customers.setdefault(addr.customer.pk, []).append(addr)
+
+        for cust_id, items in customers.items():
+            # unset existing defaults for that customer
+            models.Address.objects.filter(customer_id=cust_id).update(is_default=False)
+            # mark the first selected as default
+            first = items[0]
+            first.is_default = True
+            first.save()
+
+    make_selected_default.short_description = 'Set selected address as default (per customer)'
+    
 class SiteAdminAdmin(admin.ModelAdmin):
     list_display = ('admin_id', 'user', 'role')
     raw_id_fields = ('user',)
@@ -91,7 +167,7 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = ('user', 'phone', 'mobile', 'theme_preference')
     search_fields = ('user__username', 'user__email', 'phone')
     raw_id_fields = ('user',)
-    inlines = [CartItemInline, WishlistItemInline, NotificationInline]
+    inlines = [CartItemInline, WishlistItemInline, NotificationInline, PaymentMethodInline, AddressInline]
 
 
 admin.site.register(models.Shoe, ShoeAdmin)
@@ -106,3 +182,5 @@ admin.site.register(models.Review, ReviewAdmin)
 admin.site.register(models.Admin, SiteAdminAdmin)
 admin.site.register(models.WishlistItem, WishlistItemAdmin)
 admin.site.register(models.CartItem, CartItemAdmin)
+admin.site.register(models.PaymentMethod, PaymentMethodAdmin)
+admin.site.register(models.Address, AddressAdmin)

@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth.models import User
+#from django.db import transaction
 
 # Create your models here.
 
@@ -142,7 +143,18 @@ class PaymentMethod(models.Model):
             last4 = self.card_num[-4:] if self.card_num else ''
             self.title = f"{self.card_type} ****{last4}"
 
+        # If this is a newly created payment method and the customer has no other methods,
+        # make it the default automatically.
+        is_new = self.pk is None
+        if is_new and self.customer:
+            has_other = PaymentMethod.objects.filter(customer=self.customer).exists()
+            if not has_other:
+                self.is_default = True
+
         super().save(*args, **kwargs)
+        if self.is_default and self.customer:
+            # Unset other defaults for this customer
+            PaymentMethod.objects.filter(customer=self.customer).exclude(pk=self.pk).update(is_default=False)
 
     def __str__(self):
         masked = self.card_num[-4:] if self.card_num else '----'
@@ -159,12 +171,17 @@ class Address(models.Model):
     last_name = models.CharField(max_length=50)
     is_default = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name_plural = 'Addresses'
+
     def save(self, *args, **kwargs):
         # If no title is provided, set a default title safely
         if not self.title or not self.title.strip():
             self.title = f"{self.first_name.strip()}-{self.street.strip()[:10]}-{self.city.strip()}"
 
         super().save(*args, **kwargs)
+        if self.is_default and self.customer:
+            Address.objects.filter(customer=self.customer).exclude(pk=self.pk).update(is_default=False)
 
     def __str__(self):
         cust = self.customer.user.username if self.customer else 'Unknown'
