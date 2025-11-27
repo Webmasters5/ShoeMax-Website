@@ -1,0 +1,29 @@
+{% extends 'customer/base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Address</h1>
+<div class="address-detail">
+    <h3>{{ address.title }}</h3>
+    <p>{{ address.first_name }} {{ address.last_name }}</p>
+    <p>{{ address.street }}</p>
+    <p>{{ address.city }} {{ address.zip_code }}</p>
+</div>
+
+<p>
+    {% if not address.is_default %}
+        <form method="post" action="{% url 'customer:address_set_default' address.pk %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Set as default</button>
+        </form>
+    {% else %}
+        <span class="badge">Default</span>
+    {% endif %}
+
+    <a href="{% url 'customer:address_edit' address.pk %}">Edit</a>
+    <a href="{% url 'customer:address_delete' address.pk %}">Delete</a>
+</p>
+
+<p><a href="{% url 'customer:address_list' %}">Back to addresses</a></p>
+
+{% endblock %}

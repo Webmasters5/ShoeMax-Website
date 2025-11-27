@@ -1,0 +1,44 @@
+{% extends 'customer/base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Addresses</h1>
+
+<p>
+    <form method="get" action="{% url 'customer:address_add' %}" style="display:inline;">
+        <button type="submit" class="button">Add new address</button>
+    </form>
+</p>
+
+{% if addresses %}
+    <ul class="addresses-list">
+        {% for addr in addresses %}
+            <li class="address-item {% if addr.is_default %}default{% endif %}">
+                <a class="addr-link" href="{% url 'customer:address_detail' addr.pk %}">
+                    <div class="addr-title">{{ addr.title }}</div>
+                    <div class="addr-details">{{ addr.street }}, {{ addr.city }} {{ addr.zip_code }}</div>
+                </a>
+                <div class="addr-actions">
+                    {% if not addr.is_default %}
+                        <form method="post" action="{% url 'customer:address_set_default' addr.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">Set as default</button>
+                        </form>
+                    {% else %}
+                        <span class="badge">Default</span>
+                    {% endif %}
+
+                    <a href="{% url 'customer:address_delete' addr.pk %}" style="margin-left:8px;">Delete</a>
+
+                    <form method="get" action="{% url 'customer:address_edit' addr.pk %}" style="display:inline; margin-left:8px;">
+                        <button type="submit">Edit</button>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no saved addresses.</p>
+{% endif %}
+
+{% endblock %}
