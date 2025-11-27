@@ -1,4 +1,4 @@
-/* Main spacing to account for fixed navbar */
+/* Main below navbar */
 main { padding-top: 70px; }
 
 /* Cart indicator dot */
@@ -40,19 +40,24 @@ footer.site-footer a:hover {
 /* Floating messages (Django messages) */
 .floating-messages {
   position: fixed;
-  top: 76px; /* sits below the fixed navbar (navbar height + small gap) */
-  right: 1rem;
-  z-index: 1080; /* above normal content, below modals */
+  top: 76px; /* navbar height */
+  left: 50%; /* center horizontally */
+  transform: translateX(-50%);
+  z-index: 1080; /* above normal content */
   display: flex;
   flex-direction: column;
   gap: .5rem;
-  align-items: flex-end;
+  align-items: center; /* center toasts horizontally */
   pointer-events: none; /* allow clicks to pass through except on the toasts themselves */
+  width: min(90vw, 520px); /* responsive cap */
+  max-width: 520px;
+  padding: 0 0.5rem; /* small horizontal padding */
 }
 .floating-messages .toast {
   pointer-events: auto; /* make toasts clickable (dismiss button) */
-  min-width: 260px;
-  max-width: 420px;
+  width: 100%;
+  min-width: 220px;
+  max-width: 100%;
   box-shadow: 0 6px 18px rgba(2,6,23,0.35);
 }
 .floating-messages .btn-close {
