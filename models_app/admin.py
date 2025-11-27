@@ -46,7 +46,7 @@ class PaymentMethodInline(admin.StackedInline):
     fields = ('title', 'card_type', 'card_num', 'exp_date', 'holder_name', 'is_default')
 
 
-class AddressInline(admin.TabularInline):
+class AddressInline(admin.StackedInline):
     model = models.Address
     extra = 0
     fields = ('title', 'first_name', 'last_name', 'street', 'city', 'zip_code', 'is_default')

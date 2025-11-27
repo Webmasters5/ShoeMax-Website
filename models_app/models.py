@@ -114,12 +114,16 @@ class Customer(models.Model):
         return f"{self.user.first_name} {self.user.last_name}"
 
 class PaymentMethod(models.Model):
+    CARD_TYPE_CHOICES = [
+        ('debit', 'Debit'),
+        ('credit', 'Credit'),
+    ]
     card_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name='payment_methods', null=True, blank=True) #Allow generic payment methods and preserve deleted customers
     card_num = models.CharField(max_length=19)
     exp_date = models.DateField()
-    card_type = models.CharField(max_length=50)
+    card_type = models.CharField(max_length=10, choices=CARD_TYPE_CHOICES)
     holder_name = models.CharField(max_length=100)
     is_default = models.BooleanField(default=False)
 
@@ -141,7 +145,7 @@ class PaymentMethod(models.Model):
         # If no title is provided, set a default title
         if not self.title or not self.title.strip():
             last4 = self.card_num[-4:] if self.card_num else ''
-            self.title = f"{self.card_type} ****{last4}"
+            self.title = f"{self.get_card_type_display()} ****{last4}"
 
         # If this is a newly created payment method and the customer has no other methods,
         # make it the default automatically.

@@ -5,7 +5,9 @@
 <h1>Payment Methods</h1>
 
 <p>
-    <a class="button" href="{% url 'customer:paymentmethod_add' %}">Add new payment method</a>
+    <form method="get" action="{% url 'customer:paymentmethod_add' %}" style="display:inline;">
+        <button type="submit" class="button">Add new payment method</button>
+    </form>
 </p>
 
 {% if payment_methods %}
@@ -26,13 +28,15 @@
                         <span class="badge">Default</span>
                     {% endif %}
 
-                    <!-- Quick delete button: posts to the DeleteView for this payment method -->
+                    <!-- Delete button -->
                     <form method="post" action="{% url 'customer:paymentmethod_delete' pm.pk %}" style="display:inline; margin-left:8px;">
                         {% csrf_token %}
                         <button type="submit" onclick="return confirm('Delete this payment method?');">Delete</button>
                     </form>
-                    <!-- Edit link -->
-                    <a href="{% url 'customer:paymentmethod_edit' pm.pk %}" style="margin-left:8px;">Edit</a>
+                    <!-- Edit button -->
+                    <form method="get" action="{% url 'customer:paymentmethod_edit' pm.pk %}" style="display:inline; margin-left:8px;">
+                        <button type="submit">Edit</button>
+                    </form>
                 </div>
             </li>
         {% endfor %}
