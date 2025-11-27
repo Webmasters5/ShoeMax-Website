@@ -39,7 +39,6 @@ class Shoe(models.Model):
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     shoe_id = models.AutoField(primary_key=True)
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE, related_name='shoes')
-    #image_url = models.ImageField(upload_to='shoes/')
     
     def __str__(self):
         return self.name
@@ -96,9 +95,6 @@ class Customer(models.Model):
     )
     phone = models.CharField(max_length=15, blank=False, default="")
     mobile = models.CharField(max_length=15, blank=True, default="")
-    shipping_address = models.TextField(blank=True, default="") # to remove
-    billing_address = models.TextField(blank=True, default="") # to remove
-    credit_card = models.CharField(max_length=16, blank=True, default="")
     theme_preference = models.CharField(
         max_length=10,
         choices=[("light", "Light"), ("dark", "Dark")],
@@ -149,7 +145,7 @@ class PaymentMethod(models.Model):
 
         # If this is a newly created payment method and the customer has no other methods,
         # make it the default automatically.
-        is_new = self.pk is None
+        is_new = self.pk is None #Not created yet
         if is_new and self.customer:
             has_other = PaymentMethod.objects.filter(customer=self.customer).exists()
             if not has_other:
@@ -160,9 +156,14 @@ class PaymentMethod(models.Model):
             # Unset other defaults for this customer
             PaymentMethod.objects.filter(customer=self.customer).exclude(pk=self.pk).update(is_default=False)
 
+    @property
+    def masked(self):
+        """Return masked card number string (e.g. '****1234') or '----' when unavailable."""
+        last4 = self.card_num[-4:] if self.card_num else '----'
+        return f'****{last4}'
+
     def __str__(self):
-        masked = self.card_num[-4:] if self.card_num else '----'
-        return f'PaymentMethod {self.card_id} - ****{masked} ({self.holder_name})'
+        return f'PM {self.card_id} - {self.masked} ({self.holder_name})'
 
 class Address(models.Model):
     addr_id = models.AutoField(primary_key=True)
@@ -206,11 +207,19 @@ class Order(models.Model):
     delivery_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     total_price = models.DecimalField(max_digits=8, decimal_places=2, default=0) #to replace
-    shipping_address = models.TextField(blank=True, null=True) #to remove
-    billing_address = models.TextField(blank=True, null=True) #to remove
+    shipping_address = models.ForeignKey('Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders_with_shipping')
+    billing_address = models.ForeignKey('Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders_with_billing')
+    payment_method = models.ForeignKey('PaymentMethod', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders')
     shipping_cost = models.DecimalField(max_digits=8, decimal_places=2, default=100.00)
     subtotal = models.DecimalField(max_digits=8, decimal_places=2, blank=True, default=0.00)
     discount_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    
+    @property
+    def payment_method_label(self):
+        pm = self.payment_method
+        if pm is None:
+            return 'Cash on delivery'
+        return pm.title if pm.title else getattr(pm, 'masked', str(pm))
     
     def __str__(self):
         return f"Order #{self.order_id} - {self.customer.user.username}"
@@ -246,7 +255,7 @@ class Notification(models.Model):
     )
 
     def __str__(self):
-        return f"Notification for {self.customer.user.username}: {self.message[:50]}"
+        return f"Notification for {self.customer.user.username}: {self.message[:10]}..."
 
 class Review(models.Model):
     review_id = models.AutoField(primary_key=True)
@@ -280,7 +289,9 @@ class WishlistItem(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('customer', 'shoe')
+        constraints = [
+            models.UniqueConstraint(fields=['customer', 'shoe'], name='unique_wishlist_customer_shoe')
+        ]
 
     def __str__(self):
         return f'WishlistItem {self.shoe} for {self.customer}'
@@ -290,6 +301,10 @@ class CartItem(models.Model):
     variant = models.ForeignKey(ShoeVariant, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['customer', 'variant'], name='unique_cart_customer_variant')
+        ]
     @property
     def total_price(self):
         return self.variant.shoe.price * self.quantity

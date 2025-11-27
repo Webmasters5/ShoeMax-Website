@@ -3,7 +3,7 @@
 
 {% block content %}
 <h1>Delete Payment Method</h1>
-<p>Are you sure you want to delete "{{ object.title }}" (****{{ object.card_num|slice:"-4:" }})?</p>
+<p>Are you sure you want to delete "{{ object.title }}" ({{ object.masked }})?</p>
 <form method="post">
     {% csrf_token %}
     <button type="submit">Yes, delete</button>

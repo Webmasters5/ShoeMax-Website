@@ -14,13 +14,22 @@
 
 <div class="profile-section addresses">
     <div class="address-box">
-        <h2>Shipping Address</h2>
-        <p>{{ customer.shipping_address }}</p>
-    </div>
-
-    <div class="address-box">
-        <h2>Billing Address</h2>
-        <p>{{ customer.billing_address }}</p>
+        <h2>Saved Addresses</h2>
+        {% if customer.addresses.all %}
+            <ul>
+                {% for addr in customer.addresses.all %}
+                    <li>
+                        <strong>{{ addr.title }}</strong> - {{ addr.first_name }} {{ addr.last_name }}, {{ addr.street }}, {{ addr.city }} {{ addr.zip_code }}
+                        {% if addr.is_default %} <em>(default)</em>{% endif %}
+                    </li>
+                {% empty %}
+                    <li>No saved addresses.</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No saved addresses.</p>
+        {% endif %}
+        <a href="{% url 'customer:address_list' %}">Manage addresses</a>
     </div>
 </div>
 
@@ -33,10 +42,10 @@
     <p><strong>Email:</strong> {{ customer.user.email }}</p>
 </div>
 
-<div class="profile-section">
+<!-- <div class="profile-section">
     <h2>Payment Information</h2>
-    <p><strong>Card Number:</strong> {{ customer.credit_card|slice:":4" }}-xxxx-xxxx-{{ customer.credit_card|slice:"-4:" }}</p>
-</div>
+    <p>Manage payment methods on the Payment Methods page.</p>
+</div> -->
 
 <a href="{% url 'customer:customer_info' %}" class="btn">Edit Profile</a>
 {% endblock %}

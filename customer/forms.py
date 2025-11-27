@@ -7,7 +7,7 @@ from models_app.models import Address
 class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = ['date_of_birth', 'gender', 'phone', 'mobile','shipping_address','billing_address','credit_card',]
+        fields = ['date_of_birth', 'gender', 'phone', 'mobile']
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }

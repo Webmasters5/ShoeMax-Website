@@ -8,8 +8,20 @@
 <div class="profile-section">
     <h2>Customer Info</h2>
     <p><strong>Name:</strong> {{ order.customer.user.first_name }} {{ order.customer.user.last_name }}</p>
-    <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
-    <p><strong>Billing Address:</strong> {{ order.billing_address }}</p>
+    <p><strong>Shipping Address:</strong>
+        {% if order.shipping_address %}
+            {{ order.shipping_address.first_name }} {{ order.shipping_address.last_name }}, {{ order.shipping_address.street }}, {{ order.shipping_address.city }} {{ order.shipping_address.zip_code }}
+        {% else %}
+            N/A
+        {% endif %}
+    </p>
+    <p><strong>Billing Address:</strong>
+        {% if order.billing_address %}
+            {{ order.billing_address.first_name }} {{ order.billing_address.last_name }}, {{ order.billing_address.street }}, {{ order.billing_address.city }} {{ order.billing_address.zip_code }}
+        {% else %}
+            N/A
+        {% endif %}
+    </p>
 </div>
 
 <div class="profile-section">
@@ -58,7 +70,7 @@
 
 <div class="profile-section">
     <h2>Payment Info</h2>
-    <p>Card ending in: {{ order.customer.credit_card|slice:"-4:" }}</p>
+    <p> {{order.payment_method_label}}    </p>
 </div>
 
 <a href="{% url 'customer:customer_orders' %}" class="btn">Back to Orders</a>

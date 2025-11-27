@@ -5,7 +5,7 @@
 <h1>Payment Method</h1>
 <div class="pm">
     <div><strong>{{ payment_method.title }}</strong></div>
-    <div>Card ending: ****{{ payment_method.card_num|slice:"-4:" }}</div>
+    <div>Card ending: {{ payment_method.masked }}</div>
     <div>Expires: {{ payment_method.exp_date|date:"M/Y" }}</div>
     <div>Holder: {{ payment_method.holder_name }}</div>
     <a href="{% url 'customer:paymentmethod_edit' payment_method.pk %}">Edit</a>

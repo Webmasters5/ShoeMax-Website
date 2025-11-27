@@ -57,36 +57,6 @@
         </div>
     </div>
 
-    <!-- Addresses Section -->
-    <div class="form-card">
-        <div class="card-header">
-            <h2>Addresses</h2>
-        </div>
-        <div class="card-body addresses">
-            <div class="form-group">
-                {{ customer_form.shipping_address.label_tag }}
-                {{ customer_form.shipping_address }}
-            </div>
-            <div class="form-group">
-                {{ customer_form.billing_address.label_tag }}
-                {{ customer_form.billing_address }}
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Section -->
-    <div class="form-card">
-        <div class="card-header">
-            <h2>Payment</h2>
-        </div>
-        <div class="card-body">
-            <div class="form-group">
-                {{ customer_form.credit_card.label_tag }}
-                {{ customer_form.credit_card }}
-            </div>
-        </div>
-    </div>
-
     <button type="submit" class="btn">Save Changes</button>
 </form>
 {% endblock %}

@@ -16,7 +16,7 @@
             <li class="payment-method {% if pm.is_default %}default{% endif %}">
                 <a class="pm-link" href="{% url 'customer:paymentmethod_detail' pm.pk %}">
                     <div class="pm-title">{{ pm.title }}</div>
-                    <div class="pm-details">****{{ pm.card_num|slice:"-4:" }} &middot; Expires {{ pm.exp_date|date:"M/Y" }}</div>
+                    <div class="pm-details">{{ pm.masked}} &middot; Expires {{ pm.exp_date|date:"M/Y" }}</div>
                 </a>
                 <div class="pm-actions">
                     {% if not pm.is_default %}
