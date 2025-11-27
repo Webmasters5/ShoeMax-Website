@@ -71,6 +71,13 @@
                 </li>
 
                 <li>
+                    <a href="{% url 'customer:address_list' %}"
+                    class="{% if request.resolver_match.url_name == 'address_list' %}active{% endif %}">
+                    Addresses
+                    </a>
+                </li>
+
+                <li>
                     <form action="{% url 'customer:logout' %}" method="post" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="sidebar-link">Logout</button>
