@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
@@ -82,7 +83,7 @@ class Brand(models.Model):
     
     def __str__(self):
         return self.name
-
+     
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer_profile')
     customer_id = models.AutoField(primary_key=True)
@@ -94,8 +95,8 @@ class Customer(models.Model):
     )
     phone = models.CharField(max_length=15, blank=False, default="")
     mobile = models.CharField(max_length=15, blank=True, default="")
-    shipping_address = models.TextField(blank=True, default="")
-    billing_address = models.TextField(blank=True, default="")
+    shipping_address = models.TextField(blank=True, default="") # to remove
+    billing_address = models.TextField(blank=True, default="") # to remove
     credit_card = models.CharField(max_length=16, blank=True, default="")
     theme_preference = models.CharField(
         max_length=10,
@@ -106,6 +107,69 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    @property
+    def full_name(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+
+class PaymentMethod(models.Model):
+    card_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=100, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name='payment_methods', null=True, blank=True) #Allow generic payment methods and preserve deleted customers
+    card_num = models.CharField(max_length=19)
+    exp_date = models.DateField()
+    card_type = models.CharField(max_length=50)
+    holder_name = models.CharField(max_length=100)
+    is_default = models.BooleanField(default=False)
+
+    def clean(self):
+        errors = {}
+
+        if not self.card_num.isdigit() or not (13 <= len(self.card_num) <= 19):
+            errors['card_num'] = 'Card number must be 13 to 19 digits (numbers only).'
+
+        if self.exp_date and self.exp_date <= timezone.now().date():
+            errors['exp_date'] = 'Expiration date must be in the future.'
+
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+
+        # If no title is provided, set a default title
+        if not self.title or not self.title.strip():
+            last4 = self.card_num[-4:] if self.card_num else ''
+            self.title = f"{self.card_type} ****{last4}"
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        masked = self.card_num[-4:] if self.card_num else '----'
+        return f'PaymentMethod {self.card_id} - ****{masked} ({self.holder_name})'
+
+class Address(models.Model):
+    addr_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=100, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name='addresses', null=True, blank=True) #Allow generic addresses and preserve deleted customers
+    street = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    zip_code = models.CharField(max_length=5)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    is_default = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        # If no title is provided, set a default title safely
+        if not self.title or not self.title.strip():
+            self.title = f"{self.first_name.strip()}-{self.street.strip()[:10]}-{self.city.strip()}"
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        cust = self.customer.user.username if self.customer else 'Unknown'
+
+        return f'Address {self.addr_id} - {self.street}, {self.city} ({cust})'
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -121,12 +185,12 @@ class Order(models.Model):
     delivery_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     total_price = models.DecimalField(max_digits=8, decimal_places=2, default=0) #to replace
-    shipping_address = models.TextField(blank=True, null=True)
-    billing_address = models.TextField(blank=True, null=True)
+    shipping_address = models.TextField(blank=True, null=True) #to remove
+    billing_address = models.TextField(blank=True, null=True) #to remove
     shipping_cost = models.DecimalField(max_digits=8, decimal_places=2, default=100.00)
     subtotal = models.DecimalField(max_digits=8, decimal_places=2, blank=True, default=0.00)
     discount_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
-        
+    
     def __str__(self):
         return f"Order #{self.order_id} - {self.customer.user.username}"
         
