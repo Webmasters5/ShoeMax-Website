@@ -1,0 +1,44 @@
+{% extends 'customer/base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Payment Methods</h1>
+
+<p>
+    <a class="button" href="{% url 'customer:paymentmethod_add' %}">Add new payment method</a>
+</p>
+
+{% if payment_methods %}
+    <ul class="payment-methods-list">
+        {% for pm in payment_methods %}
+            <li class="payment-method {% if pm.is_default %}default{% endif %}">
+                <a class="pm-link" href="{% url 'customer:paymentmethod_detail' pm.pk %}">
+                    <div class="pm-title">{{ pm.title }}</div>
+                    <div class="pm-details">****{{ pm.card_num|slice:"-4:" }} &middot; Expires {{ pm.exp_date|date:"M/Y" }}</div>
+                </a>
+                <div class="pm-actions">
+                    {% if not pm.is_default %}
+                        <form method="post" action="{% url 'customer:paymentmethod_set_default' pm.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">Set as default</button>
+                        </form>
+                    {% else %}
+                        <span class="badge">Default</span>
+                    {% endif %}
+
+                    <!-- Quick delete button: posts to the DeleteView for this payment method -->
+                    <form method="post" action="{% url 'customer:paymentmethod_delete' pm.pk %}" style="display:inline; margin-left:8px;">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Delete this payment method?');">Delete</button>
+                    </form>
+                    <!-- Edit link -->
+                    <a href="{% url 'customer:paymentmethod_edit' pm.pk %}" style="margin-left:8px;">Edit</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no saved payment methods.</p>
+{% endif %}
+
+{% endblock %}

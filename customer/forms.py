@@ -1,6 +1,7 @@
 from django import forms
 from models_app.models import Customer
 from django.contrib.auth.models import User
+from models_app.models import PaymentMethod
 
 class CustomerForm(forms.ModelForm):
     class Meta:
@@ -14,3 +15,14 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name']
+
+
+class PaymentMethodForm(forms.ModelForm):
+    class Meta:
+        model = PaymentMethod
+        # customer is set from the logged-in user in the view
+        exclude = ['customer', 'card_id']
+        widgets = {
+            'exp_date': forms.DateInput(attrs={'type': 'date'}),
+            'card_num': forms.TextInput(attrs={'inputmode': 'numeric'}),
+        }
