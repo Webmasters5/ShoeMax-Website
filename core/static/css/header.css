@@ -1,33 +1,31 @@
 .shop-header {
   display: flex; /*to control the position of items inside horizontally and vertically*/
-  align-items: center; /* Vertically centers items within the header */
-  justify-content: space-between; /* Places first and last items at edges, with space in between */
+  align-items: center; /*Vertically centers items within the header */
+  justify-content: space-between; /*Places first and last items at edges, with space in between */
   background-color: #000;
   color: white; /*for icons and text*/
-  padding: 10px 20px; /*space btw border and items inside*/
+  padding: 10px 15px; 
   font-family: 'Montserrat';
+  width: 100%;
 }
 
 .menu-icon i {
   font-size: 20px;
   cursor: pointer;
+  text-align: center;
+  color: white;
 }
 
 .shop-name {
   font-size: 20px;
   font-weight: bold;
-  margin-left: 15px;
   letter-spacing: 2px;
-  font-family: 'Montserrat'
+  font-family: 'Montserrat';
+  margin-right: 20px;
 }
 
 .search-bar {
-  display: flex;
-  align-items: center;
-  background-color: #333;
-  border-radius: 20px;
-  padding: 5px 10px;
-  width: 200px;
+  background-color: #33333300;
 }
 
 .search-bar input {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Login</title>
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
                             <!-- header imports -->
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
@@ -16,18 +16,15 @@
 <body>
     <header class="shop-header"> <!--The class designs the nav bar-->
         <div class="menu-icon">
-            <i class="fas fa-bars"></i> <!--The specific icon for menu-->
+            <a href="/">
+                <i class="fas fa-home"></i> <!--The specific icon for menu-->
+            </a>
+            
         </div>
 
-        <div class="shop-name">SHOP NAME</div>
+        <div class="shop-name">SHOEMAX</div>
 
-        <div class="search-bar">
-            <input type="text" placeholder="Search">
-            <i class="fas fa-search"></i> <!--search icon-->
-        </div>
-
-        <!-- removed div class icon-group  -->
-
+        <div class="search-bar"></div> <!--  will not be visible -->
     </header>
     <div class="container">
         <div class="signup-box">
