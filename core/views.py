@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import signupform , loginform,forgotPassword
 from django.http import HttpResponse
+from django.contrib.auth.views import PasswordResetView
+from django.urls import reverse_lazy
 
 #for email sending
 from django.core.mail import send_mail
@@ -110,23 +112,42 @@ def signup(request):
 
 ############# FORGOT PASSWORD ##########################
 
-def forgot_password_view(request):
-    if request.method == 'POST':
-        form = forgotPassword(request.POST)
-        if form.is_valid():
-            form.save(
-                request=request,
-                use_https=request.is_secure(),
-                email_template_name='core/password_reset_email.html',
-                subject_template_name='core/passwordResetSubject.txt',
-                from_email=None,  # Or set a custom sender
-            )
-            messages.success(request, "Password reset link sent to your email.")
-            return redirect('core:login')  # Create this view or template
-    else:
-        form = forgotPassword()
 
-    return render(request, 'core/forgotPassword.html', {'form': form})
+class forgot_password_view(PasswordResetView):
+    template_name = "registration/password_reset_form.html"
+    email_template_name = "registration/password_reset_email.html"
+    subject_template_name = "registration/password_reset_subject.txt"
+    success_url = reverse_lazy("password_reset_done")
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx.update({
+            "domain": "localhost:8000",  # change in prod (e.g., myapp.com)
+            "protocol": "http",          # use "https" in production
+        })
+        return ctx
+
+
+# def forgot_password_view(request):
+#     if request.method == 'POST':
+#         form = forgotPassword(request.POST)
+#         if form.is_valid():
+#             form.save(
+#                 request=request,
+#                 use_https=request.is_secure(),
+#                 email_template_name='core/password_reset_email.html',
+#                 subject_template_name='core/passwordResetSubject.txt',
+#                 from_email=None,  # Or set a custom sender
+#             )
+#             messages.success(request, "Password reset link sent to your email.")
+#             return redirect('core:login')  # Create this view or template
+#     else:
+#         form = forgotPassword()
+
+#     return render(request, 'core/forgotPassword.html', {'form': form})
+
+
+
 
 
 

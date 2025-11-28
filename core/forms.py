@@ -22,8 +22,6 @@ class loginform(AuthenticationForm):
             'placeholder' : 'Password'
         })
 
-    # class Meta:
-        # fields = ['username', 'password']
 
 class signupform(UserCreationForm):
 
@@ -55,13 +53,7 @@ class signupform(UserCreationForm):
             'placeholder' : 'Password'
         })
 
-    username = forms.CharField(max_length=150)
-    email = forms.EmailField(max_length=150)
-    password1 = forms.CharField(max_length=150)
-    password2 = forms.CharField(max_length=150)
-
-
-    ## the metadata for the class
+    # ## the metadata for the class
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
