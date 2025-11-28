@@ -131,38 +131,100 @@ def search(request):
 
     return render(request, 'search.html', context)
 
-def reviews(request,product_id):
-    shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
-    reviews= models.Review.objects.filter(order_item__variant__shoe=shoe)
+def reviews(request,shoe_id):
+    shoe = get_object_or_404(models.Shoe,shoe_id=shoe_id)
+    reviews = models.Review.objects.filter(order_item__variant__shoe=shoe)
     avg_rating = reviews.aggregate(average=Avg('rating'))['average']
+    # determine if the current user can leave a review: they must be authenticated
+    # and have at least one Order with status 'Delivered' containing this shoe
+    can_leave_review = False
+    if request.user.is_authenticated:
+        customer = getattr(request.user, 'customer_profile', None)
+        if customer:
+            delivered_orders = models.Order.objects.filter(customer=customer, status__iexact='delivered')
+            if delivered_orders.exists():
+                has_item = models.OrderItem.objects.filter(order__in=delivered_orders, variant__shoe=shoe).exists()
+                can_leave_review = bool(has_item)
+
     context = {
         'shoe': shoe,
         'reviews': reviews,
         'avg_rating': avg_rating,
+        'can_leave_review': can_leave_review,
     }
     return render(request,'reviews.html',context)
 
-#@login_required
-def review_product(request,product_id):
-    shoe=get_object_or_404(models.Shoe,shoe_id=product_id)
-    if request.method =='POST':
-        form=Reviewform(request.POST)
+@login_required
+def add_review(request, shoe_id):
+    shoe = get_object_or_404(models.Shoe, shoe_id=shoe_id)
+
+    order_item = None
+    if request.user.is_authenticated:
+        # pick the most recent delivered OrderItem
+        order_item = (
+            models.OrderItem.objects.filter(
+                variant__shoe=shoe,
+                order__customer__user=request.user,
+                order__status__iexact='delivered'
+            )
+            .select_related('order', 'variant')
+            .order_by('-order__delivery_date', '-order__order_date', '-pk')
+            .first()
+        )
+
+    # Prevent users who haven't received the product from viewing the form
+    if not order_item:
+        return HttpResponseForbidden('You must purchase and receive the product before reviewing it.')
+
+    # Prevent reviewing the same order_item more than once
+    if models.Review.objects.filter(order_item=order_item).exists():
+        return HttpResponseForbidden('This order item has already been reviewed.')
+
+    if request.method == 'POST':
+        form = Reviewform(request.POST, order_item=order_item, user=request.user)
         if form.is_valid():
-            Review=form.save(commit=False)
-            order_item= models.OrderItem.objects.filter(variant__shoe=shoe, order__customer__user=request.user)
-            if order_item:
-                Review.order_item = order_item
-                Review.save()
-                return redirect('products:reviews',product_id=shoe.shoe_id)
+            review = form.save(commit=False)
+            if not order_item:
+                form.add_error(None, 'You must purchase and receive the product to review it.')
             else:
-                form.add_error(None, 'You must purchase the product to review it.')
+                review.order_item = order_item
+                review.save()
+                return redirect('products:reviews', shoe_id=shoe.shoe_id)
     else:
-        form=Reviewform()
-    context={
-        'shoe':shoe,
-        'form':form,
+        form = Reviewform(order_item=order_item, user=request.user)
+
+    context = {
+        'shoe': shoe,
+        'form': form,
     }
-    return render(request,'reviewform.html',context)
+    return render(request, 'reviewform.html', context)
+
+
+@login_required
+def edit_review(request, review_id):
+    review = get_object_or_404(models.Review, pk=review_id)
+
+    # checks that the review belongs to logged-in customer first
+    review_owner_user = getattr(review.order_item.order.customer, 'user', None)
+    if review_owner_user != request.user:
+        return HttpResponseForbidden('Not allowed')
+
+    shoe = review.order_item.variant.shoe
+
+    if request.method == 'POST':
+        form = Reviewform(request.POST, instance=review, order_item=review.order_item, user=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('products:reviews', shoe_id=shoe.shoe_id)
+    else:
+        form = Reviewform(instance=review, order_item=review.order_item, user=request.user)
+
+    context = {
+        'shoe': shoe,
+        'form': form,
+        'editing': True,
+    }
+    return render(request, 'reviewform.html', context)
 
 def dummy(request):
     shoe=models.Shoe.objects.all()
