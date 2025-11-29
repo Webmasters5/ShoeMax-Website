@@ -1,0 +1,12 @@
+{% extends 'customer/base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Address</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+    <a href="{% url 'customer:address_list' %}">Cancel</a>
+</form>
+{% endblock %}

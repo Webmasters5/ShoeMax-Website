@@ -1,9 +1,11 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth.models import User
+#from django.db import transaction
 
 # Create your models here.
 
@@ -37,7 +39,6 @@ class Shoe(models.Model):
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     shoe_id = models.AutoField(primary_key=True)
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE, related_name='shoes')
-    #image_url = models.ImageField(upload_to='shoes/')
     
     def __str__(self):
         return self.name
@@ -82,7 +83,7 @@ class Brand(models.Model):
     
     def __str__(self):
         return self.name
-
+     
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer_profile')
     customer_id = models.AutoField(primary_key=True)
@@ -94,9 +95,6 @@ class Customer(models.Model):
     )
     phone = models.CharField(max_length=15, blank=False, default="")
     mobile = models.CharField(max_length=15, blank=True, default="")
-    shipping_address = models.TextField(blank=True, default="")
-    billing_address = models.TextField(blank=True, default="")
-    credit_card = models.CharField(max_length=16, blank=True, default="")
     theme_preference = models.CharField(
         max_length=10,
         choices=[("light", "Light"), ("dark", "Dark")],
@@ -106,6 +104,94 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    @property
+    def full_name(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+
+class PaymentMethod(models.Model):
+    CARD_TYPE_CHOICES = [
+        ('debit', 'Debit'),
+        ('credit', 'Credit'),
+    ]
+    card_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=100, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name='payment_methods', null=True, blank=True) #Allow generic payment methods and preserve deleted customers
+    card_num = models.CharField(max_length=19)
+    exp_date = models.DateField()
+    card_type = models.CharField(max_length=10, choices=CARD_TYPE_CHOICES)
+    holder_name = models.CharField(max_length=100)
+    is_default = models.BooleanField(default=False)
+
+    def clean(self):
+        errors = {}
+
+        if not self.card_num.isdigit() or not (13 <= len(self.card_num) <= 19):
+            errors['card_num'] = 'Card number must be 13 to 19 digits (numbers only).'
+
+        if self.exp_date and self.exp_date <= timezone.now().date():
+            errors['exp_date'] = 'Expiration date must be in the future.'
+
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+
+        # If no title is provided, set a default title
+        if not self.title or not self.title.strip():
+            last4 = self.card_num[-4:] if self.card_num else ''
+            self.title = f"{self.get_card_type_display()} ****{last4}"
+
+        # If this is a newly created payment method and the customer has no other methods,
+        # make it the default automatically.
+        is_new = self.pk is None #Not created yet
+        if is_new and self.customer:
+            has_other = PaymentMethod.objects.filter(customer=self.customer).exists()
+            if not has_other:
+                self.is_default = True
+
+        super().save(*args, **kwargs)
+        if self.is_default and self.customer:
+            # Unset other defaults for this customer
+            PaymentMethod.objects.filter(customer=self.customer).exclude(pk=self.pk).update(is_default=False)
+
+    @property
+    def masked(self):
+        """Return masked card number string (e.g. '****1234') or '----' when unavailable."""
+        last4 = self.card_num[-4:] if self.card_num else '----'
+        return f'****{last4}'
+
+    def __str__(self):
+        return f'PM {self.card_id} - {self.masked} ({self.holder_name})'
+
+class Address(models.Model):
+    addr_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=100, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name='addresses', null=True, blank=True) #Allow generic addresses and preserve deleted customers
+    street = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    zip_code = models.CharField(max_length=5)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    is_default = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = 'Addresses'
+
+    def save(self, *args, **kwargs):
+        # If no title is provided, set a default title safely
+        if not self.title or not self.title.strip():
+            self.title = f"{self.first_name.strip()}-{self.street.strip()[:10]}-{self.city.strip()}"
+
+        super().save(*args, **kwargs)
+        if self.is_default and self.customer:
+            Address.objects.filter(customer=self.customer).exclude(pk=self.pk).update(is_default=False)
+
+    def __str__(self):
+        cust = self.customer.user.username if self.customer else 'Unknown'
+
+        return f'Address {self.addr_id} - {self.street}, {self.city} ({cust})'
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -121,12 +207,20 @@ class Order(models.Model):
     delivery_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     total_price = models.DecimalField(max_digits=8, decimal_places=2, default=0) #to replace
-    shipping_address = models.TextField(blank=True, null=True)
-    billing_address = models.TextField(blank=True, null=True)
+    shipping_address = models.ForeignKey('Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders_with_shipping')
+    billing_address = models.ForeignKey('Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders_with_billing')
+    payment_method = models.ForeignKey('PaymentMethod', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders')
     shipping_cost = models.DecimalField(max_digits=8, decimal_places=2, default=100.00)
     subtotal = models.DecimalField(max_digits=8, decimal_places=2, blank=True, default=0.00)
     discount_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
-        
+    
+    @property
+    def payment_method_label(self):
+        pm = self.payment_method
+        if pm is None:
+            return 'Cash on delivery'
+        return pm.title if pm.title else getattr(pm, 'masked', str(pm))
+    
     def __str__(self):
         return f"Order #{self.order_id} - {self.customer.user.username}"
         
@@ -161,7 +255,7 @@ class Notification(models.Model):
     )
 
     def __str__(self):
-        return f"Notification for {self.customer.user.username}: {self.message[:50]}"
+        return f"Notification for {self.customer.user.username}: {self.message[:10]}..."
 
 class Review(models.Model):
     review_id = models.AutoField(primary_key=True)
@@ -195,7 +289,9 @@ class WishlistItem(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('customer', 'shoe')
+        constraints = [
+            models.UniqueConstraint(fields=['customer', 'shoe'], name='unique_wishlist_customer_shoe')
+        ]
 
     def __str__(self):
         return f'WishlistItem {self.shoe} for {self.customer}'
@@ -205,6 +301,10 @@ class CartItem(models.Model):
     variant = models.ForeignKey(ShoeVariant, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['customer', 'variant'], name='unique_cart_customer_variant')
+        ]
     @property
     def total_price(self):
         return self.variant.shoe.price * self.quantity
