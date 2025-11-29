@@ -1,42 +1,93 @@
 {% extends "customer/base.html" %}
 
-{% block content %}
-<h1>My Profile</h1>
+{% block dashboard_content %}
+<h1 class="mb-4">My Profile</h1>
 
-<div class="profile-section">
+<!-- Personal Information -->
+<div class="profile-card light-card hover-pop">
     <h2>Personal Information</h2>
     <div class="info-row">
-        <p><strong>Full Name:</strong> {{ customer.user.first_name }} {{ customer.user.last_name }}</p>
-        <p><strong>Date of Birth:</strong> {{ customer.date_of_birth }}</p>
-        <p><strong>Gender:</strong> {{ customer.gender }}</p>
+        <div><strong>Full Name:</strong> {{ customer.user.first_name }} {{ customer.user.last_name }}</div>
+        <div><strong>Date of Birth:</strong> {{ customer.date_of_birth }}</div>
+        <div><strong>Gender:</strong> {{ customer.gender }}</div>
     </div>
 </div>
 
-<div class="profile-section addresses">
+<!-- Addresses -->
+<div class="profile-card light-card hover-pop addresses">
     <div class="address-box">
         <h2>Shipping Address</h2>
         <p>{{ customer.shipping_address }}</p>
     </div>
-
     <div class="address-box">
         <h2>Billing Address</h2>
         <p>{{ customer.billing_address }}</p>
     </div>
 </div>
 
-<div class="profile-section">
+<!-- Contact Information -->
+<div class="profile-card light-card hover-pop">
     <h2>Contact Information</h2>
     <div class="info-row">
-        <p><strong>Phone:</strong> {{ customer.phone }}</p>
-        <p><strong>Mobile:</strong> {{ customer.mobile }}</p>
+        <div><strong>Phone:</strong> {{ customer.phone }}</div>
+        <div><strong>Mobile:</strong> {{ customer.mobile }}</div>
+        <div><strong>Email:</strong> {{ customer.user.email }}</div>
     </div>
-    <p><strong>Email:</strong> {{ customer.user.email }}</p>
 </div>
 
-<div class="profile-section">
+<!-- Payment Information -->
+<div class="profile-card light-card hover-pop">
     <h2>Payment Information</h2>
     <p><strong>Card Number:</strong> {{ customer.credit_card|slice:":4" }}-xxxx-xxxx-{{ customer.credit_card|slice:"-4:" }}</p>
 </div>
 
-<a href="{% url 'customer:customer_info' %}" class="btn">Edit Profile</a>
+<!-- Edit Button -->
+<div class="mt-3">
+    <a href="{% url 'customer:customer_info' %}" class="btn btn-dashboard">Edit Profile</a>
+</div>
+
+<style>
+/* Force light grey cards for dashboard sections */
+.profile-card,
+.dashboard-card,
+.light-card {
+    background-color: #f9f9f9 !important;
+    border-radius: 12px !important;
+    padding: 25px !important;
+    margin-bottom: 20px !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.profile-card:hover,
+.dashboard-card:hover,
+.light-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+}
+
+/* Flex wrapper for addresses */
+.addresses {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.address-box {
+    flex: 1 1 300px;
+}
+
+/* Info rows spacing */
+.info-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.info-row > div {
+    min-width: 200px;
+}
+</style>
+
 {% endblock %}

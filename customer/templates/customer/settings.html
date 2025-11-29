@@ -1,35 +1,22 @@
 {% extends "customer/base.html" %}
 
-{% block content %}
-<h1>Settings</h1>
+{% block dashboard_content %}
+<h1 class="mb-4">Settings</h1>
 
-<div class="profile-section">
-    <h2>Appearance</h2>
-    <form method="POST">
-        {% csrf_token %}
-        <label for="theme">Theme:</label>
-        <select name="theme" id="theme">
-            <option value="light" {% if customer.theme_preference == "light" %}selected{% endif %}>Light</option>
-            <option value="dark" {% if customer.theme_preference == "dark" %}selected{% endif %}>Dark</option>
-        </select>
-        <br><br>
-        <button type="submit" class="btn">Save</button>
-    </form>
-</div>
-
-<div class="profile-section">
+<!-- Account Settings -->
+<div class="profile-card light-card hover-pop">
     <h2>Account Settings (Coming Soon)</h2>
     <form> 
         <label>Preferred Language: 
-            <select> 
+            <select class="form-select"> 
                 <option selected>English</option> 
                 <option>French</option> 
                 <option>Spanish</option> 
             </select> 
-        </label><br><br> 
-
+        </label>
+        <br><br> 
         <label>Currency: 
-            <select> 
+            <select class="form-select"> 
                 <option selected>MUR</option> 
                 <option>USD</option> 
                 <option>EUR</option> 
@@ -38,13 +25,48 @@
     </form>
 </div>
 
-<div class="profile-section">
+<!-- Privacy & Security -->
+<div class="profile-card light-card hover-pop">
     <h2>Privacy & Security (Coming Soon)</h2>
     <form> 
         <label><input type="checkbox"> Enable two-factor authentication</label><br> 
         <label><input type="checkbox"> Log out from other devices</label><br> 
         <label><input type="checkbox"> Receive newsletters</label><br> 
-        <button type="submit" class="btn">Save Settings</button> 
+        <button type="submit" class="btn btn-dashboard">Save Settings</button> 
     </form>
 </div>
+
+<style>
+/* Force light grey cards for dashboard sections */
+.profile-card,
+.dashboard-card,
+.light-card {
+    background-color: #f9f9f9 !important;
+    border-radius: 12px !important;
+    padding: 25px !important;
+    margin-bottom: 20px !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.profile-card:hover,
+.dashboard-card:hover,
+.light-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+}
+
+/* Info rows consistent spacing */
+.info-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.info-row > div {
+    min-width: 200px;
+}
+</style>
+
 {% endblock %}
