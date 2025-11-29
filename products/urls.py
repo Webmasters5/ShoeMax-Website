@@ -6,12 +6,14 @@ from django.conf.urls.static import static
 app_name = 'products'
 
 urlpatterns = [
-    path('search/', views.search, name='search'),
+    path('search/', views.ShoeListView.as_view(), name='search'),
+    path('brands/', views.BrandListView.as_view(), name='brand_list'),
+    path('gender/<str:gender>/', views.ShoeByGenderListView.as_view(), name='by_gender'),
+    path('brand/<int:brand_id>/', views.ShoeByBrandListView.as_view(), name='by_brand'),
     path('<int:shoe_id>/', views.shoe_details, name='shoe_details'),
     path('wishlist/', views.WishlistView.as_view(), name='wishlist'),
     path('wishlist/delete/<int:item_id>/', views.delete_wishlist_item, name='wishlist_delete'),
     path('wishlist/add/<int:shoe_id>/', views.add_wishlist_item, name='wishlist_add'),
-    path('dummy/',views.dummy,name='dummy'), #to delete
     path('review/<int:shoe_id>',views.reviews, name='reviews'),
     path('review/add/<int:shoe_id>',views.add_review, name='add_review'),
     path('review/edit/<int:review_id>/', views.edit_review, name='edit_review'),

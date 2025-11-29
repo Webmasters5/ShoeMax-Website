@@ -8,6 +8,7 @@ from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
+from django.http import Http404
 #from django.http import HttpResponse
 
 # Create your views here.
@@ -42,7 +43,7 @@ def delete_wishlist_item(request, item_id):
 
 class WishlistView(LoginRequiredMixin,generic.ListView):
     model = models.WishlistItem
-    template_name = 'wishlist.html'
+    template_name = 'products/wishlist.html'
     context_object_name = 'wishlist_items'
     paginate_by = 5
     
@@ -84,53 +85,183 @@ def shoe_details(request, shoe_id):
     print(color_available)
     print(variants)
     print(selected_color)
-    return render(request, 'details.html', context)
+    return render(request, 'products/details.html', context)
     
-def search(request):
-    #retrieve GET query parameters
-    q = request.GET.get('q', '').strip()
-    category = request.GET.get('category', '').strip()
-    min_price = request.GET.get('min_price', '').strip()
-    max_price = request.GET.get('max_price', '').strip()
+class ShoeListView(generic.ListView):
+    model = models.Shoe
+    template_name = 'products/search.html'
+    context_object_name = 'shoes'
+    paginate_by = 12
 
-    shoes = models.Shoe.objects.all().prefetch_related('images')
+    def get_queryset(self):
+        # retrieve GET query parameters
+        q = self.request.GET.get('q', '').strip()
+        category = self.request.GET.get('category', '').strip()
+        brand = self.request.GET.get('brand', '').strip()
+        gender = self.request.GET.get('gender', '').strip()
+        min_price = self.request.GET.get('min_price', '').strip()
+        max_price = self.request.GET.get('max_price', '').strip()
 
-    if q:
-        shoes = shoes.filter(
-            Q(name__icontains=q) | Q(description__icontains=q) #combine sets 
-        )
+        qs = models.Shoe.objects.all().prefetch_related('images')
 
-    if category:
-        shoes = shoes.filter(category__iexact=category)
+        if q:
+            qs = qs.filter(Q(name__icontains=q) | Q(description__icontains=q))
 
-    if min_price:
-        shoes = shoes.filter(price__gte=float(min_price))
+        if category:
+            qs = qs.filter(category__iexact=category)
 
-    if max_price:
-        shoes = shoes.filter(price__lte=float(max_price))
+        if brand:
+            # brand is expected to be brand_id (int). Fall back to name lookup if not numeric.
+            try:
+                brand_id = int(brand)
+                qs = qs.filter(brand__brand_id=brand_id)
+            except ValueError:
+                qs = qs.filter(brand__name__iexact=brand)
 
-    shoes = shoes.order_by('price', 'name')
+        if gender:
+            qs = qs.filter(gender__iexact=gender)
 
-    #remove duplicates if any
-    categories = (
-        models.Shoe.objects.exclude(category__isnull=True)
-        .exclude(category__exact='')
-        .values_list('category', flat=True)
-        .distinct()
-        .order_by('category')
-    )
+        if min_price:
+            qs = qs.filter(price__gte=float(min_price))
 
-    context = {
-        'shoes': shoes,
-        'categories': categories,
-        'q': q,
-        'selected_category': category,
-        'min_price': min_price,
-        'max_price': max_price,
-    }
+        if max_price:
+            qs = qs.filter(price__lte=float(max_price))
 
-    return render(request, 'search.html', context)
+        return qs.order_by('price', 'name')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # categories list for filters
+        categories = models.Shoe.CATEGORY_CHOICES
+
+        # brands and genders for dropdowns
+        brands = models.Brand.objects.all().order_by('name')
+        genders = models.Shoe.GENDER_CHOICES
+
+        # keep original query strings
+        q = self.request.GET.get('q', '').strip()
+        category = self.request.GET.get('category', '').strip()
+        selected_brand = self.request.GET.get('brand', '').strip()
+        gender = self.request.GET.get('gender', '').strip()
+        min_price = self.request.GET.get('min_price', '').strip()
+        max_price = self.request.GET.get('max_price', '').strip()
+
+        context.update({
+            'categories': categories,
+            'brands': brands,
+            'genders': genders,
+            'q': q,
+            'selected_category': category,
+            'selected_gender': gender,
+            'selected_brand': selected_brand,
+            'min_price': min_price,
+            'max_price': max_price,
+        })
+
+        # Build breadcrumb
+        gender_label = models.Shoe.GENDER_CHOICES.get(gender, '')
+
+        category_label = models.Shoe.CATEGORY_CHOICES.get(category, '')
+
+        breadcrumb = None
+        if gender_label or category_label:
+            breadcrumb = {
+                'gender': gender_label,
+                'gender_code': gender,
+                'category': category_label,
+                'category_code': category,
+            }
+
+        context['breadcrumb'] = breadcrumb
+
+        return context
+
+class BrandListView(generic.ListView):
+    model = models.Brand
+    template_name = 'products/brand_list.html'
+    context_object_name = 'brands'
+
+    def get_queryset(self):
+        return super().get_queryset().order_by('name')
+
+class ShoeByGenderListView(ShoeListView):
+    template_name = 'products/shoe_by_gender.html'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        gender = self.kwargs.get('gender', '').strip()
+        return qs.filter(gender__iexact=gender) if gender else qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        selected_gender = self.kwargs.get('gender', '').strip()
+        selected_gender_label = models.Shoe.GENDER_CHOICES.get(selected_gender, '')
+        if not selected_gender_label:
+            raise Http404("Gender not found")
+        context['selected_gender'] = selected_gender
+        context['selected_gender_label'] = selected_gender_label
+        # disable gender filter in search template
+        context['rendered'] = 'shoe_by_gender'
+        # Build breadcrumb
+        breadcrumb = []
+        # link to the gender listing
+        gender_url = reverse('products:by_gender', args=[selected_gender])
+        breadcrumb.append({'title': selected_gender_label, 'url': gender_url})
+
+        category = self.request.GET.get('category', '').strip()
+        if category:
+            category_label = models.Shoe.CATEGORY_CHOICES.get(category, category.title())
+            # final breadcrumb item should be active (no url)
+            breadcrumb.append({'title': category_label, 'url': None})
+
+        context['breadcrumb'] = breadcrumb
+        return context
+    
+
+class ShoeByBrandListView(ShoeListView):
+    template_name = 'products/shoe_by_brand.html'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        brand_id = self.kwargs.get('brand_id', '')
+        if not brand_id:
+            return qs
+        try:
+            bid = int(brand_id)
+            return qs.filter(pk=bid)
+        except (ValueError, TypeError):
+            return qs.filter(name__iexact=brand_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        brand_id = self.kwargs.get('brand_id', '')
+        try:
+            brand = models.Brand.objects.get(brand_id=brand_id)
+        except (models.Brand.DoesNotExist, ValueError, TypeError):
+            raise Http404('Brand not found')
+
+        # selected_brand
+        context['selected_brand'] = brand.brand_id
+        context['selected_brand_obj'] = brand
+        # disable the brand select
+        context['rendered'] = 'shoe_by_brand'
+
+        # Build breadcrumb
+        breadcrumb = []
+        brand_url = reverse('products:by_brand', args=[brand.brand_id])
+        breadcrumb.append({'title': brand.name, 'url': brand_url})
+
+        category = self.request.GET.get('category', '').strip()
+        if category:
+            category_label = models.Shoe.CATEGORY_CHOICES.get(category, category.title())
+            breadcrumb.append({'title': category_label, 'url': None})
+
+        context['breadcrumb'] = breadcrumb
+
+        return context
+    
+    
 def reviews(request,shoe_id):
     shoe = get_object_or_404(models.Shoe,shoe_id=shoe_id)
     reviews = models.Review.objects.filter(order_item__variant__shoe=shoe)
@@ -152,7 +283,7 @@ def reviews(request,shoe_id):
         'avg_rating': avg_rating,
         'can_leave_review': can_leave_review,
     }
-    return render(request,'reviews.html',context)
+    return render(request, 'products/reviews.html', context)
 
 @login_required
 def add_review(request, shoe_id):
@@ -197,7 +328,7 @@ def add_review(request, shoe_id):
         'shoe': shoe,
         'form': form,
     }
-    return render(request, 'reviewform.html', context)
+    return render(request, 'products/reviewform.html', context)
 
 
 @login_required
@@ -224,8 +355,4 @@ def edit_review(request, review_id):
         'form': form,
         'editing': True,
     }
-    return render(request, 'reviewform.html', context)
-
-def dummy(request):
-    shoe=models.Shoe.objects.all()
-    return render(request,'dummy.html',{'shoes':shoe})
+    return render(request, 'products/reviewform.html', context)

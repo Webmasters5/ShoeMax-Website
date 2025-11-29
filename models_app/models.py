@@ -80,6 +80,7 @@ class Brand(models.Model):
     description = models.TextField()
     website = models.URLField()
     brand_id = models.AutoField(primary_key=True)
+    logo = models.ImageField(upload_to='brand_logos/', null=True, blank=True)
     
     def __str__(self):
         return self.name
@@ -192,6 +193,24 @@ class Address(models.Model):
         cust = self.customer.user.username if self.customer else 'Unknown'
 
         return f'Address {self.addr_id} - {self.street}, {self.city} ({cust})'
+
+class Coupon(models.Model):
+    coupon_id = models.AutoField(primary_key=True)
+    promo_code = models.CharField(max_length=50, unique=True)
+    description = models.TextField(blank=True)
+    percent_off = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    is_active = models.BooleanField(default=True)
+    exp_date = models.DateTimeField(null=True, blank=True)
+
+    def is_valid(self) -> bool:
+        if not self.is_active:
+            return False
+        if self.exp_date and self.exp_date < timezone.now():
+            return False
+        return True
+
+    def __str__(self):
+        return f'Coupon {self.promo_code} - {self.percent_off}%'
 
 class Order(models.Model):
     STATUS_CHOICES = [

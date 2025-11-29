@@ -1,0 +1,97 @@
+{% extends "BaseTemplate/nav.html" %}
+{% load static %}
+
+{% block title %}Search Shoes - ShoeMax{% endblock %}
+
+{% block extra_head %}
+	<meta name="description" content="Search for shoes by name, category, and price range.">
+{% endblock %}
+
+<!-- https://bootstrapexamples.com/@juanmz/product-card -->
+ 
+{% block content %}
+	{% block breadcrumb %}
+		<nav aria-label="breadcrumb" class="mb-3">
+			<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="{% url 'homepage:home' %}">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Search</li>
+			</ol>
+		</nav>
+	{% endblock breadcrumb %}
+
+	{% block page_banner %}
+	{% endblock page_banner %}
+
+	<h1 class="mb-4">Find Your Perfect Pair</h1>
+
+	<form method="get" class="row g-3 mb-4">
+		<input type="hidden" name="q" value="{{ q }}" />
+		{# search input removed — using top-bar search instead #}
+
+		<div class="col-md-2">
+			<label for="category" class="form-label">Category</label>
+			<select name="category" id="category" class="form-select">
+				<option value="">All categories</option>
+				{% for code,label in categories.items %}
+					<option value="{{ code }}" {% if code == selected_category %}selected{% endif %}>{{ label }}</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class="col-md-2">
+			<label for="brand" class="form-label">Brand</label>
+			<select name="brand" id="brand" class="form-select" {% if rendered == 'shoe_by_brand' %}disabled{% endif %}>
+				<option value="">All brands</option>
+				{% for b in brands %}
+					<option value="{{ b.brand_id }}" {% if b.brand_id == selected_brand %}selected{% endif %}>{{ b.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class="col-md-2">
+			<label for="gender" class="form-label">Gender</label>
+			<select name="gender" id="gender" class="form-select" {% if rendered == 'shoe_by_gender' %}disabled{% endif %}>
+				<option value="">Any</option>
+				{% for code,label in genders.items %}
+					<option value="{{ code }}" {% if code == selected_gender %}selected{% endif %}>{{ label }}</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class="col-md-3">
+			<label class="form-label">Price</label>
+			<div class="input-group">
+				<input type="number" name="min_price" step="0.01" min="0" value="{{ min_price }}" class="form-control" placeholder="Min" />
+				<span class="input-group-text">—</span>
+				<input type="number" name="max_price" step="0.01" min="0" value="{{ max_price }}" class="form-control" placeholder="Max" />
+			</div>
+		</div>
+
+		<div class="col-md-3 d-flex align-items-end">
+			<div class="d-flex gap-2 flex-column flex-sm-row w-100">
+				<button type="submit" class="btn btn-primary flex-fill">Filter</button>
+				<a href="?" class="btn btn-outline-secondary flex-fill">Reset</a>
+			</div>
+		</div>
+	</form>
+
+	<div class="mb-3 text-muted">
+		{% if shoes %}
+			<strong>{{ shoes|length }}</strong> result{{ shoes|length|pluralize }} found
+		{% else %}
+			No results found
+		{% endif %}
+	</div>
+
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+		{% for shoe in shoes %}
+			<div class="col">
+				{% include 'products/includes/shoe_card.html' with shoe=shoe %}
+			</div>
+		{% empty %}
+			<div class="col">
+				<div class="alert alert-secondary">Try adjusting your filters.</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
