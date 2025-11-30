@@ -10,27 +10,21 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Shoe(models.Model):
-    GENDER_CHOICES = [
-        ('M', 'Men'),
-        ('W', 'Women'),
-        ('U', 'Unisex'),
-        ('K', 'Kids'),
-    ]
+    GENDER_CHOICES = {
+        'M': 'Men',
+        'W': 'Women',
+        'U': 'Unisex',
+        'K': 'Kids',
+    }
     
-    CATEGORY_CHOICES = [
-        ('running', 'Running'),
-        ('sports', 'Sports'),
-        ('casual', 'Casual'),
-        ('sneakers', 'Sneakers'),
-        ('athletic', 'Athletic'),
-        ('formal', 'Formal'),
-        ('loafers', 'Loafers'),
-        ('crocs','Crocs'),
-        ('heels','Heels'),
-        ('dress pumps','Dress pumps'),
-        ('boots', 'Boots'),
-        ('sandals', 'Sandals'),
-    ]
+    CATEGORY_CHOICES = {
+        'running': 'Running',
+        'casual': 'Casual',
+        'sneakers': 'Sneakers',
+        'formal': 'Formal',
+        'boots': 'Boots',
+        'sandals': 'Sandals',
+    }
     
     name = models.CharField(max_length=100)
     description = models.TextField()
