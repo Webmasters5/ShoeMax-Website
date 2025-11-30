@@ -1,0 +1,48 @@
+/* Site-wide theme variables for light and dark modes. */
+/* https://getbootstrap.com/docs/5.3/customize/color-modes/ */
+:root {
+  --bg: #ffffff;
+  --text: #111827;
+  --muted: #6c757d;
+  --navbar-bg: #f8f9fa;
+  --navbar-text: #111827;
+  --card-bg: #ffffff;
+  --link: #0d6efd;
+  --footer-bg: #f8f9fa; 
+}
+
+[data-bs-theme="dark"] {
+  --bg: #0b0c0e;
+  --text: #e6edf3;
+  --muted: #98a0aa;
+  --navbar-bg: #111827;
+  --navbar-text: #f8f9fa;
+  --card-bg: #111317;
+  --link: #7fb1ff;
+  --footer-bg: #111827; 
+}
+
+html, body {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+/* Navbar and offcanvas / sidebar */
+.navbar, .offcanvas, .offcanvas-header, .offcanvas-body, .list-group-item {
+  background-color: var(--navbar-bg) !important;
+  color: var(--navbar-text) !important;
+}
+
+.list-group-item a, .list-group-item { color: var(--navbar-text) !important; }
+
+.site-footer { background: var(--navbar-bg); color: var(--navbar-text); }
+
+a { color: var(--link); }
+
+.text-muted { color: var(--muted) !important; }
+
+/* Toasts */
+.toast { background: var(--card-bg); color: var(--text); }
+
+/* Make buttons with outline adapt */
+.btn-outline-light { color: var(--navbar-text); border-color: rgba(255,255,255,0.2); }

@@ -15,22 +15,22 @@ main { padding-top: 70px; }
 
 /* Footer styling */
 footer.site-footer {
-  background: #111827;
-  color: #e6edf3;
+  background: var(--footer-bg);
+  color: var(--navbar-text);
 }
 
 footer.site-footer a {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--navbar-text);
   text-decoration: none;
 }
 
 footer.site-footer a:hover {
-  color: #ffffff;
+  color: var(--link);
   text-decoration: underline;
 }
 
 .footer-desc p {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--muted);
 }
 
 .offcanvas.offcanvas-start { --bs-offcanvas-width: 260px; }
