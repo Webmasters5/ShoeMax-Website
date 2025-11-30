@@ -41,7 +41,7 @@
 		<div class="col-md-2">
 			<label for="brand" class="form-label">Brand</label>
 			<select name="brand" id="brand" class="form-select" {% if rendered == 'shoe_by_brand' %}disabled{% endif %}>
-				<option value="">All brands</option>
+				<option value="0">All brands</option>
 				{% for b in brands %}
 					<option value="{{ b.brand_id }}" {% if b.brand_id == selected_brand %}selected{% endif %}>{{ b.name }}</option>
 				{% endfor %}

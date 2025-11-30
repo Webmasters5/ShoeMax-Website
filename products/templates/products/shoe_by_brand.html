@@ -24,13 +24,12 @@
             {% if selected_brand_obj.logo %}
                 <img src="{{ selected_brand_obj.logo.url }}" class="img-fluid w-100 mb-3 rounded" alt="{{ selected_brand_obj.name }}">
             {% else %}
-                {# Fallback to a placeholder using the first letter #}
-                <div class="bg-light p-5 text-center rounded mb-3">
-                    <div style="font-size:72px; font-weight:700; color:#6c757d;">{{ selected_brand_obj.name|slice:":1"|upper }}</div>
+                <div class="{% if theme|default:'light' == 'dark' %}bg-dark text-white{% else %}bg-light text-dark{% endif %} p-5 text-center rounded mb-3">
+                    <div style="font-size:72px; font-weight:700;">{{ selected_brand_obj.name|slice:":1"|upper }}</div>
                 </div>
             {% endif %}
 
-            <div class="bg-light p-4 rounded mb-4">
+            <div class="{% if theme|default:'light' == 'dark' %}bg-dark text-white{% else %}bg-light text-dark{% endif %} p-4 rounded mb-4">
                 <h1 class="h3 mb-2">{{ selected_brand_obj.name }} Shoes</h1>
                 <p class="mb-0">Discover our selection of {{ selected_brand_obj.name }} shoes. Use the filters to refine by size, price and category.</p>
             </div>

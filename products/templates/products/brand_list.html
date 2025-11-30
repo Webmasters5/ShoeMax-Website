@@ -23,7 +23,7 @@
             {% endif %}
 
             <div class="mt-auto w-100">
-              <a href="{% url 'products:search' %}?brand={{ brand.brand_id }}" class="btn btn-primary btn-sm w-100">View shoes</a>
+              <a href="{% url 'products:by_brand' brand.brand_id %}" class="btn btn-primary btn-sm w-100">View shoes</a>
             </div>
           </div>
         </div>

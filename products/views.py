@@ -97,7 +97,7 @@ class ShoeListView(generic.ListView):
         # retrieve GET query parameters
         q = self.request.GET.get('q', '').strip()
         category = self.request.GET.get('category', '').strip()
-        brand = self.request.GET.get('brand', '').strip()
+        brand_id = self.request.GET.get('brand', '').strip()
         gender = self.request.GET.get('gender', '').strip()
         min_price = self.request.GET.get('min_price', '').strip()
         max_price = self.request.GET.get('max_price', '').strip()
@@ -110,13 +110,9 @@ class ShoeListView(generic.ListView):
         if category:
             qs = qs.filter(category__iexact=category)
 
-        if brand:
-            # brand is expected to be brand_id (int). Fall back to name lookup if not numeric.
-            try:
-                brand_id = int(brand)
-                qs = qs.filter(brand__brand_id=brand_id)
-            except ValueError:
-                qs = qs.filter(brand__name__iexact=brand)
+        if brand_id:
+            brand_id = int(brand_id)
+            qs = qs.filter(brand_id=brand_id)
 
         if gender:
             qs = qs.filter(gender__iexact=gender)
@@ -142,7 +138,7 @@ class ShoeListView(generic.ListView):
         # keep original query strings
         q = self.request.GET.get('q', '').strip()
         category = self.request.GET.get('category', '').strip()
-        selected_brand = self.request.GET.get('brand', '').strip()
+        brand = self.request.GET.get('brand', 0)
         gender = self.request.GET.get('gender', '').strip()
         min_price = self.request.GET.get('min_price', '').strip()
         max_price = self.request.GET.get('max_price', '').strip()
@@ -154,26 +150,10 @@ class ShoeListView(generic.ListView):
             'q': q,
             'selected_category': category,
             'selected_gender': gender,
-            'selected_brand': selected_brand,
+            'selected_brand': int(brand),
             'min_price': min_price,
             'max_price': max_price,
         })
-
-        # Build breadcrumb
-        gender_label = models.Shoe.GENDER_CHOICES.get(gender, '')
-
-        category_label = models.Shoe.CATEGORY_CHOICES.get(category, '')
-
-        breadcrumb = None
-        if gender_label or category_label:
-            breadcrumb = {
-                'gender': gender_label,
-                'gender_code': gender,
-                'category': category_label,
-                'category_code': category,
-            }
-
-        context['breadcrumb'] = breadcrumb
 
         return context
 
@@ -206,11 +186,13 @@ class ShoeByGenderListView(ShoeListView):
         # Build breadcrumb
         breadcrumb = []
         # link to the gender listing
-        gender_url = reverse('products:by_gender', args=[selected_gender])
-        breadcrumb.append({'title': selected_gender_label, 'url': gender_url})
-
+        
         category = self.request.GET.get('category', '').strip()
-        if category:
+        if not category:
+            breadcrumb.append({'title': selected_gender_label, 'url': None})
+        else:
+            gender_url = reverse('products:by_gender', args=[selected_gender])
+            breadcrumb.append({'title': selected_gender_label, 'url': gender_url})
             category_label = models.Shoe.CATEGORY_CHOICES.get(category, category.title())
             # final breadcrumb item should be active (no url)
             breadcrumb.append({'title': category_label, 'url': None})
@@ -249,14 +231,18 @@ class ShoeByBrandListView(ShoeListView):
 
         # Build breadcrumb
         breadcrumb = []
-        brand_url = reverse('products:by_brand', args=[brand.brand_id])
-        breadcrumb.append({'title': brand.name, 'url': brand_url})
 
         category = self.request.GET.get('category', '').strip()
-        if category:
-            category_label = models.Shoe.CATEGORY_CHOICES.get(category, category.title())
-            breadcrumb.append({'title': category_label, 'url': None})
+        if not category:
+            breadcrumb.append({'title': brand.name, 'url': None})
+        else:
+            brand_url = reverse('products:by_brand', args=[brand.brand_id])
+            breadcrumb.append({'title': brand.name, 'url': brand_url})
 
+            category_label = models.Shoe.CATEGORY_CHOICES.get(category, category.title())
+            # final breadcrumb item should be active (no url)
+            breadcrumb.append({'title': category_label, 'url': None})
+        
         context['breadcrumb'] = breadcrumb
 
         return context

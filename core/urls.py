@@ -11,6 +11,7 @@ urlpatterns=[
     path('contact/',views.contact,name='contact'),
     path('login/',views.log_in,name='login'),
     path('login/',views.logOut,name='logout'),
+    path('toggle-theme/', views.toggle_theme, name='toggle_theme'),
     path('signup/',views.signup,name='signup'),
     # path('forgot/',views.forgot_password_view,name='forgot'),
 

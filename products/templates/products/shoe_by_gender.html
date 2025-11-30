@@ -31,7 +31,7 @@
                     <img src="{% static 'products/images/kids.png' %}" class="img-fluid w-100 mb-3 rounded" alt="{{ selected_gender_label|default:selected_gender }}">
                 {% endif %}
 
-                <div class="bg-light p-4 rounded mb-4">
+                <div class="{% if theme|default:'light' == 'dark' %}bg-dark text-white{% else %}bg-light text-dark{% endif %} p-4 rounded mb-4">
                     <h1 class="h3 mb-2">{{ selected_gender_label }} Shoes</h1>
                     <p class="mb-0">Discover our selection of {{ selected_gender_label }} shoes. Use the filters to refine by size, price and category.</p>
                 </div>
