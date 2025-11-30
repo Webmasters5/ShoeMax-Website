@@ -1,92 +1,143 @@
 {% extends "customer/base.html" %}
 
-{% block content %}
-<h1>Edit Personal Information</h1>
+{% block dashboard_content %}
+<h1 class="mb-4">Edit Personal Information</h1>
 
 <form method="POST" class="info-form">
     {% csrf_token %}
 
-    <!-- Name Section -->
-    <div class="form-card">
-        <div class="card-header">
-            <h2>Name</h2>
-        </div>
+    <!-- Name -->
+    <div class="profile-card light-card hover-pop">
+        <div class="card-header"><h2>Name</h2></div>
         <div class="card-body info-row">
-            <div class="form-group">
-                {{ user_form.first_name.label_tag }}
-                {{ user_form.first_name }}
-            </div>
-            <div class="form-group">
-                {{ user_form.last_name.label_tag }}
-                {{ user_form.last_name }}
-            </div>
+            <div class="form-group">{{ user_form.first_name.label_tag }}{{ user_form.first_name }}</div>
+            <div class="form-group">{{ user_form.last_name.label_tag }}{{ user_form.last_name }}</div>
         </div>
     </div>
 
-    <!-- Contact Section -->
-    <div class="form-card">
-        <div class="card-header">
-            <h2>Contact</h2>
-        </div>
+    <!-- Contact -->
+    <div class="profile-card light-card hover-pop">
+        <div class="card-header"><h2>Contact</h2></div>
         <div class="card-body info-row">
-            <div class="form-group">
-                {{ customer_form.phone.label_tag }}
-                {{ customer_form.phone }}
-            </div>
-            <div class="form-group">
-                {{ customer_form.mobile.label_tag }}
-                {{ customer_form.mobile }}
-            </div>
+            <div class="form-group">{{ customer_form.phone.label_tag }}{{ customer_form.phone }}</div>
+            <div class="form-group">{{ customer_form.mobile.label_tag }}{{ customer_form.mobile }}</div>
         </div>
     </div>
 
-    <!-- Details Section -->
-    <div class="form-card">
-        <div class="card-header">
-            <h2>Details</h2>
-        </div>
+    <!-- Details -->
+    <div class="profile-card light-card hover-pop">
+        <div class="card-header"><h2>Details</h2></div>
         <div class="card-body info-row">
-            <div class="form-group">
-                {{ customer_form.date_of_birth.label_tag }}
-                {{ customer_form.date_of_birth }}
+            <div class="form-group">{{ customer_form.date_of_birth.label_tag }}{{ customer_form.date_of_birth }}</div>
+            <div class="form-group">{{ customer_form.gender.label_tag }}{{ customer_form.gender }}</div>
+        </div>
+    </div>
+
+    <!-- Addresses -->
+    <div class="profile-card light-card hover-pop addresses">
+        <div class="address-box">
+            <div class="card-header"><h2>Shipping Address</h2></div>
+            <div class="card-body">
+                <div class="form-group">{{ customer_form.shipping_address.label_tag }}{{ customer_form.shipping_address }}</div>
             </div>
-            <div class="form-group">
-                {{ customer_form.gender.label_tag }}
-                {{ customer_form.gender }}
+        </div>
+        <div class="address-box">
+            <div class="card-header"><h2>Billing Address</h2></div>
+            <div class="card-body">
+                <div class="form-group">{{ customer_form.billing_address.label_tag }}{{ customer_form.billing_address }}</div>
             </div>
         </div>
     </div>
 
-    <!-- Addresses Section -->
-    <div class="form-card">
-        <div class="card-header">
-            <h2>Addresses</h2>
-        </div>
-        <div class="card-body addresses">
-            <div class="form-group">
-                {{ customer_form.shipping_address.label_tag }}
-                {{ customer_form.shipping_address }}
-            </div>
-            <div class="form-group">
-                {{ customer_form.billing_address.label_tag }}
-                {{ customer_form.billing_address }}
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Section -->
-    <div class="form-card">
-        <div class="card-header">
-            <h2>Payment</h2>
-        </div>
+    <!-- Payment -->
+    <div class="profile-card light-card hover-pop">
+        <div class="card-header"><h2>Payment</h2></div>
         <div class="card-body">
-            <div class="form-group">
-                {{ customer_form.credit_card.label_tag }}
-                {{ customer_form.credit_card }}
-            </div>
+            <div class="form-group">{{ customer_form.credit_card.label_tag }}{{ customer_form.credit_card }}</div>
         </div>
     </div>
 
-    <button type="submit" class="btn">Save Changes</button>
+    <!-- Save Button -->
+    <div class="mt-3">
+        <button type="submit" class="btn btn-dashboard">Save Changes</button>
+    </div>
 </form>
+
+<style>
+/* Force light grey cards for dashboard sections */
+.profile-card,
+.dashboard-card,
+.light-card {
+    background-color: #f9f9f9 !important;
+    border-radius: 12px !important;
+    padding: 25px !important;
+    margin-bottom: 20px !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.profile-card:hover,
+.dashboard-card:hover,
+.light-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+}
+
+/* Flex wrapper for addresses */
+.addresses {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.address-box {
+    flex: 1 1 300px;
+}
+
+/* Info rows spacing */
+.info-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.info-row > div {
+    min-width: 200px;
+}
+
+/* Input styling inside cards */
+.info-form .form-group input,
+.info-form .form-group select,
+.info-form .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.info-form .form-group input:focus,
+.info-form .form-group select:focus,
+.info-form .form-group textarea:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 6px rgba(13,110,253,0.3);
+}
+
+/* Labels consistent */
+.info-form label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Save button spacing */
+.btn-dashboard {
+    margin-top: 10px;
+}
+</style>
+
 {% endblock %}

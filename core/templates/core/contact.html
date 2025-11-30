@@ -49,19 +49,19 @@
                         {% csrf_token %}
                         <div class="inputtext">
                             <label class="label">First name </label>
-                            <input class="textbox" type="text" name="fname" id="fname">
+                            <input class="textbox" type="text" name="fname" id="fname" value="{{ fname|default:'' }}" >
                         </div>
                         <div class="inputtext">
                             <label class="label">Last name </label>
-                            <input class="textbox" type="text" name="lname" id="lname">
+                            <input class="textbox" type="text" name="lname" id="lname" value="{{ lname|default:'' }}" >
                         </div>
                         <div class="inputtext">
                             <label class="label">Email </label>
-                            <input class="textbox" type="email" name="email" id="email">
+                            <input class="textbox" type="email" name="email" id="email" value="{{ email|default:'' }}" >
                         </div>
                         <div class="inputtext">
                             <label class="label">Phone Number </label>
-                            <input class="textbox" type="tel" name="telnum" id="telnum">
+                            <input class="textbox" type="tel" name="telnum" id="telnum" value="{{ telnum|default:'' }}" >
                         </div>
                         <div  class="inputtext">
                             <label class="label">Message </label>

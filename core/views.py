@@ -1,11 +1,12 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import signupform , loginform,forgotPassword
-from django.http import HttpResponse
+from .forms import signupform , loginform
 from django.contrib.auth.views import PasswordResetView
 from django.urls import reverse_lazy
+import re
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 #for email sending
 from django.core.mail import send_mail
@@ -22,7 +23,7 @@ def about(request):
     return render(request,"core/about.html",context)
 
 
-###       contact page
+###       contact page    ###
 def contact(request):
 
     if request.method == 'POST':
@@ -32,6 +33,48 @@ def contact(request):
         email = request.POST.get('email')
         phone = request.POST.get('telnum')
         message = request.POST.get('message')
+
+        #Email validation using built-in email validation
+        try:
+            validate_email(email)
+        except ValidationError:
+            messages.success(request, "Invalid email address.",extra_tags='contactSuccess')
+            #re-render with existing data
+
+            return render(request, 'core/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'phone': phone,
+                'message': message,
+            })
+        
+        #### email validation using regex for email domains ###
+        common_email_pattern = re.compile(r'^[A-Za-z0-9._%+-]+@(?:gmail\.com|yahoo\.com|outlook\.com|hotmail\.com|icloud\.com|protonmail\.com)$')
+        if not common_email_pattern.match(email):
+            messages.success(request, "Invalid email domain. Please use Gmail, Yahoo, Outlook, Hotmail, iCloud, or ProtonMail.", extra_tags='contactSuccess')
+            return render(request, 'core/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'phone': phone,
+                'message': message,
+            })
+
+
+        #Phone validation with regex
+        phone_pattern = re.compile(r'^\+230\d{8}$')
+        if not phone_pattern.match(phone):
+            messages.success(request, "Invalid phone number. Use format +23012345678 (up to 8 digits after +230).", extra_tags='contactSuccess')
+            #re-render with existing data
+            return render(request, 'core/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'phone': phone,
+                'message': message,
+            })
+
 
         # Build email content
         subject = f"New Contact Us Message from {fname} {lname}"
@@ -69,6 +112,7 @@ def log_in(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
+            remember_me = form.cleaned_data.get("remember_me")
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
@@ -77,6 +121,13 @@ def log_in(request):
                 return redirect('homepage:home')
             else:
                 messages.error(request,'Error. User does not exist.')
+
+            if not remember_me:
+                # Session expires when browser closes
+                self.request.session.set_expiry(0)
+            else:
+                # 2 weeks
+                self.request.session.set_expiry(1209600)
                 
         
         else:
@@ -126,25 +177,6 @@ class forgot_password_view(PasswordResetView):
             "protocol": "http",          # use "https" in production
         })
         return ctx
-
-
-# def forgot_password_view(request):
-#     if request.method == 'POST':
-#         form = forgotPassword(request.POST)
-#         if form.is_valid():
-#             form.save(
-#                 request=request,
-#                 use_https=request.is_secure(),
-#                 email_template_name='core/password_reset_email.html',
-#                 subject_template_name='core/passwordResetSubject.txt',
-#                 from_email=None,  # Or set a custom sender
-#             )
-#             messages.success(request, "Password reset link sent to your email.")
-#             return redirect('core:login')  # Create this view or template
-#     else:
-#         form = forgotPassword()
-
-#     return render(request, 'core/forgotPassword.html', {'form': form})
 
 
 

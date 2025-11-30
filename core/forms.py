@@ -6,9 +6,12 @@ from django.contrib.auth.models import User
 
 class loginform(AuthenticationForm):
 
+    remember_me = forms.BooleanField(required=False, initial=False, label="Remember Me")
+
     ## to apply custom css to input fields
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.label_suffix = ""  # removes the colon globally 'remember me:' is now 'remember me'
 
         ##custom css for username
         self.fields['username'].widget.attrs.update({
@@ -22,6 +25,10 @@ class loginform(AuthenticationForm):
             'placeholder' : 'Password'
         })
 
+        # Custom CSS for remember_me
+        self.fields['remember_me'].widget.attrs.update({
+            'class': 'remember-me-checkbox'
+        })
 
 class signupform(UserCreationForm):
 

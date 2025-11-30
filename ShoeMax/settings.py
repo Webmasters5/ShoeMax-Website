@@ -151,3 +151,7 @@ EMAIL_USE_TLS = True
 # Your email account
 EMAIL_HOST_USER = 'shoemaxtest@gmail.com'
 EMAIL_HOST_PASSWORD = 'tfij tiwy zsso nmml'
+
+### remember me ##
+SESSION_COOKIE_AGE = 1209600  # 2 weeks
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

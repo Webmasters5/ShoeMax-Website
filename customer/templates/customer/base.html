@@ -1,83 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ShoeMax - Customer Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body class="{{ request.user.customer.theme_preference|default:'light' }}">
+{% extends 'BaseTemplate/nav.html' %}
+{% load static %}
 
-<div class="container">
-    <aside class="sidebar">
-        <h2>My Account</h2>
-        <nav>
-            <ul>
-                <li>
-                    <a href="{% url 'homepage:home' %}"
-                    class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                    Home
-                    </a>
-                </li>
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'customer/static/css/styles.css' %}?v=4">
+<style>
+/* Hide the fixed navbar and offcanvas sidebar from BaseTemplate on dashboard pages */
+body.dashboard-layout .navbar,
+body.dashboard-layout .offcanvas {
+    display: none !important;
+}
 
-                <li>
-                    <a href="{% url 'customer:customer_profile' %}"
-                    class="{% if request.resolver_match.url_name == 'customer_profile' %}active{% endif %}">
-                    Profile
-                    </a>
-                </li>
+/* ===== DASHBOARD TOP NAV ===== */
+.dashboard-nav {
+    background-color: #1f2937;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin: 15px;
+}
 
-                <!--<li>
-                    <a href="{% url 'customer:customer_info' %}"
-                    class="{% if request.resolver_match.url_name == 'customer_info' %}active{% endif %}">
-                    Personal Info
-                    </a>
-                </li>-->
+.dashboard-nav .dashboard-link {
+    display: inline-block;
+    background-color: #111827;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.1s;
+    font-weight: 500;
+    margin-right: 8px;
+}
 
-                <li>
-                    <a href="{% url 'customer:customer_orders' %}"
-                    class="{% if request.resolver_match.url_name in 'customer_orders customer_order_detail' %}active{% endif %}">
-                    Orders
-                    </a>
-                </li>
+.dashboard-nav .dashboard-link:hover {
+    background-color: #2563eb;
+    color: #fff;
+    transform: translateY(-1px);
+}
 
-                <li>
-                    <a href="{% url 'customer:customer_password' %}"
-                    class="{% if request.resolver_match.url_name == 'customer_password' %}active{% endif %}">
-                    Change Password
-                    </a>
-                </li>
+.dashboard-nav .dashboard-link.active {
+    background-color: #0d6efd;
+    color: #fff;
+}
 
-                <li>
-                    <a href="{% url 'customer:customer_notifications' %}"
-                    class="{% if request.resolver_match.url_name == 'customer_notifications' %}active{% endif %}">
-                    Notifications
-                    </a>
-                </li>
+.dashboard-nav form button {
+    padding: 6px 14px;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
 
-                <li>
-                    <a href="{% url 'customer:customer_settings' %}"
-                    class="{% if request.resolver_match.url_name == 'customer_settings' %}active{% endif %}">
-                    Settings
-                    </a>
-                </li>
+/* ===== DASHBOARD CONTENT ===== */
+.dashboard-content {
+    padding: 25px 30px;
+    min-height: calc(100vh - 80px);
+}
+</style>
+{% endblock %}
 
-                <li>
-                    <form action="{% url 'customer:logout' %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="sidebar-link">Logout</button>
-                    </form>
-                </li>
-            </ul>
-        </nav>
-    </aside>
+{% block content %}
+<div class="container-fluid p-0 dashboard-layout">
 
-    <main class="content">
-        {% block content %}
-        {% endblock %}
+    <!-- DASHBOARD TOP NAV -->
+    <nav class="dashboard-nav mb-4">
+        <div class="d-flex flex-wrap align-items-center gap-2 px-3 py-2">
+            <a href="{% url 'homepage:home' %}" class="dashboard-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+            <a href="{% url 'customer:customer_profile' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_profile' %}active{% endif %}">Profile</a>
+            <a href="{% url 'customer:customer_orders' %}" class="dashboard-link {% if request.resolver_match.url_name in 'customer_orders customer_order_detail' %}active{% endif %}">Orders</a>
+            <a href="{% url 'products:wishlist' %}" class="dashboard-link {% if request.resolver_match.url_name == 'wishlist' %}active{% endif %}">Wishlist</a>
+            <a href="{% url 'customer:customer_password' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_password' %}active{% endif %}">Change Password</a>
+            <a href="{% url 'customer:customer_notifications' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_notifications' %}active{% endif %}">Notifications</a>
+            <a href="{% url 'customer:customer_settings' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_settings' %}active{% endif %}">Settings</a>
+            <form action="{% url 'customer:logout' %}" method="post" class="d-inline ms-auto">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- DASHBOARD CONTENT -->
+    <main class="dashboard-content px-3">
+        {% block dashboard_content %}{% endblock %}
     </main>
-</div>
 
-</body>
-</html>
+</div>
+{% endblock %}
