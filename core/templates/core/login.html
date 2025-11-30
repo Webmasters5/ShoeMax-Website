@@ -70,22 +70,22 @@
 
 
                         <div class="forgot-password-box">
+                            <div class="remember-me-box">
+                                <!-- Remember Me -->
+                                {{ loginform.remember_me }}
+                                {{ loginform.remember_me.label_tag }}
+                            </div>
                             <div class="forgot-password">
                                 <a href="/core/password_reset">
                                     <button type="button" class="forgot-password-button">Forgot Password</button>
                                 </a>
                             </div>
                         </div>
+                        
                         <div class="login-button-box">
                             <button class="login-button" type="submit">Login</button>
                         </div>
                         
-                        <!-- <div class="choose-label" >Choose your login option</div>
-                        <div class="icons-display">
-                            <div class="google-icon"></div>
-                            <div class="facebook-icon"></div>
-                            <div class="x-icon"></div>
-                        </div> -->
                         <div class="register-box">
                             <div class="register-text">Don't have an account?</div>
                             <a href="/core/signup">
