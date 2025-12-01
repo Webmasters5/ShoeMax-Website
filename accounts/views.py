@@ -39,7 +39,7 @@ def log_in(request):
     else:
         form = loginform()
 
-    return render(request,"core/login.html", {"loginform" : form, "next": next_param})
+    return render(request,"accounts/login.html", {"loginform" : form, "next": next_param})
     
 
 ###           logout
@@ -56,11 +56,11 @@ def signup(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your account has successfully been created.')
-            return redirect('core:login')  # or your dashboard
+            return redirect('accounts:login')  # or your dashboard
     else:
         form = signupform()
 
-    return render(request,"core/signup.html", {'form' : form})
+    return render(request,"accounts/signup.html", {'form' : form})
 
 
 

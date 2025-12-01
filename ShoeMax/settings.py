@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core.apps.CoreConfig',
+    'accounts.apps.AccountsConfig',
     'products.apps.ProductsConfig',
     'storefront.apps.StorefrontConfig',
     'BaseTemplate.apps.BasetemplateConfig',
@@ -73,14 +73,14 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 # expose theme (from cookie) to all templates
-                'core.context_processors.theme',
+                'accounts.context_processors.theme',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'ShoeMax.wsgi.application'
-LOGIN_URL = '/core/login/'
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL='/' #when log in successful, send to homepage
 LOGOUT_REDIRECT_URL = '/'
 

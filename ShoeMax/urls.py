@@ -26,7 +26,7 @@ urlpatterns = [
     path('',include('storefront.urls')),
     # path('home/',include('storefront.urls')),
     path('products/', include('products.urls'), name='products'),
-    path('core/',include('core.urls')),
+    path('accounts/',include('accounts.urls')),
     path('accounts/',include('django.contrib.auth.urls')), #dummy acc for testing
     path('customer/', include('customer.urls')),
     #path('adminpanel/', include('adminpanel.urls')),

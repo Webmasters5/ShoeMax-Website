@@ -3,7 +3,7 @@ from . import views
 from .views import forgot_password_view
 from django.contrib.auth import views as auth_views
 
-app_name='core'
+app_name='accounts'
 
 
 urlpatterns=[

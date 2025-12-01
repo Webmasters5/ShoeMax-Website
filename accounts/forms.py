@@ -68,7 +68,7 @@ class signupform(UserCreationForm):
 
 ############ forgot form #####################
 
-# core/forms.py
+# accounts/forms.py
 from django.contrib.auth.forms import PasswordResetForm
 
 class forgotPassword(PasswordResetForm):

@@ -52,7 +52,7 @@
             </form>
             </li>
             {% else %}
-            <li><a style="font-size: 1.3rem; margin-top:1.5rem;" {% if active_class == 'login' %}class="active"{% endif %} href="{% url 'core:login' %}">Log in</a></li>
+            <li><a style="font-size: 1.3rem; margin-top:1.5rem;" {% if active_class == 'login' %}class="active"{% endif %} href="{% url 'accounts:login' %}">Log in</a></li>
             {% endif %}
             </ul>
           </nav>

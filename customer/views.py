@@ -15,7 +15,7 @@ def get_customer_or_redirect_login(request):
 	# check for customer profile
 	customer = getattr(request.user, "customer_profile", None)
 	if not customer:
-		return redirect('core:login')
+		return redirect('accounts:login')
 	return customer
 
 # Create your views here.
@@ -261,7 +261,7 @@ class PaymentMethodCreateView(LoginRequiredMixin, PaymentMethodOwnerMixin, gener
 	def form_valid(self, form):
 		customer = self.get_customer()
 		if not customer:
-			return redirect('core:login')
+			return redirect('accounts:login')
 		# assign owner
 		form.instance.customer = customer
 		return super().form_valid(form)
@@ -283,7 +283,7 @@ class AddressCreateView(LoginRequiredMixin, AddressOwnerMixin, generic.CreateVie
 	def form_valid(self, form):
 		customer = self.get_customer()
 		if not customer:
-			return redirect('core:login')
+			return redirect('accounts:login')
 		form.instance.customer = customer
 		return super().form_valid(form)
 

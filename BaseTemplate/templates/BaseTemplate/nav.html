@@ -54,7 +54,7 @@
                         </li>
                         <!-- Theme toggle -->
                         <li class="nav-item">
-                            <form method="post" action="{% url 'core:toggle_theme' %}" class="d-inline">
+                            <form method="post" action="{% url 'accounts:toggle_theme' %}" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-outline-light ms-2" title="Toggle theme">
                                     {% if theme == 'dark' %}
@@ -74,7 +74,7 @@
                         </li>
                         {% else %}
                         <li class="nav-item">
-                            <a class="btn btn-outline-light ms-2" href="{% url 'core:login' %}">Log in</a>
+                            <a class="btn btn-outline-light ms-2" href="{% url 'accounts:login' %}">Log in</a>
                         </li>
                         {% endif %}
                     </ul>
@@ -113,7 +113,7 @@
                             <button type="submit" class="btn btn-danger w-100">Logout</button>
                         </form>
                         {% else %}
-                        <a href="{% url 'core:login' %}" class="btn btn-primary w-100">Log in</a>
+                        <a href="{% url 'accounts:login' %}" class="btn btn-primary w-100">Log in</a>
                         {% endif %}
                     </div>
                 </nav>
