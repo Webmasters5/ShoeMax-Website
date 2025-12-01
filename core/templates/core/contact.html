@@ -1,32 +1,17 @@
+{% extends "BaseTemplate/nav.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Contact Us - ShoeMax{% endblock %}
+
+{% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/contact.css' %}">
-    <title>Contact Us</title>
-                            <!-- header imports -->
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
-    <!--import icons-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!--import font-->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <header class="shop-header"> <!--The class designs the nav bar-->
-        <div class="menu-icon">
-            <a href="/">
-                <i class="fas fa-home"></i> <!--The specific icon for menu-->
-            </a>
-            
-        </div>
+{% endblock %}
 
-        <div class="shop-name">SHOEMAX</div>
-
-        <div class="search-bar"></div> <!--  will not be visible -->
-    </header>
-    <div class="container">
+{% block content %}
+    <div class="contact-page">
+        <div class="container">
         <div class="one">
             <div class="contact-us-text">Contact Us!</div>
             <br>
@@ -40,7 +25,7 @@
                             {% for message in messages|slice:"-1:" %}
                                 {% if "contactSuccess" in message.tags %}
                                     <li>{{ message }}</li>
-                                {% endif %}    
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     {% endif %}
@@ -65,7 +50,7 @@
                         </div>
                         <div  class="inputtext">
                             <label class="label">Message </label>
-                            <textarea type="textarea" name="message" id="message" class="textarea" ></textarea>
+                            <textarea type="textarea" name="message" id="message" class="textarea" >{{ message|default:'' }}</textarea>
                         </div>
                         <div class="button-div">
                             <button class="button" type="submit" name="submit" id="submit" >Submit</button>
@@ -75,7 +60,6 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
-    
-</body>
-</html>
+{% endblock %}

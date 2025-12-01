@@ -5,15 +5,15 @@
     align-items: center;
 
     background-color: rgba(0, 255, 255, 0);
-    height: 75vh;
-    width: 100vw;
+    height: 48vh; /* reduced height */
+    width: 100%;
 
-border-radius: 25px;
+    border-radius: 20px;
 
     background-image: url('../images/img1.jpeg');
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: 0%;
+    background-position: center;
 }
 
 .about-box-text{
@@ -22,24 +22,26 @@ border-radius: 25px;
     justify-content:center ;
     align-items: center;
 
-    background-color: rgba(255, 255, 255, 0.495);
-    height: 75%;
-    width: 90%;
+    background-color: rgba(255, 255, 255, 0.85);
+    height: 70%;
+    width: 85%;
 
-    border-radius: 25px;
-    
+    border-radius: 20px;
 }
 
-div h1{
-    font-size: 120px;
+/* Scope headings to the about page to avoid global selector conflicts */
+.about-page h1{
+    font-size: 48px; /* reduced */
+    margin: 0.25rem 0;
 }
 
-div h2{
-    font-size: 37px;
+.about-page h2{
+    font-size: 22px;
+    margin: 0.5rem 0;
 }
 
-div p{
-    font-size: 30px;
+.about-page p{
+    font-size: 18px;
 }
 
 .about-para-box{
@@ -48,17 +50,16 @@ div p{
     align-items: center;
 
     background-color: rgba(255, 0, 0, 0);
-    height: 75vh;
-    width: 100vw;
+    height: 50vh; /* reduced */
+    width: 100%;
 
-    border-radius: 25px;
-    margin-top: 1%;
+    border-radius: 20px;
+    margin-top: 1rem;
 
     background-image: url('../images/img2.jpg');
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: 0%;
-
+    background-position: center;
 }
 
 .about-para-box-text{
@@ -67,15 +68,13 @@ div p{
     align-items: center;
     flex-direction: column;
 
-    background-color: rgba(3, 150, 194, 0.486);
-    height: 95%;
-    width: 90%;
+    background-color: rgba(3, 150, 194, 0.45);
+    height: 90%;
+    width: 85%;
 
     text-align: center;
 
-    border-radius: 25px;
-
-
+    border-radius: 20px;
 }
 
 .mission-box{
@@ -84,33 +83,30 @@ div p{
     align-items: center;
 
     background-color: rgba(98, 0, 255, 0);
-    height: 75vh;
-    width: 100vw;
+    height: 44vh;
+    width: 100%;
 
-    border-radius: 25px;
-    margin-top: 1%;
+    border-radius: 20px;
+    margin-top: 1rem;
 
     background-image: url('../images/img3.jpg');
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: 0%;
-
+    background-position: center;
 }
-
 .mission{
     display: flex;
     justify-content:center ;
     align-items: center;
     flex-direction: column;
 
-    background-color: rgba(140, 255, 39, 0.584);
-    height: 95%;
-    width: 90%;
+    background-color: rgba(140, 255, 39, 0.45);
+    height: 90%;
+    width: 85%;
 
     text-align: center;
 
-    border-radius: 25px;
-    
+    border-radius: 20px;
 }
 
 .different-box{
@@ -119,17 +115,16 @@ div p{
     align-items: center;
 
     background-color: rgba(13, 104, 86, 0);
-    height: 75vh;
-    width: 100vw;
+    height: 44vh;
+    width: 100%;
 
-    border-radius: 25px;
-    margin-top: 1%;
+    border-radius: 20px;
+    margin-top: 1rem;
 
     background-image: url('../images/img4.jpg');
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: 0%;
-
+    background-position: center;
 }
 
 .different{
@@ -138,14 +133,13 @@ div p{
     align-items: center;
     flex-direction: column;
 
-    background-color: rgba(255, 238, 85, 0.557);
-    height: 95%;
-    width: 90%;
+    background-color: rgba(255, 238, 85, 0.45);
+    height: 90%;
+    width: 85%;
 
     text-align: center;
 
-    border-radius: 25px;
-
+    border-radius: 20px;
 }
 
 .vision-box{
@@ -154,16 +148,16 @@ div p{
     align-items: center;
 
     background-color: rgba(107, 65, 65, 0);
-    height: 75vh;
-    width: 100vw;
+    height: 44vh;
+    width: 100%;
 
-    border-radius: 25px;
+    border-radius: 20px;
     /* margin-top: 1%; */
 
     background-image: url('../images/img7.jpg');
-    background-size: 50%;
+    background-size: cover;
     background-repeat: repeat-x;
-    background-position: 0%;
+    background-position: center;
 
 }
 
@@ -174,12 +168,11 @@ div p{
     flex-direction: column;
 
     background-color: rgba(255, 94, 94, 0.32);
-    height: 95%;
-    width: 90%;
+    height: 90%;
+    width: 85%;
 
     text-align: center;
 
-    border-radius: 25px;
-
+    border-radius: 20px;
 
 }

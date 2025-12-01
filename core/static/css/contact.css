@@ -1,11 +1,12 @@
-.contact-us-text {
+.contact-page .contact-us-text {
     color: rgb(0, 0, 0);
-    font-size: 500%;
+    font-size: 4rem;
     font-weight: 900;
     padding-top: 5%;
 }
 
-.container{
+/* Layout wrapper scoped to contact page only */
+.contact-page .container{
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -15,7 +16,7 @@
     height: 100vh;
 }
 
-.one {
+.contact-page .one {
     display: flex;
     flex-direction: column;
     justify-content: baseline;
@@ -25,7 +26,7 @@
     width:50%;
 }
 
-.onepic {
+.contact-page .onepic {
     background-color: rgb(255, 255, 255);
     width:75%;
     height: 75%;
@@ -36,7 +37,7 @@
     background-position: 50%;
 }
 
-.two {
+.contact-page .two {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -45,7 +46,7 @@
     width:100%;
 }
 
-.twodiv{
+.contact-page .twodiv{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,7 +57,7 @@
     border-radius: 25px;
 }
 
-.twoform{
+.contact-page .twoform{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -72,14 +73,14 @@
     height: 90%;
 }
 
-.inputtext{
+.contact-page .inputtext{
     display: flex;
     flex-direction: row;
     justify-content: start;
     align-items: center;
     padding-top: 5%;
 
-    width:50dvw;
+    width:50vw;
     height: 15%;
 
     margin: 1%;
@@ -87,21 +88,24 @@
 
 }
 
-.textbox{
-    width: 800%;
-    height: 50%;
+.contact-page .textbox{
+    width: 100%;
+    height: 50px;
     border-radius: 25px;
+    box-sizing: border-box;
+    padding: 0.5rem;
 }
 
-.textarea{
-    resize: none;
-    width: 800%;
-    height: 100%;
+.contact-page .textarea{
+    resize: vertical;
+    width: 100%;
+    min-height: 120px;
     border-radius: 20px;
-    padding-left: 10px;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
-.label{
+.contact-page .label{
     font-size: larger;
     font-weight: 600;
     color: rgb(0, 0, 0);
@@ -109,9 +113,9 @@
 
 }
 
-.button {
-    width: 7vw;
-    height:5vh;
+.contact-page .button {
+    width: 120px;
+    height:40px;
     border-radius: 30px;
     margin-top: 5%;
     font-weight: 900;
@@ -125,12 +129,12 @@
     align-self: center;
 }
 
-.button:hover {
+.contact-page .button:hover {
     background-color: black;
     color: aquamarine;
 }
 
-.button-div {
+.contact-page .button-div {
     display: flex;
     justify-content: space-evenly;
 }

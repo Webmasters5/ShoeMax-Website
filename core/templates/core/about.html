@@ -1,42 +1,26 @@
+{% extends "BaseTemplate/nav.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+{% block title %}About Us - ShoeMax{% endblock %}
+
+{% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/about.css' %}">
-                            <!-- header imports -->
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
-    <!--import icons-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!--import font-->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-</head>
-<title>About Us</title>
-<body>
-    <header class="shop-header"> <!--The class designs the nav bar-->
-        <div class="menu-icon">
-            <a href="/">
-                <i class="fas fa-home"></i> <!--The specific icon for menu-->
-            </a>
-            
-        </div>
+{% endblock %}
 
-        <div class="shop-name">SHOEMAX</div>
-
-        <div class="search-bar"></div> <!--  will not be visible -->
-    </header>
-    <div class="container">
+{% block content %}
+    <div class="about-page">
+        <div class="container">
         <div class="about-box">
             <div class="about-box-text">
-                <h1 style="font-size: 1000;">About Us!</h1>
-                <p>“Good shoes take you good places" – Seo Min Hyun </p>
+                <h1>About Us!</h1>
+                <p>“Good shoes take you good places" – Seo Min Hyun </p>
             </div>
         </div>
         <div class="about-para-box">
             <div class="about-para-box-text">
-                <h2 style="padding-top: 5%;">At Shoemax, we believe that great shoes take you great places—whether you're chasing dreams, conquering city streets, or simply walking into your next adventure.</h2>
+                <h2>At Shoemax, we believe that great shoes take you great places—whether you're chasing dreams, conquering city streets, or simply walking into your next adventure.</h2>
                 <h2>Founded with a passion for style, comfort, and innovation, Shoemax is your go-to destination for premium footwear that blends fashion with function.</h2>
                 <h2>From timeless classics to bold new trends, we curate a collection that speaks to every step of your journey.</h2>
             </div>
@@ -62,17 +46,6 @@
                 Whether you're looking for sleek sneakers, rugged boots, or elegant heels, Shoemax is where your perfect pair begins.</p>
             </div>
         </div>
+        </div>
     </div>
-
-
-<!--
-    
-    
-   
-    <div class="vision">
-        <h2>Our Vision</h2>
-        <p>To become a global leader in footwear e-commerce by combining cutting-edge tech with timeless design—making Shoemax not just a store, but a movement.
-Whether you're looking for sleek sneakers, rugged boots, or elegant heels, Shoemax is where your perfect pair begins.</p>
-    </div> -->
-</body>
-</html>
+{% endblock %}
