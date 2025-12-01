@@ -68,6 +68,10 @@ body.dashboard-layout .offcanvas {
             <a href="{% url 'customer:customer_password' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_password' %}active{% endif %}">Change Password</a>
             <a href="{% url 'customer:customer_notifications' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_notifications' %}active{% endif %}">Notifications</a>
             <a href="{% url 'customer:customer_settings' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_settings' %}active{% endif %}">Settings</a>
+            <a href="{% url 'customer:customer_payment_methods' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_payment_methods' %}active{% endif %}">Settings</a>
+            <a href="{% url 'customer:address_list' %}" class="dashboard-link {% if request.resolver_match.url_name == 'address_list' %}active{% endif %}">Settings</a>
+
+            
             <form action="{% url 'customer:logout' %}" method="post" class="d-inline ms-auto">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger btn-sm">Logout</button>

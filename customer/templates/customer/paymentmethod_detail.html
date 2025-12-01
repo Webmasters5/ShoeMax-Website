@@ -1,0 +1,15 @@
+{% extends 'customer/base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Payment Method</h1>
+<div class="pm">
+    <div><strong>{{ payment_method.title }}</strong></div>
+    <div>Card ending: {{ payment_method.masked }}</div>
+    <div>Expires: {{ payment_method.exp_date|date:"M/Y" }}</div>
+    <div>Holder: {{ payment_method.holder_name }}</div>
+    <a href="{% url 'customer:paymentmethod_edit' payment_method.pk %}">Edit</a>
+    <a href="{% url 'customer:paymentmethod_delete' payment_method.pk %}">Delete</a>
+    <a href="{% url 'customer:paymentmethod_list' %}">Back</a>
+</div>
+{% endblock %}

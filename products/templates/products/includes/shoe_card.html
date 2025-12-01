@@ -1,0 +1,20 @@
+{% load static %}
+{% comment %} Reusable shoe card. Expects `shoe` in context. {% endcomment %}
+<div class="card h-100">
+    {% with shoe.images.first as main_image %}
+        {% if main_image %}
+            <img src="{{ main_image.image.url }}" class="card-img-top" alt="{{ shoe.name }}">
+        {% else %}
+            <img src="{% static 'images/image1.png' %}" class="card-img-top" alt="{{ shoe.name }}">
+        {% endif %}
+    {% endwith %}
+    <div class="card-body d-flex flex-column">
+        <h5 class="card-title mb-1">{{ shoe.name }}</h5>
+        <p class="text-muted mb-2">{{ shoe.category }}</p>
+        <p class="card-text mb-3">{{ shoe.description|truncatewords:20 }}</p>
+        <div class="mt-auto d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">Rs {{ shoe.price }}</span>
+            <a href="{% url 'products:shoe_details' shoe.shoe_id %}" class="btn btn-sm btn-outline-primary">View</a>
+        </div>
+    </div>
+</div>

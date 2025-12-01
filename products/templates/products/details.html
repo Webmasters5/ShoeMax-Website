@@ -14,9 +14,15 @@
 <div class="container my-4">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#">Home</a></li>
-      <li class="breadcrumb-item"><a href="#">{{ shoe.gender }}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{ shoe.category }}</li>
+      <li class="breadcrumb-item"><a href="{% url 'homepage:home' %}">Home</a></li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'products:by_gender' shoe.gender %}">{{ shoe.get_gender_display }}</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'products:by_gender' shoe.gender %}?category={{ shoe.category }}">{{ shoe.get_category_display }}</a>
+      </li>
+      <li class="breadcrumb-item active">{{shoe.name}}</li>
+
     </ol>
   </nav>
 

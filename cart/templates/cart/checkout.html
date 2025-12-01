@@ -24,37 +24,224 @@
     <div class="col-12 col-md-7">
       <h1 class="mb-4">Checkout</h1>
 
-      <form method="POST" class="row g-3">
+      <form method="POST" class="row gy-4" novalidate> <!-- no client-side validate in order to allow empty forms to be sent when existing data is selected -->
         {% csrf_token %}
 
+        <!-- Contact -->
         <div class="col-12">
-          <label for="full_name" class="form-label">Full Name</label>
-          <input id="full_name" name="full_name" type="text" class="form-control" required
-                 value="{{ customer.user.get_full_name|default:customer.user.username }}">
+          <div class="card shadow-sm">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">Contact</h5>
+            </div>
+            <div class="card-body">
+              {% if contact_form.non_field_errors %}
+                <div class="invalid-feedback d-block">{{ contact_form.non_field_errors }}</div>
+              {% endif %}
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="{{ contact_form.full_name.id_for_label }}" class="form-label">{{ contact_form.full_name.label }}</label>
+                  <div class="input-group">
+                    {{ contact_form.full_name }}
+                  </div>
+                  {% if contact_form.full_name.errors %}
+                    <div class="invalid-feedback d-block">{{ contact_form.full_name.errors|join:", " }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-md-6">
+                  <label for="{{ contact_form.email.id_for_label }}" class="form-label">{{ contact_form.email.label }}</label>
+                  <div class="input-group">
+                    {{ contact_form.email }}
+                  </div>
+                  {% if contact_form.email.errors %}
+                    <div class="invalid-feedback d-block">{{ contact_form.email.errors|join:", " }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-md-6">
+                  <label for="{{ contact_form.phone.id_for_label }}" class="form-label">{{ contact_form.phone.label }}</label>
+                  <div class="input-group">
+                    {{ contact_form.phone }}
+                  </div>
+                  {% if contact_form.phone.errors %}
+                    <div class="invalid-feedback d-block">{{ contact_form.phone.errors|join:", " }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping -->
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-header bg-light d-flex align-items-center justify-content-between">
+              <h5 class="mb-0">Shipping address</h5>
+              <span class="badge text-bg-secondary">Required</span>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Pick an option</label>
+                <select name="shipping_existing" class="form-select">
+                  <option value="new" {% if shipping_selected == 'new' %}selected{% endif %}>Enter new shipping address</option>
+                  {% for addr in addresses %}
+                    <option value="{{ addr.addr_id }}" {% if shipping_selected == addr.addr_id|stringformat:"s" %}selected{% endif %}>{{ addr.first_name }} {{ addr.last_name }} — {{ addr.street }}, {{ addr.city }} {{ addr.zip_code }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              {% if shipping_form.non_field_errors %}
+                <div class="invalid-feedback d-block">{{ shipping_form.non_field_errors }}</div>
+              {% endif %}
+              <div class="row g-3">
+            <div class="col-md-6">
+              {{ shipping_form.first_name }}
+              {% if shipping_form.first_name.errors %}
+                <div class="invalid-feedback d-block">{{ shipping_form.first_name.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              {{ shipping_form.last_name }}
+              {% if shipping_form.last_name.errors %}
+                <div class="invalid-feedback d-block">{{ shipping_form.last_name.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-12">
+              {{ shipping_form.street }}
+              {% if shipping_form.street.errors %}
+                <div class="invalid-feedback d-block">{{ shipping_form.street.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              {{ shipping_form.city }}
+              {% if shipping_form.city.errors %}
+                <div class="invalid-feedback d-block">{{ shipping_form.city.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              {{ shipping_form.zip_code }}
+              {% if shipping_form.zip_code.errors %}
+                <div class="invalid-feedback d-block">{{ shipping_form.zip_code.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing -->
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">Billing address</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Pick an option</label>
+                <select name="billing_existing" class="form-select">
+                  <option value="same" {% if billing_selected == 'same' %}selected{% endif %}>Use shipping address</option>
+                  <option value="new" {% if billing_selected == 'new' %}selected{% endif %}>Enter new billing address</option>
+                  {% for addr in addresses %}
+                    <option value="{{ addr.addr_id }}" {% if billing_selected == addr.addr_id|stringformat:"s" %}selected{% endif %}>{{ addr.first_name }} {{ addr.last_name }} — {{ addr.street }}, {{ addr.city }} {{ addr.zip_code }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              {% if billing_form.non_field_errors %}
+                <div class="invalid-feedback d-block">{{ billing_form.non_field_errors }}</div>
+              {% endif %}
+              <div class="row g-3">
+            <div class="col-md-6">
+              {{ billing_form.first_name }}
+              {% if billing_form.first_name.errors %}
+                <div class="invalid-feedback d-block">{{ billing_form.first_name.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              {{ billing_form.last_name }}
+              {% if billing_form.last_name.errors %}
+                <div class="invalid-feedback d-block">{{ billing_form.last_name.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-12">
+              {{ billing_form.street }}
+              {% if billing_form.street.errors %}
+                <div class="invalid-feedback d-block">{{ billing_form.street.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              {{ billing_form.city }}
+              {% if billing_form.city.errors %}
+                <div class="invalid-feedback d-block">{{ billing_form.city.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              {{ billing_form.zip_code }}
+              {% if billing_form.zip_code.errors %}
+                <div class="invalid-feedback d-block">{{ billing_form.zip_code.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">Payment</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Pick an option</label>
+                <select name="payment_existing" class="form-select">
+                  <option value="new" {% if payment_selected == 'new' %}selected{% endif %}>Enter new card / payment</option>
+                  <option value="cod" {% if payment_selected == 'cod' %}selected{% endif %}>Cash on Delivery</option>
+                  {% for pm in payment_methods %}
+                    <option value="{{ pm.card_id }}" {% if payment_selected == pm.card_id|stringformat:"s" %}selected{% endif %}>{{ pm.masked}} — {{ pm.holder_name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              {% if payment_form.non_field_errors %}
+                <div class="invalid-feedback d-block">{{ payment_form.non_field_errors }}</div>
+              {% endif %}
+              <div class="row g-3">
+            <div class="col-md-6">
+              {{ payment_form.card_num }}
+              {% if payment_form.card_num.errors %}
+                <div class="invalid-feedback d-block">{{ payment_form.card_num.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-4">
+              {{ payment_form.exp_date }}
+              {% if payment_form.exp_date.errors %}
+                <div class="invalid-feedback d-block">{{ payment_form.exp_date.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-2">
+              {{ payment_form.cvv }}
+              {% if payment_form.cvv.errors %}
+                <div class="invalid-feedback d-block">{{ payment_form.cvv.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              {{ payment_form.holder_name }}
+              {% if payment_form.holder_name.errors %}
+                <div class="invalid-feedback d-block">{{ payment_form.holder_name.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              {{ payment_form.card_type }}
+              {% if payment_form.card_type.errors %}
+                <div class="invalid-feedback d-block">{{ payment_form.card_type.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="col-12">
-          <label for="email" class="form-label">Email</label>
-          <input id="email" name="email" type="email" class="form-control" required
-                 value="{{ customer.user.email|default_if_none:'' }}">
-        </div>
-
-        <div class="col-12">
-          <label for="address" class="form-label">Shipping Address</label>
-          <textarea id="address" name="address" class="form-control" rows="3" required>{{ customer.shipping_address|default_if_none:'' }}</textarea>
-        </div>
-
-        <div class="col-12 col-md-6">
-          <label for="payment" class="form-label">Payment Method</label>
-          <select id="payment" name="payment" class="form-select" required>
-            <option value="">Select</option>
-            <option value="card">Credit/Debit Card</option>
-            <option value="cod">Cash on Delivery</option>
-          </select>
-        </div>
-
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Place Order</button>
+          <div class="d-grid">
+            <button type="submit" name="place_order" class="btn btn-primary btn-lg">Place Order</button>
+          </div>
         </div>
       </form>
     </div>

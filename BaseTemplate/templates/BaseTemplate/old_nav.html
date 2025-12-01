@@ -34,9 +34,9 @@
             <li><a href="{% url 'homepage:home' %}" {% if active_class == 'home' %}class="active"{% endif %}>  Home</a></li>
             <li id="no-hover" style=" margin-bottom:0rem"><a>Categories</a></li>
             <ul style="color: rgb(255, 255, 255);">
-                <li><a href="{% url 'homepage:prod_by_gender' 'M' %}" {% if active_class == 'M' %}class="active"{% endif %}>Men</a></li>
-                <li><a href="{% url 'homepage:prod_by_gender' 'W' %}" {% if active_class == 'W' %}class="active"{% endif %}>Women</a></li>
-                <li style="margin-bottom: 0.6rem;"><a href="{% url 'homepage:prod_by_gender' 'K' %}" {% if active_class == 'K' %}class="active"{% endif %}>Kids</a></li>
+                <li><a href="{% url 'products:search' %}?gender=M" {% if active_class == 'M' %}class="active"{% endif %}>Men</a></li>
+                <li><a href="{% url 'products:search' %}?gender=W" {% if active_class == 'W' %}class="active"{% endif %}>Women</a></li>
+                <li style="margin-bottom: 0.6rem;"><a href="{% url 'products:search' %}?gender=K" {% if active_class == 'K' %}class="active"{% endif %}>Kids</a></li>
             </ul>
             <li><a href="{% url 'cart:summary' %}" {% if active_class == 'cart' %}class="active"{% endif %}>My cart</a></li>
             <li><a href="{% url 'customer:customer_profile' %}" {% if active_class == 'wishlist' %}class="active"{% endif %}>Wishlist</a></li>

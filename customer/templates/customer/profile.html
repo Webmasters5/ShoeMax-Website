@@ -13,18 +13,6 @@
     </div>
 </div>
 
-<!-- Addresses -->
-<div class="profile-card light-card hover-pop addresses">
-    <div class="address-box">
-        <h2>Shipping Address</h2>
-        <p>{{ customer.shipping_address }}</p>
-    </div>
-    <div class="address-box">
-        <h2>Billing Address</h2>
-        <p>{{ customer.billing_address }}</p>
-    </div>
-</div>
-
 <!-- Contact Information -->
 <div class="profile-card light-card hover-pop">
     <h2>Contact Information</h2>
@@ -35,59 +23,10 @@
     </div>
 </div>
 
-<!-- Payment Information -->
-<div class="profile-card light-card hover-pop">
+<!-- <div class="profile-section">
     <h2>Payment Information</h2>
-    <p><strong>Card Number:</strong> {{ customer.credit_card|slice:":4" }}-xxxx-xxxx-{{ customer.credit_card|slice:"-4:" }}</p>
-</div>
+    <p>Manage payment methods on the Payment Methods page.</p>
+</div> -->
 
-<!-- Edit Button -->
-<div class="mt-3">
-    <a href="{% url 'customer:customer_info' %}" class="btn btn-dashboard">Edit Profile</a>
-</div>
-
-<style>
-/* Force light grey cards for dashboard sections */
-.profile-card,
-.dashboard-card,
-.light-card {
-    background-color: #f9f9f9 !important;
-    border-radius: 12px !important;
-    padding: 25px !important;
-    margin-bottom: 20px !important;
-    border: 1px solid #e0e0e0 !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
-    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
-}
-
-.profile-card:hover,
-.dashboard-card:hover,
-.light-card:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
-}
-
-/* Flex wrapper for addresses */
-.addresses {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.address-box {
-    flex: 1 1 300px;
-}
-
-/* Info rows spacing */
-.info-row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.info-row > div {
-    min-width: 200px;
-}
-</style>
-
+<a href="{% url 'customer:customer_info' %}" class="btn">Edit Profile</a>
 {% endblock %}
