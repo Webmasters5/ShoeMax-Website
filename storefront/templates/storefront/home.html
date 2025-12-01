@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Shoemax-Homepage{% endblock title%}
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/homepage/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/storefront/home.css' %}">
 <!--import font-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
 <!--2 banners downwards-->
 <section class="banner">
     <div class="left">
-        <img src="/static/images/homepage/bannerr1.jpg" alt="Shoe1" class="left-image" >
+        <img src="/static/images/storefront/bannerr1.jpg" alt="Shoe1" class="left-image" >
         <div class="innerleft">
             <h1>Unleash the athlete</h1>
             <p>Lightweight speed, bold style-<br> the
@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="right">
-        <img src="/static/images/homepage/bannnerr2.jpg" alt="Shoe2" class="right-image">
+        <img src="/static/images/storefront/bannnerr2.jpg" alt="Shoe2" class="right-image">
         <div class="innerright">
             <h2>Elegance for Ladies,<br> 
                  One Step at a Time </h2>
@@ -60,15 +60,15 @@
 <!--Shop men/women/kid-->
 <section class="genderclass">
     <div class="innergender">
-        <img src="/static/images/homepage/gender1.jpg">
+        <img src="/static/images/storefront/gender1.jpg">
     <a href="{% url 'products:by_gender' 'M' %}" class="cta-button" >Shop Men</a>
     </div>
     <div class="innergender">
-        <img src="/static/images/homepage/gender2.jpg">
+        <img src="/static/images/storefront/gender2.jpg">
     <a href="{% url 'products:by_gender' 'W' %}" class="cta-button" >Shop Women</a>
     </div>
     <div class="innergender">
-        <img src="/static/images/homepage/gender3.jpg">
+        <img src="/static/images/storefront/gender3.jpg">
     <a href="{% url 'products:by_gender' 'K' %}" class="cta-button" >Shop kid</a>
     </div>
 </section>
@@ -77,19 +77,19 @@
 <section class="category">
     <div class="category-box">
     <a href="{% url 'products:search' %}?category=trainers" class="stretched-link" aria-label="Go page x"></a>
-        <img src="/static/images/homepage/cat1.jpg">
+        <img src="/static/images/storefront/cat1.jpg">
         <h1>Trainers</h1>
         <p>Lightweight, comfortable shoes designed for everyday wear, workouts, or just keeping it effortlessly casual</p>
     </div>
     <div class="category-box">
     <a href="{% url 'products:search' %}?category=formals" class="stretched-link" aria-label="Go page x"></a>
-        <img src="/static/images/homepage/cat2.jpg">
+        <img src="/static/images/storefront/cat2.jpg">
         <h1>Formal Shoes</h1>
         <p>Polished, stylish footwear ideal for office, weddings, or special occasions — where looking sharp matters most</p>
     </div>
     <div class="category-box">
     <a href="{% url 'products:search' %}?category=crocs" class="stretched-link" aria-label="Go page x"></a>
-        <img src="/static/images/homepage/cat3.jpg">
+        <img src="/static/images/storefront/cat3.jpg">
         <h1>Crocs</h1>
         <p>Easy-slip comfort with a laid-back vibe. Lightweight, water-friendly, and perfect for indoor or outdoor chill.</p>
     </div>
@@ -98,19 +98,19 @@
 <section class="category">
     <div class="category-box">
     <a href="{% url 'products:search' %}?category=dress-shoes" class="stretched-link" aria-label="Go page x"></a>
-        <img src="/static/images/homepage/cat4new.png">
+        <img src="/static/images/storefront/cat4new.png">
         <h1>Dress Shoes</h1>
         <p>Elegant and refined styles for every occasion — from classic heels to chic pumps and sophisticated silhouettes.</p>
     </div>
     <div class="category-box">
     <a href="{% url 'products:search' %}?category=sandals" class="stretched-link" aria-label="Go page x"></a>
-        <img src="/static/images/homepage/cat5new.jpg">
+        <img src="/static/images/storefront/cat5new.jpg">
         <h1>Sandals</h1>
         <p>Open-toe styles built for sunshine. Breezy, stylish, and ideal for warm days or casual getaways.</p>
     </div>
     <div class="category-box">
     <a href="{% url 'products:search' %}?category=boots" class="stretched-link" aria-label="Go page x"></a>
-        <img src="/static/images/homepage/cat6.jpg">
+        <img src="/static/images/storefront/cat6.jpg">
         <h1>Boots</h1>
         <p>Durable and versatile, from rugged outdoor pairs to sleek fashion staples. Ready for any season or setting.</p>
     </div>

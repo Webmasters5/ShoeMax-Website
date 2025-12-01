@@ -123,7 +123,7 @@ def log_in(request):
                 # Validate next; fallback to LOGIN_REDIRECT_URL
                 if next_param:
                     return redirect(next_param)
-                return redirect(settings.LOGIN_REDIRECT_URL or 'homepage:home')
+                return redirect(settings.LOGIN_REDIRECT_URL or 'storefront:home')
             else:
                 messages.error(request,'Error. User does not exist.')
 
@@ -143,7 +143,7 @@ def log_in(request):
 def logOut(request):
     logout(request)
     messages.success(request,"You have successfully logged out.")
-    return redirect('homepage:home')
+    return redirect('storefront:home')
 
 
 #######   sign up

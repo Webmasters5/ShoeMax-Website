@@ -21,7 +21,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <a class="navbar-brand d-flex align-items-center" href="{% url 'homepage:home' %}">
+                <a class="navbar-brand d-flex align-items-center" href="{% url 'storefront:home' %}">
                     <img src="{% if theme == 'dark' %}{% static 'images/dark-logo.png' %}{% else %}{% static 'images/white-logo.png' %}{% endif %}" alt="logo" height="34" class="d-inline-block align-text-top me-2">
                     <span class="fw-bold">SHOEMAX</span>
                 </a>
@@ -92,7 +92,7 @@
             
             <div class="offcanvas-body p-0">
                 <nav class="list-group list-group-flush">
-                    <a href="{% url 'homepage:home' %}" class="list-group-item list-group-item-action border-0 {% if active_class == 'home' %}active{% endif %}">Home</a>
+                    <a href="{% url 'storefront:home' %}" class="list-group-item list-group-item-action border-0 {% if active_class == 'home' %}active{% endif %}">Home</a>
                     <div class="list-group-item border-0">
                         <div class="fw-bold mb-2">Categories</div>
                         <a href="{% url 'products:by_gender' 'M' %}" class="d-block ms-2 {% if active_class == 'M' %}text-decoration-underline{% endif %}">Men</a>

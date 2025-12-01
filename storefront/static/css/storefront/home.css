@@ -1,7 +1,7 @@
 /*Main banner*/
 .hero{
     height: 70vh;
-    background: url("/static/images/homepage/hero.jpg") 
+    background: url("/static/images/storefront/hero.jpg") 
     no-repeat right center;
     background-size: cover;
     position: relative;
@@ -172,7 +172,7 @@
 }
 .category div>h1{
     position: absolute;
-    top:75%;
+    top:72%;
     left:5%;
     font-size: clamp(0.2rem,4vw,1.7rem);
     color: rgb(0, 0, 0);
@@ -182,7 +182,7 @@
 }
 .category div>p{
     position: absolute;
-    top:78%;
+    top:82%;
     left:2%;
     font-size: clamp(0.2rem,4vw,1.3rem);
     font-family: serif;

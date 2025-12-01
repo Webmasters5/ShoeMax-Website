@@ -7,12 +7,12 @@ def home(request):
     context={
         'active_class':'home'
     }
-    return render(request,'homepage/home.html',context)
+    return render(request,'storefront/home.html',context)
 
 
 class ProductsByGenderView(ListView):
     model = Shoe
-    template_name = 'homepage/prod_gender.html' 
+    template_name = 'storefront/prod_gender.html' 
     paginate_by = 8
 
     def get_queryset(self):
@@ -43,4 +43,29 @@ def category(request,category):
         'shoes':shoes,
         'category':category,
     }
-    return render(request,'homepage/categories.html',context)
+    # Render a category-specific page that lists all shoes matching the requested category
+    return render(request,'storefront/category_items.html',context)
+
+
+def categories(request):
+    """Render the categories listing page.
+
+    For each category declared on the Shoe model, fetch a small set of sample
+    shoes (up to 4) and present them under the category heading with a
+    "View all" button that links to the category detail page.
+    """
+    categories = Shoe.CATEGORY_CHOICES
+    categories_list = []
+    for code, label in categories.items():
+        samples = list(Shoe.objects.filter(category=code)[:4])
+        categories_list.append({
+            'code': code,
+            'label': label,
+            'shoes': samples,
+        })
+
+    context = {
+        'categories_list': categories_list,
+        'active_class': 'categories',
+    }
+    return render(request, 'storefront/categories.html', context)

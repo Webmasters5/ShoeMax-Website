@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
     'products.apps.ProductsConfig',
-    'homepage.apps.HomepageConfig',
+    'storefront.apps.StorefrontConfig',
     'BaseTemplate.apps.BasetemplateConfig',
     'models_app.apps.ModelsAppConfig',
     'customer.apps.CustomerConfig',

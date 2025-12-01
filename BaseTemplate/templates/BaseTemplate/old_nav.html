@@ -31,7 +31,7 @@
           <nav>
             <ul>
             <img src="/static/images/logo-removebg-preview.png">
-            <li><a href="{% url 'homepage:home' %}" {% if active_class == 'home' %}class="active"{% endif %}>  Home</a></li>
+            <li><a href="{% url 'storefront:home' %}" {% if active_class == 'home' %}class="active"{% endif %}>  Home</a></li>
             <li id="no-hover" style=" margin-bottom:0rem"><a>Categories</a></li>
             <ul style="color: rgb(255, 255, 255);">
                 <li><a href="{% url 'products:search' %}?gender=M" {% if active_class == 'M' %}class="active"{% endif %}>Men</a></li>
@@ -59,7 +59,7 @@
         <div style="margin-left:17%; width: 83%;">
             <header class="shop-header"> <!--The class designs the nav bar-->
 
-                <a class="shop-name" style="font-family: Georgia, 'Times New Roman', Times, serif" href="{% url 'homepage:home' %}">SHOEMAX</a>
+                <a class="shop-name" style="font-family: Georgia, 'Times New Roman', Times, serif" href="{% url 'storefront:home' %}">SHOEMAX</a>
 
                 <div class="search-bar">
                     <form action="{% url 'products:search' %}" method="get">
