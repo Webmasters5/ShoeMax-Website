@@ -52,7 +52,7 @@
                                 <span class="cart-dot"></span>
                             </a>
                         </li>
-                        <!-- Theme toggle (server-side, no JS) -->
+                        <!-- Theme toggle -->
                         <li class="nav-item">
                             <form method="post" action="{% url 'core:toggle_theme' %}" class="d-inline">
                                 {% csrf_token %}
@@ -89,7 +89,7 @@
                 <h5 class="offcanvas-title" id="offcanvasSidebarLabel">Menu</h5>
                 <button type="button" class="{% if theme == 'dark' %}btn-close btn-close-white text-reset{% else %}btn-close text-reset{% endif %}" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            {% endblock sidebar %}
+            
             <div class="offcanvas-body p-0">
                 <nav class="list-group list-group-flush">
                     <a href="{% url 'homepage:home' %}" class="list-group-item list-group-item-action border-0 {% if active_class == 'home' %}active{% endif %}">Home</a>
@@ -119,65 +119,63 @@
                 </nav>
             </div>
         </div>
-
+        {% endblock sidebar %}
         <!-- Main content area -->
+        {% block extra_nav %}{% endblock extra_nav %}
         <main class="container-fluid">
             <div class="container">
-                <div class="py-4">
-                    <!-- Floating Django messages container using Bootstrap toasts -->
-                     <!-- https://docs.djangoproject.com/en/5.2/ref/contrib/messages/ -->
-                    <!-- https://getbootstrap.com/docs/4.3/components/toasts/ -->
-                    <div class="floating-messages" id="floatingMessages">
-                        {% if messages %}
-                        <div aria-live="polite" aria-atomic="true" class="position-relative">
-                            <div class="toast-container">
-                                {% for message in messages %}
-                                <div class="toast text-bg-{{ message.tags }}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4000">
-                                    <div class="d-flex">
-                                        <div class="toast-body">
-                                            {{ message }}
-                                        </div>
-                                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <!-- Floating Django messages container using Bootstrap toasts -->
+                    <!-- https://docs.djangoproject.com/en/5.2/ref/contrib/messages/ -->
+                <!-- https://getbootstrap.com/docs/4.3/components/toasts/ -->
+                <div class="floating-messages" id="floatingMessages">
+                    {% if messages %}
+                    <div aria-live="polite" aria-atomic="true" class="position-relative">
+                        <div class="toast-container">
+                            {% for message in messages %}
+                            <div class="toast text-bg-{{ message.tags }}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4000">
+                                <div class="d-flex">
+                                    <div class="toast-body">
+                                        {{ message }}
                                     </div>
+                                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
-                                {% endfor %}
                             </div>
+                            {% endfor %}
                         </div>
-                        {% endif %}
                     </div>
-
-                    {% block content %}{% endblock %}
+                    {% endif %}
                 </div>
             </div>
-
-            <footer class="site-footer mt-5 py-5 border-top">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 col-md-7 footer-desc mb-4 mb-md-0">
-                            <h5>About ShoeMax</h5>
-                            <p class="mb-2">At ShoeMax, we're passionate about helping you put your best foot forward. From timeless classics to the latest trends, we offer high-quality footwear for every walk of life.</p>
-                            <small class="text-muted">&copy; ShoeMax - 2025</small>
-                        </div>
-                        <div class="col-12 col-md-5 footer-links">
-                            <h6>Menu</h6>
-                            <ul class="list-unstyled">
-                                <li><a href="{% url 'core:about' %}">About us</a></li>
-                                <li><a href="{% url 'core:contact' %}">Contact us</a></li>
-                            </ul>
-                        </div>
+            {% block content %}{% endblock %}
+        </main>
+        <footer class="site-footer mt-5 py-5 border-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-7 footer-desc mb-4 mb-md-0">
+                        <h5>About ShoeMax</h5>
+                        <p class="mb-2">At ShoeMax, we're passionate about helping you put your best foot forward. From timeless classics to the latest trends, we offer high-quality footwear for every walk of life.</p>
+                        <small class="text-muted">&copy; ShoeMax - 2025</small>
+                    </div>
+                    <div class="col-12 col-md-5 footer-links">
+                        <h6>Menu</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="{% url 'core:about' %}">About us</a></li>
+                            <li><a href="{% url 'core:contact' %}">Contact us</a></li>
+                        </ul>
                     </div>
                 </div>
-            </footer>
-        </main>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+            </div>
+        </footer>
 
-            <!-- https://getbootstrap.com/docs/4.3/components/toasts/ -->
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    document.querySelectorAll('#floatingMessages .toast').forEach(function (msg) {
-                        new bootstrap.Toast(msg).show();
-                    });
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+        <!-- https://getbootstrap.com/docs/4.3/components/toasts/ -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#floatingMessages .toast').forEach(function (msg) {
+                    new bootstrap.Toast(msg).show();
                 });
-            </script>
+            });
+        </script>
     </body>
 </html>

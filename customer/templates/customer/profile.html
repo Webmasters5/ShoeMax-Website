@@ -1,32 +1,33 @@
 {% extends "customer/base.html" %}
 
 {% block dashboard_content %}
-<h1 class="mb-4">My Profile</h1>
+<div class="container">
+    <h1>My Profile</h1>
 
-<!-- Personal Information -->
-<div class="profile-card light-card hover-pop">
-    <h2>Personal Information</h2>
-    <div class="info-row">
-        <div><strong>Full Name:</strong> {{ customer.user.first_name }} {{ customer.user.last_name }}</div>
-        <div><strong>Date of Birth:</strong> {{ customer.date_of_birth }}</div>
-        <div><strong>Gender:</strong> {{ customer.gender }}</div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5>Personal Information</h5>
+                    <div><strong>Full Name:</strong> {{ customer.user.first_name }} {{ customer.user.last_name }}</div>
+                    <div><strong>Date of Birth:</strong> {{ customer.date_of_birth }}</div>
+                    <div><strong>Gender:</strong> {{ customer.gender }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5>Contact Information</h5>
+                    <div><strong>Phone:</strong> {{ customer.phone }}</div>
+                    <div><strong>Mobile:</strong> {{ customer.mobile }}</div>
+                    <div><strong>Email:</strong> {{ customer.user.email }}</div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <a class="btn btn-primary" href="{% url 'customer:customer_info' %}">Edit Profile</a>
 </div>
 
-<!-- Contact Information -->
-<div class="profile-card light-card hover-pop">
-    <h2>Contact Information</h2>
-    <div class="info-row">
-        <div><strong>Phone:</strong> {{ customer.phone }}</div>
-        <div><strong>Mobile:</strong> {{ customer.mobile }}</div>
-        <div><strong>Email:</strong> {{ customer.user.email }}</div>
-    </div>
-</div>
-
-<!-- <div class="profile-section">
-    <h2>Payment Information</h2>
-    <p>Manage payment methods on the Payment Methods page.</p>
-</div> -->
-
-<a href="{% url 'customer:customer_info' %}" class="btn">Edit Profile</a>
 {% endblock %}

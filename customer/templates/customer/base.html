@@ -2,87 +2,33 @@
 {% load static %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'customer/static/css/styles.css' %}?v=4">
-<style>
-/* Hide the fixed navbar and offcanvas sidebar from BaseTemplate on dashboard pages */
-body.dashboard-layout .navbar,
-body.dashboard-layout .offcanvas {
-    display: none !important;
-}
-
-/* ===== DASHBOARD TOP NAV ===== */
-.dashboard-nav {
-    background-color: #1f2937;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    margin: 15px;
-}
-
-.dashboard-nav .dashboard-link {
-    display: inline-block;
-    background-color: #111827;
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.1s;
-    font-weight: 500;
-    margin-right: 8px;
-}
-
-.dashboard-nav .dashboard-link:hover {
-    background-color: #2563eb;
-    color: #fff;
-    transform: translateY(-1px);
-}
-
-.dashboard-nav .dashboard-link.active {
-    background-color: #0d6efd;
-    color: #fff;
-}
-
-.dashboard-nav form button {
-    padding: 6px 14px;
-    border-radius: 0.5rem;
-    font-size: 0.9rem;
-}
-
-/* ===== DASHBOARD CONTENT ===== */
-.dashboard-content {
-    padding: 25px 30px;
-    min-height: calc(100vh - 80px);
-}
-</style>
+    <link rel="stylesheet" href="{% static 'customer/css/styles.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid p-0 dashboard-layout">
+<!-- https://bootstrapexamples.com/@shola-ajani/profile-management-dashboard-2 -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar / Top nav -->
+        <nav class="col-12 col-md-3 mb-3 mb-md-0 customer-dashboard-nav">
+            <div class="position-sticky" style="top:1rem;">
+                <ul class="nav nav-pills flex-row flex-md-column rounded p-2">
+                    <li class="nav-item"><a class="nav-link {% if active == 'profile' %}active{% endif %}" href="{% url 'customer:customer_profile' %}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link {% if active == 'payment_methods' %}active{% endif %}" href="{% url 'customer:customer_payment_methods' %}">Payment Methods</a></li>
+                    <li class="nav-item"><a class="nav-link {% if active == 'addresses' %}active{% endif %}" href="{% url 'customer:address_list' %}">Addresses</a></li>
+                    <li class="nav-item"><a class="nav-link {% if active == 'orders' %}active{% endif %}" href="{% url 'customer:customer_orders' %}">Orders</a></li>
+                    <li class="nav-item"><a class="nav-link {% if active == 'password' %}active{% endif %}" href="{% url 'customer:customer_password' %}">Change Password</a></li>
+                    <li class="nav-item"><a class="nav-link {% if active == 'notifications' %}active{% endif %}" href="{% url 'customer:customer_notifications' %}">Notifications</a></li>
+                    <li class="nav-item"><a class="nav-link {% if active == 'settings' %}active{% endif %}" href="{% url 'customer:customer_settings' %}">Settings</a></li>
+                </ul>
+            </div>
+        </nav>
 
-    <!-- DASHBOARD TOP NAV -->
-    <nav class="dashboard-nav mb-4">
-        <div class="d-flex flex-wrap align-items-center gap-2 px-3 py-2">
-            <a href="{% url 'homepage:home' %}" class="dashboard-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
-            <a href="{% url 'customer:customer_profile' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_profile' %}active{% endif %}">Profile</a>
-            <a href="{% url 'customer:customer_orders' %}" class="dashboard-link {% if request.resolver_match.url_name in 'customer_orders customer_order_detail' %}active{% endif %}">Orders</a>
-            <a href="{% url 'products:wishlist' %}" class="dashboard-link {% if request.resolver_match.url_name == 'wishlist' %}active{% endif %}">Wishlist</a>
-            <a href="{% url 'customer:customer_password' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_password' %}active{% endif %}">Change Password</a>
-            <a href="{% url 'customer:customer_notifications' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_notifications' %}active{% endif %}">Notifications</a>
-            <a href="{% url 'customer:customer_settings' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_settings' %}active{% endif %}">Settings</a>
-            <a href="{% url 'customer:customer_payment_methods' %}" class="dashboard-link {% if request.resolver_match.url_name == 'customer_payment_methods' %}active{% endif %}">Settings</a>
-            <a href="{% url 'customer:address_list' %}" class="dashboard-link {% if request.resolver_match.url_name == 'address_list' %}active{% endif %}">Settings</a>
-
-            
-            <form action="{% url 'customer:logout' %}" method="post" class="d-inline ms-auto">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-            </form>
-        </div>
-    </nav>
-
-    <!-- DASHBOARD CONTENT -->
-    <main class="dashboard-content px-3">
-        {% block dashboard_content %}{% endblock %}
-    </main>
-
+        <!-- Main dashboard content -->
+        <main class="col-12 col-md-9">
+            {% block dashboard_content %}{% endblock %}
+        </main>
+    </div>
 </div>
+
 {% endblock %}

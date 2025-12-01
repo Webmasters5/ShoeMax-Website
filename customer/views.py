@@ -25,7 +25,7 @@ def profile(request):
 	
 	if not isinstance(customer, Customer):
 		return customer
-	return render(request, "customer/profile.html", {"customer": customer})
+	return render(request, "customer/profile.html", {"customer": customer, "active": "profile"})
 
 @login_required
 def info(request):
@@ -47,7 +47,8 @@ def info(request):
 
 	return render(request, "customer/info.html", {
 		"user_form": user_form,
-		"customer_form": customer_form
+		"customer_form": customer_form,
+		"active": "profile",
 	})
 
 @login_required
@@ -56,7 +57,7 @@ def orders(request):
 	if not isinstance(customer, Customer):
 		return customer
 	orders = customer.orders.all()
-	return render(request, "customer/orders.html", {"orders": orders})
+	return render(request, "customer/orders.html", {"orders": orders, "active": "orders"})
 
 @login_required
 def order_detail(request, order_id):
@@ -64,7 +65,7 @@ def order_detail(request, order_id):
 	if not isinstance(customer, Customer):
 		return customer
 	order = get_object_or_404(Order, order_id=order_id, customer=customer)
-	return render(request, "customer/order_detail.html", {"order": order})
+	return render(request, "customer/order_detail.html", {"order": order, "active": "orders"})
 
 
 @login_required
@@ -104,8 +105,8 @@ def password(request):
 			return redirect("customer:customer_profile")  # or another success page
 	else:
 		form = PasswordChangeForm(request.user)
-	
-	return render(request, "customer/password.html", {"form": form})
+
+	return render(request, "customer/password.html", {"form": form, "active": "password"})
 
 @login_required
 def notifications(request):
@@ -113,7 +114,7 @@ def notifications(request):
 	if not isinstance(customer, Customer):
 		return customer
 	notifications = customer.notifications.all().order_by('-created_at')
-	return render(request, "customer/notifications.html", {"notifications": notifications})
+	return render(request, "customer/notifications.html", {"notifications": notifications, "active": "notifications"})
 
 @login_required
 def settings(request):
@@ -126,7 +127,7 @@ def settings(request):
 			customer.theme_preference = theme
 			customer.save()
 		return redirect("customer:customer_settings")
-	return render(request, "customer/settings.html", {"customer": customer})
+	return render(request, "customer/settings.html", {"customer": customer, "active": "settings"})
 
 @login_required
 def mark_notification_read(request, notification_id):
@@ -134,7 +135,7 @@ def mark_notification_read(request, notification_id):
 	if not isinstance(customer, Customer):
 		return customer
 	notification = get_object_or_404(Notification, id=notification_id, customer=customer)
-	notification.is_read = True
+	notification.is_read = not notification.is_read
 	notification.save()
 	return redirect('customer:customer_notifications')
 
@@ -156,8 +157,8 @@ def payment_methods(request):
 
 @login_required
 def addresses(request):
-    #redirect to address list view
-    return redirect('customer:address_list')
+	#redirect to address list view
+	return redirect('customer:address_list')
 
 
 
@@ -233,6 +234,7 @@ class PaymentMethodListView(LoginRequiredMixin, PaymentMethodOwnerMixin, generic
 	def get_context_data(self, **kwargs):
 		ctx = super().get_context_data(**kwargs)
 		ctx['customer'] = self.get_customer()
+		ctx['active'] = 'payment_methods'
 		return ctx
 
 
@@ -248,6 +250,7 @@ class AddressListView(LoginRequiredMixin, AddressOwnerMixin, generic.ListView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['customer'] = self.get_customer()
+		context['active'] = 'addresses'
 		return context
 
 class PaymentMethodCreateView(LoginRequiredMixin, PaymentMethodOwnerMixin, generic.CreateView):
@@ -266,6 +269,11 @@ class PaymentMethodCreateView(LoginRequiredMixin, PaymentMethodOwnerMixin, gener
 	def get_success_url(self):
 		return reverse_lazy('customer:paymentmethod_list')
 
+	def get_context_data(self, **kwargs):
+		ctx = super().get_context_data(**kwargs)
+		ctx['active'] = 'payment_methods'
+		return ctx
+
 
 class AddressCreateView(LoginRequiredMixin, AddressOwnerMixin, generic.CreateView):
 	model = Address
@@ -282,6 +290,11 @@ class AddressCreateView(LoginRequiredMixin, AddressOwnerMixin, generic.CreateVie
 	def get_success_url(self):
 		return reverse_lazy('customer:address_list')
 
+	def get_context_data(self, **kwargs):
+		ctx = super().get_context_data(**kwargs)
+		ctx['active'] = 'addresses'
+		return ctx
+
 
 class PaymentMethodDetailView(LoginRequiredMixin, PaymentMethodOwnerMixin, generic.DetailView):
 	model = PaymentMethod
@@ -291,6 +304,11 @@ class PaymentMethodDetailView(LoginRequiredMixin, PaymentMethodOwnerMixin, gener
 	def get_object(self, queryset=None):
 		return get_object_or_404(self.get_queryset(), pk=self.kwargs.get('pk'))
 
+	def get_context_data(self, **kwargs):
+		ctx = super().get_context_data(**kwargs)
+		ctx['active'] = 'payment_methods'
+		return ctx
+
 
 class AddressDetailView(LoginRequiredMixin, AddressOwnerMixin, generic.DetailView):
 	model = Address
@@ -299,6 +317,11 @@ class AddressDetailView(LoginRequiredMixin, AddressOwnerMixin, generic.DetailVie
 
 	def get_object(self, queryset=None):
 		return get_object_or_404(self.get_queryset(), pk=self.kwargs.get('pk'))
+
+	def get_context_data(self, **kwargs):
+		ctx = super().get_context_data(**kwargs)
+		ctx['active'] = 'addresses'
+		return ctx
 
 
 class PaymentMethodUpdateView(LoginRequiredMixin, PaymentMethodOwnerMixin, generic.UpdateView):
@@ -317,6 +340,11 @@ class PaymentMethodUpdateView(LoginRequiredMixin, PaymentMethodOwnerMixin, gener
 	def get_success_url(self):
 		return reverse_lazy('customer:paymentmethod_list')
 
+	def get_context_data(self, **kwargs):
+		ctx = super().get_context_data(**kwargs)
+		ctx['active'] = 'payment_methods'
+		return ctx
+
 
 class AddressUpdateView(LoginRequiredMixin, AddressOwnerMixin, generic.UpdateView):
 	model = Address
@@ -334,6 +362,11 @@ class AddressUpdateView(LoginRequiredMixin, AddressOwnerMixin, generic.UpdateVie
 	def get_success_url(self):
 		return reverse('customer:address_list')
 
+	def get_context_data(self, **kwargs):
+		ctx = super().get_context_data(**kwargs)
+		ctx['active'] = 'addresses'
+		return ctx
+
 
 class PaymentMethodDeleteView(LoginRequiredMixin, PaymentMethodOwnerMixin, generic.DeleteView):
 	model = PaymentMethod
@@ -345,6 +378,11 @@ class PaymentMethodDeleteView(LoginRequiredMixin, PaymentMethodOwnerMixin, gener
 	def get_success_url(self):
 		return reverse_lazy('customer:paymentmethod_list')
 
+	def get_context_data(self, **kwargs):
+		ctx = super().get_context_data(**kwargs)
+		ctx['active'] = 'payment_methods'
+		return ctx
+
 
 class AddressDeleteView(LoginRequiredMixin, AddressOwnerMixin, generic.DeleteView):
 	model = Address
@@ -355,3 +393,8 @@ class AddressDeleteView(LoginRequiredMixin, AddressOwnerMixin, generic.DeleteVie
 
 	def get_success_url(self):
 		return reverse_lazy('customer:address_list')
+
+	def get_context_data(self, **kwargs):
+		ctx = super().get_context_data(**kwargs)
+		ctx['active'] = 'addresses'
+		return ctx

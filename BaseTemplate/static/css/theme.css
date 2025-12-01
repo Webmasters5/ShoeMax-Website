@@ -1,12 +1,12 @@
 /* Site-wide theme variables for light and dark modes. */
 /* https://getbootstrap.com/docs/5.3/customize/color-modes/ */
-:root {
+:root, [data-bs-theme="light"] {
   --bg: #ffffff;
   --text: #111827;
   --muted: #6c757d;
   --navbar-bg: #f8f9fa;
   --navbar-text: #111827;
-  --card-bg: #ffffff;
+  --card-bg: #f8f9fa;
   --link: #0d6efd;
   --footer-bg: #f8f9fa; 
 }
@@ -44,5 +44,9 @@ a { color: var(--link); }
 /* Toasts */
 .toast { background: var(--card-bg); color: var(--text); }
 
-/* Make buttons with outline adapt */
 .btn-outline-light { color: var(--navbar-text); border-color: rgba(255,255,255,0.2); }
+
+.card, .nav {  
+  background-color: var(--card-bg) !important;
+  color: var(--text) !important;
+}
