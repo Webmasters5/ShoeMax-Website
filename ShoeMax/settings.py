@@ -73,7 +73,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 # expose theme (from cookie) to all templates
-                'accounts.context_processors.theme',
+                'BaseTemplate.context_processors.theme',
             ],
         },
     },
