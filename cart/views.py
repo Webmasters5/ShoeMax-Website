@@ -9,31 +9,73 @@ from .forms import AddressForm, PaymentMethodForm, ContactForm
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-@login_required
 def add_to_cart(request):
+    """Add a variant to the cart.
+
+    For authenticated customers we use the CartItem model as before.
+    For anonymous visitors we store a simple mapping in the session under 'cart': { variant_id: qty }
+    """
     variant_id = request.POST.get('variant')
     variant = get_object_or_404(ShoeVariant, variant_id=variant_id)
-    customer = request.user.customer_profile
 
-    cart_item, created = CartItem.objects.get_or_create(
-        customer=customer,
-        variant=variant,
-        defaults={'quantity': 1}
-    )
+    if request.user.is_authenticated and hasattr(request.user, 'customer_profile'):
+        customer = request.user.customer_profile
 
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
+        cart_item, created = CartItem.objects.get_or_create(
+            customer=customer,
+            variant=variant,
+            defaults={'quantity': 1}
+        )
+
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+    else:
+        cart = request.session.get('cart', {})
+        # store quantities as ints; keys as strings
+        cart[str(variant.variant_id)] = int(cart.get(str(variant.variant_id), 0)) + 1
+        request.session['cart'] = cart
 
     return redirect('cart:summary')
 
 
-@login_required
 def cart_summary(request):
-    customer = request.user.customer_profile
-    cart_items = CartItem.objects.filter(customer=customer)
+    """Render cart summary for authenticated users (DB cart) or anonymous users (session cart)."""
+    if request.user.is_authenticated and hasattr(request.user, 'customer_profile'):
+        customer = request.user.customer_profile
+        cart_items = CartItem.objects.filter(customer=customer)
 
-    total = sum(item.total_price for item in cart_items)
+        total = sum(item.total_price for item in cart_items)
+        discount = 0
+        final_total = total - discount
+
+        return render(request, 'cart/summary.html', {
+            'cart_items': cart_items,
+            'total': total,
+            'discount': discount,
+            'final_total': final_total,
+        })
+
+    # anonymous/session cart
+    session_cart = request.session.get('cart', {})
+    cart_items = []
+    total = 0
+
+    for variant_id, qty in session_cart.items():
+        variant = ShoeVariant.objects.filter(variant_id=variant_id).first()
+        if not variant:
+            continue
+        item_total = (variant.shoe.price) * int(qty)
+        total += item_total
+        
+        cart_item = {
+            'id': variant.variant_id,  # used by template for url of shoe
+            'variant': variant,
+            'quantity': int(qty),
+            'total_price': item_total,
+        }
+        cart_items.append(cart_item)
+
     discount = 0
     final_total = total - discount
 
@@ -44,27 +86,48 @@ def cart_summary(request):
         'final_total': final_total,
     })
 
-@login_required
 def remove_from_cart(request, item_id):
-    item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer_profile)
-    item.delete()
+    #for logged-in customer
+    if request.user.is_authenticated and hasattr(request.user, 'customer_profile'):
+        item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer_profile)
+        item.delete()
+    else: #anonymous user
+        cart = request.session.get('cart', {})
+        # item_id for session mode is the variant_id
+        cart.pop(str(item_id), None)
+        request.session['cart'] = cart
+
     return redirect('cart:summary')
 
-@login_required
 def update_quantity(request, item_id):
-    item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer_profile)
-    
-    if request.method == 'POST':
-        action = request.POST.get('action')
-        
+    # require post
+    if request.method != 'POST':
+        return redirect('cart:summary')
+
+    #increment or decrement action
+    action = request.POST.get('action')
+
+    #logged-in customer
+    if request.user.is_authenticated and hasattr(request.user, 'customer_profile'):
+        item = get_object_or_404(CartItem, id=item_id, customer=request.user.customer_profile)
+
         if action == 'increment':
             item.quantity += 1
             item.save()
-            
-        elif action == 'decrement':
-            if item.quantity > 1: 
-                item.quantity -= 1
-                item.save()
+        elif action == 'decrement' and item.quantity > 1:
+            item.quantity -= 1
+            item.save()
+
+    else: #anonymous user
+        cart = request.session.get('cart', {})
+        key = str(item_id)
+        if key in cart:
+            if action == 'increment':
+                cart[key] = int(cart.get(key, 0)) + 1
+            elif action == 'decrement':
+                if int(cart.get(key, 0)) > 1:
+                    cart[key] = int(cart.get(key, 0)) - 1
+        request.session['cart'] = cart
 
     return redirect('cart:summary')
 

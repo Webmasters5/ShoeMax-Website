@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 import re
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 #for email sending
 from django.core.mail import send_mail
@@ -106,6 +107,7 @@ def contact(request):
 ###      login 
 def log_in(request):
 
+    next_param = request.GET.get('next') or request.POST.get('next') or ''
     if request.method == "POST":
         form = loginform(request,data=request.POST)
         
@@ -118,25 +120,23 @@ def log_in(request):
             if user is not None:
                 login(request,user)
                 messages.success(request,'You have successfully logged in.')
-                return redirect('homepage:home')
+                # Validate next; fallback to LOGIN_REDIRECT_URL
+                if next_param:
+                    return redirect(next_param)
+                return redirect(settings.LOGIN_REDIRECT_URL or 'homepage:home')
             else:
                 messages.error(request,'Error. User does not exist.')
 
             if not remember_me:
-                # Session expires when browser closes
-                self.request.session.set_expiry(0)
+                request.session.set_expiry(0)
             else:
-                # 2 weeks
-                self.request.session.set_expiry(1209600)
-                
-        
+                request.session.set_expiry(1209600)
         else:
             messages.success(request,"There was an error logging in.") 
-            # return redirect('core:login')
     else:
         form = loginform()
 
-    return render(request,"core/login.html", {"loginform" : form})
+    return render(request,"core/login.html", {"loginform" : form, "next": next_param})
     
 
 ###           logout
