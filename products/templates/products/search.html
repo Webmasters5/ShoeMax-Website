@@ -13,8 +13,8 @@
 	{% block breadcrumb %}
 		<nav aria-label="breadcrumb" class="mb-3">
 			<ol class="breadcrumb">
-					<li class="breadcrumb-item"><a href="{% url 'homepage:home' %}">Home</a></li>
-					<li class="breadcrumb-item active" aria-current="page">Search</li>
+				<li class="breadcrumb-item"><a href="{% url 'homepage:home' %}">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Search</li>
 			</ol>
 		</nav>
 	{% endblock breadcrumb %}
@@ -26,7 +26,6 @@
 
 	<form method="get" class="row g-3 mb-4">
 		<input type="hidden" name="q" value="{{ q }}" />
-		{# search input removed — using top-bar search instead #}
 
 		<div class="col-md-2">
 			<label for="category" class="form-label">Category</label>

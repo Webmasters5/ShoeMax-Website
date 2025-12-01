@@ -79,7 +79,7 @@ def cancel_order(request, order_id):
 	# Only allow cancel if order is pending
 	if order.status.lower() != 'pending':
 		messages.error(request, "Only pending orders can be cancelled.")
-		return redirect(reverse('customer:customer_order_detail', args=[order.order_id]))
+		return redirect(order.get_absolute_url())
 
 	order.status = 'cancelled'
 	order.save()

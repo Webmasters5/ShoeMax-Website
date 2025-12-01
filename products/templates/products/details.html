@@ -75,6 +75,9 @@
               {% if avg_rating %}
                 <span class="badge bg-success">Rating: {{ avg_rating }} / 5 ★</span>
               {% endif %}
+              {% if shoe.total_stock == 0 %}
+                <span class="badge bg-danger ms-2">Out of stock</span>
+              {% endif %}
             </div>
 
             <div class="mb-3">
@@ -112,7 +115,7 @@
 
                 <input type="hidden" name="color" value="{{ selected_color }}">
                 <div class="d-flex gap-2">
-                  <button type="submit" class="btn btn-primary">Add to Cart</button>
+                  <button type="submit" class="btn btn-primary" {% if shoe.total_stock == 0 %}disabled{% endif %}>Add to Cart</button>
                   <a href="{% url 'products:reviews' shoe.shoe_id %}" class="btn btn-outline-success">View reviews</a>
                 </div>
               </form>

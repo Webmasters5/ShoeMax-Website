@@ -40,6 +40,9 @@ class Shoe(models.Model):
     def get_absolute_url(self):
         return reverse('products:shoe_details', args=[self.shoe_id])
 
+    def total_stock(self):
+        return sum(variant.stock for variant in self.variants.all())
+    
 class ShoeImage(models.Model):
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name='images', help_text='Shoe this image belongs to.')
     image = models.ImageField(upload_to='shoe_images/', help_text='Image file for the shoe.')
@@ -235,6 +238,9 @@ class Order(models.Model):
         if pm is None:
             return 'Cash on delivery'
         return pm.title if pm.title else getattr(pm, 'masked', str(pm))
+    
+    def get_absolute_url(self):
+        return reverse('customer:order_details', args=[self.order_id])
     
     def __str__(self):
         return f"Order #{self.order_id} - {self.customer.user.username}"
