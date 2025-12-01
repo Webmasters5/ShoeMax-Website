@@ -39,7 +39,8 @@
     text-decoration: none;
     font-family:Helvetica, sans-serif;
     font-weight:bolder;
-    font-size: clamo(1.0rem,4vw,2.0rem);
+    /* corrected typo: clamo -> clamp */
+    font-size: clamp(1.0rem,4vw,2.0rem);
     border-radius: 6px;
     box-shadow: 5px 5px 10px #000000;
     display: inline-block;
@@ -97,7 +98,7 @@
 }
 .banner .cta-button{
     padding: 12px 24px;
-    font-size: (0.8rem,4vw,1.7rem);
+    font-size: clamp(0.8rem,4vw,1.7rem);
     margin-top: 15px;
 }
 
@@ -128,7 +129,7 @@
     text-decoration: none;
     font-family:Helvetica, sans-serif;
     font-weight:bolder;
-    font-size: (0.8rem,4vw,1.7rem);
+    font-size: clamp(0.8rem,4vw,1.7rem);
     border-radius: 20px;
     box-shadow: 2px 2px 5px #000000;
     display: inline;
@@ -168,24 +169,33 @@
     width: 100%;
     position: relative;
     overflow: hidden;
-    padding-bottom: 120px;
+    /* increase bottom padding so absolutely positioned text doesn't get clipped */
+    padding-bottom: 160px;
 }
 .category div>h1{
     position: absolute;
-    top:72%;
+    /* position from bottom to avoid clipping on shorter boxes / different viewport heights */
+    /* move the title further up to avoid overlapping the paragraph */
+    bottom: 26%;
     left:5%;
-    font-size: clamp(0.2rem,4vw,1.7rem);
+    /* slightly larger minimum and more conservative scaling to avoid overlapping the paragraph */
+    font-size: clamp(0.85rem,2.2vw,1.4rem);
     color: rgb(0, 0, 0);
     font-weight: bolder;
     margin: 0;
+    margin-bottom: 6px;
+    line-height: 1.05;
     font-family: Helvetica, sans-serif;
+    z-index: 15; /* sit below the paragraph when they overlap */
 }
 .category div>p{
     position: absolute;
-    top:82%;
+    /* anchor the paragraph slightly above the bottom edge so it's always visible */
+    bottom: 7%;
     left:2%;
-    font-size: clamp(0.2rem,4vw,1.3rem);
+    font-size: clamp(0.8rem,1.8vw,1.15rem);
     font-family: serif;
+    z-index: 20; /* ensure paragraph appears on top of the title if overlap occurs */
 }
 .stretched-link {
   position: absolute;

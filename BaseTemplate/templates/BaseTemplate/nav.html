@@ -104,8 +104,8 @@
                     <a href="{% url 'products:wishlist' %}" class="list-group-item list-group-item-action border-0 {% if active_class == 'wishlist' %}active{% endif %}">Wishlist</a>
                     <a href="{% url 'customer:customer_profile' %}" class="list-group-item list-group-item-action border-0 {% if active_class == 'account' %}active{% endif %}">My account</a>
                     <a href="{% url 'customer:customer_settings' %}" class="list-group-item list-group-item-action border-0 {% if active_class == 'settings' %}active{% endif %}">Settings</a>
-                    <a href="{% url 'core:contact' %}" class="list-group-item list-group-item-action border-0 {% if active_class == 'contactus' %}active{% endif %}">Contact</a>
-                    <a href="{% url 'core:about' %}" class="list-group-item list-group-item-action border-0 {% if active_class == 'aboutus' %}active{% endif %}">About us</a>
+                    <a href="{% url 'storefront:contact' %}" class="list-group-item list-group-item-action border-0 {% if active_class == 'contactus' %}active{% endif %}">Contact</a>
+                    <a href="{% url 'storefront:about' %}" class="list-group-item list-group-item-action border-0 {% if active_class == 'aboutus' %}active{% endif %}">About us</a>
                     <div class="list-group-item border-0">
                         {% if user.is_authenticated %}
                         <form method="post" action="{% url 'customer:logout' %}">
@@ -159,8 +159,8 @@
                     <div class="col-12 col-md-5 footer-links">
                         <h6>Menu</h6>
                         <ul class="list-unstyled">
-                            <li><a href="{% url 'core:about' %}">About us</a></li>
-                            <li><a href="{% url 'core:contact' %}">Contact us</a></li>
+                            <li><a href="{% url 'storefront:about' %}">About us</a></li>
+                            <li><a href="{% url 'storefront:contact' %}">Contact us</a></li>
                         </ul>
                     </div>
                 </div>

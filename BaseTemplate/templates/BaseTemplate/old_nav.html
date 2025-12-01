@@ -42,8 +42,8 @@
             <li><a href="{% url 'customer:customer_profile' %}" {% if active_class == 'wishlist' %}class="active"{% endif %}>Wishlist</a></li>
             <li><a href="{% url 'customer:customer_profile' %}" {% if active_class == 'account' %}class="active"{% endif %}>My account</a></li>
             <li><a href="{% url 'customer:customer_settings' %}" {% if active_class == 'settings' %}class="active"{% endif %}>Settings</a></li>
-            <li><a {% if active_class == 'contactus' %}class="active"{% endif %} href="{% url 'core:contact' %}">Contact</a></li>
-            <li><a {% if active_class == 'aboutus' %}class="active"{% endif %} href="{% url 'core:about' %}">About us</a></li>
+            <li><a {% if active_class == 'contactus' %}class="active"{% endif %} href="{% url 'storefront:contact' %}">Contact</a></li>
+            <li><a {% if active_class == 'aboutus' %}class="active"{% endif %} href="{% url 'storefront:about' %}">About us</a></li>
             {% if user.is_authenticated %}
             <li>
             <form method="post" action="{% url 'customer:logout' %}" style="display: inline;">
@@ -90,8 +90,8 @@
                 <div class="link" style="width:40%">
                     <h4 style="padding-left: 5rem;">Menu</h4>
                     <ul style="padding-left: 5rem; line-height: 1.8;">
-                        <li><a href="{% url 'core:about' %}">About us</a></li>
-                        <li><a href="{% url 'core:contact' %}">Contact us</li>
+                        <li><a href="{% url 'storefront:about' %}">About us</a></li>
+                        <li><a href="{% url 'storefront:contact' %}">Contact us</li>
                     </ul>
                 </div>
 

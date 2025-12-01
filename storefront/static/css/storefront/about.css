@@ -10,7 +10,7 @@
 
     border-radius: 20px;
 
-    background-image: url('../images/img1.jpeg');
+    background-image: url('../../images/storefront/img1.jpeg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -56,7 +56,7 @@
     border-radius: 20px;
     margin-top: 1rem;
 
-    background-image: url('../images/img2.jpg');
+    background-image: url('../../images/storefront/img2.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -89,7 +89,7 @@
     border-radius: 20px;
     margin-top: 1rem;
 
-    background-image: url('../images/img3.jpg');
+    background-image: url('../../images/storefront/img3.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -121,7 +121,7 @@
     border-radius: 20px;
     margin-top: 1rem;
 
-    background-image: url('../images/img4.jpg');
+    background-image: url('../../images/storefront/img4.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -154,7 +154,7 @@
     border-radius: 20px;
     /* margin-top: 1%; */
 
-    background-image: url('../images/img7.jpg');
+    background-image: url('../../images/storefront/img7.jpg');
     background-size: cover;
     background-repeat: repeat-x;
     background-position: center;

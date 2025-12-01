@@ -32,7 +32,7 @@
     height: 75%;
     border-radius: 25px;
 
-    background-image: url('../images/img4.jpg');
+    background-image: url('../../images/storefront/img4.jpg');
     background-size: cover;
     background-position: 50%;
 }
@@ -64,7 +64,7 @@
     justify-content: start;
 
     border-radius: 25px;
-    background-image: url('../images/img2.jpg');
+    background-image: url('../../images/storefront/img2.jpg');
     background-size: cover;
     background-blend-mode: luminosity;
     background-color: rgba(255, 0, 0, 0);

@@ -1,59 +1,108 @@
-from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from models_app.models import Shoe
-from django.views.generic import ListView
-
+import re
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+#for email sending
+from django.core.mail import send_mail
+from django.conf import settings
+###       home page
 def home(request):
     context={
         'active_class':'home'
     }
     return render(request,'storefront/home.html',context)
 
-
-class ProductsByGenderView(ListView):
-    model = Shoe
-    template_name = 'storefront/prod_gender.html' 
-    paginate_by = 8
-
-    def get_queryset(self):
-        gender = self.kwargs.get('gender')
-        return Shoe.objects.filter(Q(gender=gender) | Q(gender='U'))
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['gender'] = self.kwargs.get('gender')
-        context['active_class'] = self.kwargs.get('gender')
-
-        return context
-
-def category(request,category):
-    if category=="trainers":
-        shoes=Shoe.objects.filter(Q(category="running")|Q(category="sports")|Q(category="casual")|Q(category="sneakers")|Q(category="athletic"))
-    elif category=="formals":
-        shoes=Shoe.objects.filter(Q(category="formal")|Q(category="loafers"))
-    elif category=="crocs":
-        shoes=Shoe.objects.filter(category="crocs")
-    elif category=="dress-shoes":
-        shoes=Shoe.objects.filter(Q(category="heels")|Q(category="dress pumps"))
-    elif category=="sandals":
-        shoes=Shoe.objects.filter(category="sandals")
-    elif category=="boots":
-        shoes=Shoe.objects.filter(category="boots")
+###       about page
+def about(request):
     context={
-        'shoes':shoes,
-        'category':category,
+        'active_class':'aboutus'
     }
-    # Render a category-specific page that lists all shoes matching the requested category
-    return render(request,'storefront/category_items.html',context)
+    return render(request,"storefront/about.html",context)
+
+###       contact page    ###
+def contact(request):
+
+    if request.method == 'POST':
+
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        email = request.POST.get('email')
+        phone = request.POST.get('telnum')
+        message = request.POST.get('message')
+
+        #Email validation using built-in email validation
+        try:
+            validate_email(email)
+        except ValidationError:
+            messages.success(request, "Invalid email address.",extra_tags='contactSuccess')
+            #re-render with existing data
+
+            return render(request, 'storefront/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'phone': phone,
+                'message': message,
+            })
+        
+        #### email validation using regex for email domains ###
+        common_email_pattern = re.compile(r'^[A-Za-z0-9._%+-]+@(?:gmail\.com|yahoo\.com|outlook\.com|hotmail\.com|icloud\.com|protonmail\.com)$')
+        if not common_email_pattern.match(email):
+            messages.success(request, "Invalid email domain. Please use Gmail, Yahoo, Outlook, Hotmail, iCloud, or ProtonMail.", extra_tags='contactSuccess')
+            return render(request, 'storefront/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'phone': phone,
+                'message': message,
+            })
+
+
+        #Phone validation with regex
+        phone_pattern = re.compile(r'^\+230\d{8}$')
+        if not phone_pattern.match(phone):
+            messages.success(request, "Invalid phone number. Use format +23012345678 (up to 8 digits after +230).", extra_tags='contactSuccess')
+            #re-render with existing data
+            return render(request, 'storefront/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'phone': phone,
+                'message': message,
+            })
+
+
+        # Build email content
+        subject = f"New Contact Us Message from {fname} {lname}"
+        body = f"""
+        You have received a new message from the Contact Us form:
+
+        Name: {fname} {lname}
+        Email: {email}
+        Phone Number: {phone}
+        Message:
+        {message}
+        """
+
+        # Send email
+        send_mail(
+            subject,
+            body,
+            settings.EMAIL_HOST_USER,        # sender (your account)
+            ['shoemaxtest@gmail.com'],       # recipient (your inbox)
+            fail_silently=False,
+        )
+
+        # … process form and send email …
+        messages.success(request, f"Thank you {fname}, your message has been sent!", extra_tags='contactSuccess')
+        return redirect('storefront:contact')
+    return render(request, 'storefront/contact.html')
 
 
 def categories(request):
-    """Render the categories listing page.
-
-    For each category declared on the Shoe model, fetch a small set of sample
-    shoes (up to 4) and present them under the category heading with a
-    "View all" button that links to the category detail page.
-    """
+    #Lists a few samples from each category
     categories = Shoe.CATEGORY_CHOICES
     categories_list = []
     for code, label in categories.items():
