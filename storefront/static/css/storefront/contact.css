@@ -32,9 +32,17 @@
     height: 75%;
     border-radius: 25px;
 
-    background-image: url('../../images/storefront/img4.jpg');
-    background-size: cover;
-    background-position: 50%;
+    /* switched to using an <img> inside this container */
+    overflow: hidden; /* clip the img to the rounded corners */
+}
+
+.contact-page .onepic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* preserve the previous background-size: cover behavior */
+    object-position: 50%;
+    display: block;
+    border-radius: 25px; /* ensure rounded corners on the image itself */
 }
 
 .contact-page .two {
@@ -64,13 +72,35 @@
     justify-content: start;
 
     border-radius: 25px;
-    background-image: url('../../images/storefront/img2.jpg');
-    background-size: cover;
+
+    /* switched to using an absolutely-positioned <img> as the visual background */
+    position: relative;
+    overflow: hidden;
     background-blend-mode: luminosity;
     background-color: rgba(255, 0, 0, 0);
 
     width:85%;
     height: 90%;
+}
+
+.contact-page .twoform .bg-img {
+    position: absolute;
+    inset: 0; /* top:0; right:0; bottom:0; left:0; */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50%;
+    display: block;
+    z-index: 0;
+    /* approximate previous blend behavior if desired: */
+    mix-blend-mode: luminosity;
+    /* make the background image translucent */
+    opacity: 0.45;
+}
+
+.contact-page .twoform > form {
+    position: relative;
+    z-index: 1; /* keep the form above the background image */
 }
 
 .contact-page .inputtext{
@@ -80,7 +110,10 @@
     align-items: center;
     padding-top: 5%;
 
-    width:50vw;
+    gap: 0.75rem; /* reduce default spacing between label and input */
+
+    /* reduce overall horizontal footprint of each label+input pair */
+    width:40vw;
     height: 15%;
 
     margin: 1%;
@@ -89,7 +122,10 @@
 }
 
 .contact-page .textbox{
-    width: 100%;
+    /* allow textbox to flex and fill remaining space next to label */
+    flex: 1 1 auto;
+    width: auto;
+    max-width: 420px; /* limit how wide inputs can grow */
     height: 50px;
     border-radius: 25px;
     box-sizing: border-box;
@@ -109,8 +145,32 @@
     font-size: larger;
     font-weight: 600;
     color: rgb(0, 0, 0);
-    width: 200%;
+    /* reduce the label width so it sits closer to the input */
+    width: 28%;
+    min-width: 120px; /* keep labels readable on small screens */
+    text-align: left;
 
+
+/* Responsive: stack labels above inputs on small screens and allow full width */
+@media (max-width: 640px) {
+    .contact-page .inputtext {
+        width: 90vw;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        padding-top: 2%;
+        height: auto;
+    }
+    .contact-page .label {
+        width: 100%;
+        min-width: 0;
+    }
+    .contact-page .textbox {
+        flex: none;
+        width: 100%;
+        max-width: none;
+    }
+}
 }
 
 .contact-page .button {
@@ -122,7 +182,7 @@
     font-size: 100%;
 
     background-color:rgba(245, 222, 179, 0) ;
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     
     justify-content: center;
     justify-self: center;
@@ -130,8 +190,9 @@
 }
 
 .contact-page .button:hover {
-    background-color: black;
-    color: aquamarine;
+    /* no hover effect: keep same appearance as default */
+    background-color: rgba(245, 222, 179, 0);
+    color: rgb(0, 0, 0);
 }
 
 .contact-page .button-div {

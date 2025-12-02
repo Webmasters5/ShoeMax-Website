@@ -14,11 +14,14 @@
         <div class="one">
             <div class="contact-us-text">Contact Us!</div>
             <br>
-            <div class="onepic"></div>
+            <div class="onepic">
+                <img src="{% static 'images/storefront/img4.jpg' %}" alt="Contact image" />
+            </div>
         </div>
         <div class="two">
             <div class="twodiv">
                 <div class="twoform">
+                    <img class="bg-img" src="{% static 'images/storefront/img2.jpg' %}" alt="Background" />
                     <form method="post">
                         {% csrf_token %}
                         
