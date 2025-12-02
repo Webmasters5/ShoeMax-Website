@@ -10,9 +10,10 @@
 {% endblock %}
 
 <!-- https://bootstrapexamples.com/@andreas-muller/product-details-page -->
-{% block content %}
-<div class="container my-4">
-  <nav aria-label="breadcrumb">
+
+{% block extra_nav %}
+<div class="container">
+  <nav aria-label="breadcrumb mb-3">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="{% url 'storefront:home' %}">Home</a></li>
       <li class="breadcrumb-item">
@@ -22,11 +23,15 @@
         <a href="{% url 'products:by_gender' shoe.gender %}?category={{ shoe.category }}">{{ shoe.get_category_display }}</a>
       </li>
       <li class="breadcrumb-item active">{{shoe.name}}</li>
-
     </ol>
   </nav>
+</div>
 
-  <main class="product-container">
+{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <!-- <main class="product-container"> -->
     <div class="row gx-4">
       <div class="col-lg-6">
         <div class="card">
@@ -129,6 +134,6 @@
         </div>
       </div>
     </div>
-  </main>
+  <!-- </main> -->
 </div>
  {% endblock %}

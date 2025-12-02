@@ -10,10 +10,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 def add_to_cart(request):
-    """Add a variant to the cart.
-
-    For authenticated customers we use the CartItem model as before.
-    For anonymous visitors we store a simple mapping in the session under 'cart': { variant_id: qty }
+    """Add a variant to the cart using session for anonymous users or DB for authenticated users.
     """
     variant_id = request.POST.get('variant')
     variant = get_object_or_404(ShoeVariant, variant_id=variant_id)

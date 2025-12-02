@@ -4,6 +4,8 @@ from models_app.models import Shoe
 import re
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.views import generic
+from models_app import models
 #for email sending
 from django.core.mail import send_mail
 from django.conf import settings
@@ -179,3 +181,11 @@ def categories(request):
         'active_class': 'categories',
     }
     return render(request, 'storefront/categories.html', context)
+
+class BrandListView(generic.ListView):
+    model = models.Brand
+    template_name = 'storefront/brand_list.html'
+    context_object_name = 'brands'
+
+    def get_queryset(self):
+        return super().get_queryset().order_by('name')

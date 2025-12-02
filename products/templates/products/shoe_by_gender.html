@@ -21,7 +21,6 @@
 {% block page_banner %}
     <div class="row mb-0">
         <div class="col-12">
-            {% comment %} Choose image based on gender. Lowercase once and do explicit comparisons. {% endcomment %}
             {% with selected_gender|lower as sg %}
                 {% if sg == 'm' or sg == 'men' %}
                     <img src="{% static 'products/images/men.png' %}" class="img-fluid w-100 mb-3 rounded" alt="{{ selected_gender_label|default:selected_gender }}">

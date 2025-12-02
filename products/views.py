@@ -157,14 +157,6 @@ class ShoeListView(generic.ListView):
 
         return context
 
-class BrandListView(generic.ListView):
-    model = models.Brand
-    template_name = 'products/brand_list.html'
-    context_object_name = 'brands'
-
-    def get_queryset(self):
-        return super().get_queryset().order_by('name')
-
 class ShoeByGenderListView(ShoeListView):
     template_name = 'products/shoe_by_gender.html'
 

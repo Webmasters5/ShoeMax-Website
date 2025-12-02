@@ -34,7 +34,7 @@
                 </li>
                 <li class="nav-item position-relative">
                     <a class="nav-link" href="{% url 'cart:summary' %}" title="Cart"><i class="fas fa-shopping-cart fa-lg"></i>
-                        <span class="cart-dot"></span>
+                        {%if request.user.customer_profile.cart_items.all or request.session.cart%}<span class="cart-dot"></span> {% endif %}
                     </a>
                 </li>
                 <!-- Theme toggle -->
