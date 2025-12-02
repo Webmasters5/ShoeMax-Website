@@ -36,22 +36,52 @@
       <div class="col-lg-6">
         <div class="card">
           <div class="card-body">
+            <!-- Bootstrap carousel -->
+             <!-- https://getbootstrap.com/docs/4.0/components/carousel/ -->
             <div class="mb-3 text-center">
-              {% if main_image %}
-                <img src="{{ main_image.image.url }}" alt="{{ main_image.alt_text }}" class="img-fluid rounded">
+              {% if shoe.images.all %}
+                <div id="shoeCarousel{{ shoe.shoe_id }}" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-indicators">
+                    {% for img in shoe.images.all %}
+                      <button type="button" data-bs-target="#shoeCarousel{{ shoe.shoe_id }}" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Slide {{ forloop.counter }}"></button>
+                    {% endfor %}
+                  </div>
+
+                  <div class="carousel-inner">
+                    {% for img in shoe.images.all %}
+                      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ img.image.url }}" class="d-block w-100 rounded" style="max-height:520px;object-fit:contain;" alt="{{ img.alt_text|default:shoe.name }}">
+                      </div>
+                    {% endfor %}
+                  </div>
+
+                  <button class="carousel-control-prev" type="button" data-bs-target="#shoeCarousel{{ shoe.shoe_id }}" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#shoeCarousel{{ shoe.shoe_id }}" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
               {% else %}
                 <img src="{% static 'images/image1.png' %}" alt="{{ shoe.name }}" class="img-fluid rounded">
               {% endif %}
             </div>
 
-            <div class="d-flex flex-wrap gap-2 justify-content-center">
-              {% for image in shoe.images.all %}
-                <img src="{{ image.image.url }}" alt="{{ image.alt_text }}" class="img-thumbnail" style="width:96px;height:96px;object-fit:cover;cursor:pointer;">
-              {% empty %}
+            <!-- Thumbnails below carousel implemented as buttons -->
+            <div class="d-flex flex-wrap gap-2 justify-content-center mt-2">
+              {% if shoe.images.all %}
+                {% for img in shoe.images.all %}
+                  <button type="button" class="btn p-0" data-bs-target="#shoeCarousel{{ shoe.shoe_id }}" data-bs-slide-to="{{ forloop.counter0 }}" aria-label="View slide {{ forloop.counter }}">
+                    <img src="{{ img.image.url }}" alt="{{ img.alt_text|default:shoe.name }}" class="img-thumbnail" style="width:96px;height:96px;object-fit:cover;">
+                  </button>
+                {% endfor %}
+              {% else %}
                 <img src="{% static 'images/image1.png' %}" alt="Product view 1" class="img-thumbnail" style="width:96px;height:96px;object-fit:cover;">
                 <img src="{% static 'images/image2.png' %}" alt="Product view 2" class="img-thumbnail" style="width:96px;height:96px;object-fit:cover;">
                 <img src="{% static 'images/image3.png' %}" alt="Product view 3" class="img-thumbnail" style="width:96px;height:96px;object-fit:cover;">
-              {% endfor %}
+              {% endif %}
             </div>
           </div>
         </div>
@@ -92,7 +122,7 @@
                   {% if color_available %}
                     {% for color, available in color_available.items %}
                       <div>
-                        <input type="radio" class="btn-check" name="color" id="color_{{ color }}" value="{{ color }}" autocomplete="off" {% if color == selected_color %}checked{% endif %} {% if not available %}disabled{% endif %} onchange="this.form.submit();">
+                        <input type="radio" class="btn-check" name="color" id="color_{{ color }}" value="{{ color }}" autocomplete="off" {% if color == selected_color %}checked{% endif %} {% if not available %}disabled{% endif %} onchange="this.form.submit();"> <!-- JS to submit upon selection of colour -->
                         <label class="btn btn-outline-secondary btn-sm" for="color_{{ color }}">{{ color }}</label>
                       </div>
                     {% endfor %}
