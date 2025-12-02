@@ -32,46 +32,107 @@ def contact(request):
         phone = request.POST.get('telnum')
         message = request.POST.get('message')
 
-        #Email validation using built-in email validation
+        # Required fields validation (phone is optional)
+        if not fname or not fname.strip():
+            messages.error(request, "First name is required.", extra_tags='contactSuccess')
+            return render(request, 'storefront/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'telnum': phone,
+                'message': message,
+            })
+        if len(fname) > 50:
+            messages.error(request, "First name must be 50 characters or fewer.", extra_tags='contactSuccess')
+            return render(request, 'storefront/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'telnum': phone,
+                'message': message,
+            })
+
+        if not lname or not lname.strip():
+            messages.error(request, "Last name is required.", extra_tags='contactSuccess')
+            return render(request, 'storefront/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'telnum': phone,
+                'message': message,
+            })
+        if len(lname) > 50:
+            messages.error(request, "Last name must be 50 characters or fewer.", extra_tags='contactSuccess')
+            return render(request, 'storefront/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'telnum': phone,
+                'message': message,
+            })
+
+        if not email or not email.strip():
+            messages.error(request, "Email is required.", extra_tags='contactSuccess')
+            return render(request, 'storefront/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'telnum': phone,
+                'message': message,
+            })
+
+        if not message or not message.strip():
+            messages.error(request, "Message is required.", extra_tags='contactSuccess')
+            return render(request, 'storefront/contact.html', {
+                'fname': fname,
+                'lname': lname,
+                'email': email,
+                'telnum': phone,
+                'message': message,
+            })
+
+        # Email validation using built-in email validation
         try:
             validate_email(email)
         except ValidationError:
-            messages.success(request, "Invalid email address.",extra_tags='contactSuccess')
+            messages.error(request, "Invalid email address.",extra_tags='contactSuccess')
             #re-render with existing data
 
             return render(request, 'storefront/contact.html', {
                 'fname': fname,
                 'lname': lname,
                 'email': email,
-                'phone': phone,
+                'telnum': phone,
                 'message': message,
             })
         
         #### email validation using regex for email domains ###
         common_email_pattern = re.compile(r'^[A-Za-z0-9._%+-]+@(?:gmail\.com|yahoo\.com|outlook\.com|hotmail\.com|icloud\.com|protonmail\.com)$')
         if not common_email_pattern.match(email):
-            messages.success(request, "Invalid email domain. Please use Gmail, Yahoo, Outlook, Hotmail, iCloud, or ProtonMail.", extra_tags='contactSuccess')
+            messages.error(request, "Invalid email domain. Please use Gmail, Yahoo, Outlook, Hotmail, iCloud, or ProtonMail.", extra_tags='contactSuccess')
             return render(request, 'storefront/contact.html', {
                 'fname': fname,
                 'lname': lname,
                 'email': email,
-                'phone': phone,
+                'telnum': phone,
                 'message': message,
             })
 
 
         #Phone validation with regex
+        # Phone is optional; if provided, validate format +230######## (8 digits)
         phone_pattern = re.compile(r'^\+230\d{8}$')
-        if not phone_pattern.match(phone):
-            messages.success(request, "Invalid phone number. Use format +23012345678 (up to 8 digits after +230).", extra_tags='contactSuccess')
-            #re-render with existing data
-            return render(request, 'storefront/contact.html', {
-                'fname': fname,
-                'lname': lname,
-                'email': email,
-                'phone': phone,
-                'message': message,
-            })
+        if phone:
+            if not phone_pattern.match(phone):
+                messages.error(request, "Invalid phone number. Use format +23012345678 (exactly 8 digits after +230).", extra_tags='contactSuccess')
+                # re-render with existing data
+                return render(request, 'storefront/contact.html', {
+                    'fname': fname,
+                    'lname': lname,
+                    'email': email,
+                    'telnum': phone,
+                    'message': message,
+                })
 
 
         # Build email content
