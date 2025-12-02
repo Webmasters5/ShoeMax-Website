@@ -1,72 +1,53 @@
 {% extends "customer/base.html" %}
 
 {% block dashboard_content %}
-<h1 class="mb-4">Settings</h1>
+<div class="container">
+    <h1>Settings</h1>
 
-<!-- Account Settings -->
-<div class="profile-card light-card hover-pop">
-    <h2>Account Settings (Coming Soon)</h2>
-    <form> 
-        <label>Preferred Language: 
-            <select class="form-select"> 
-                <option selected>English</option> 
-                <option>French</option> 
-                <option>Spanish</option> 
-            </select> 
-        </label>
-        <br><br> 
-        <label>Currency: 
-            <select class="form-select"> 
-                <option selected>MUR</option> 
-                <option>USD</option> 
-                <option>EUR</option> 
-            </select> 
-        </label> 
-    </form>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>Account Settings (Coming Soon)</h5>
+            <form>
+                <div class="mb-3">
+                    <label class="form-label">Preferred Language</label>
+                    <select class="form-select">
+                        <option selected>English</option>
+                        <option>French</option>
+                        <option>Spanish</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Currency</label>
+                    <select class="form-select">
+                        <option selected>MUR</option>
+                        <option>USD</option>
+                        <option>EUR</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5>Privacy & Security (Coming Soon)</h5>
+            <form>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="twofactor">
+                    <label class="form-check-label" for="twofactor">Enable two-factor authentication</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="logoutdevices">
+                    <label class="form-check-label" for="logoutdevices">Log out from other devices</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="newsletters">
+                    <label class="form-check-label" for="newsletters">Receive newsletters</label>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Save Settings</button>
+            </form>
+        </div>
+    </div>
 </div>
-
-<!-- Privacy & Security -->
-<div class="profile-card light-card hover-pop">
-    <h2>Privacy & Security (Coming Soon)</h2>
-    <form> 
-        <label><input type="checkbox"> Enable two-factor authentication</label><br> 
-        <label><input type="checkbox"> Log out from other devices</label><br> 
-        <label><input type="checkbox"> Receive newsletters</label><br> 
-        <button type="submit" class="btn btn-dashboard">Save Settings</button> 
-    </form>
-</div>
-
-<style>
-/* Force light grey cards for dashboard sections */
-.profile-card,
-.dashboard-card,
-.light-card {
-    background-color: #f9f9f9 !important;
-    border-radius: 12px !important;
-    padding: 25px !important;
-    margin-bottom: 20px !important;
-    border: 1px solid #e0e0e0 !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
-    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
-}
-
-.profile-card:hover,
-.dashboard-card:hover,
-.light-card:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
-}
-
-/* Info rows consistent spacing */
-.info-row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.info-row > div {
-    min-width: 200px;
-}
-</style>
 
 {% endblock %}

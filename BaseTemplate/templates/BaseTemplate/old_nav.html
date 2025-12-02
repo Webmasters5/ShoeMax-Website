@@ -31,7 +31,7 @@
           <nav>
             <ul>
             <img src="/static/images/logo-removebg-preview.png">
-            <li><a href="{% url 'homepage:home' %}" {% if active_class == 'home' %}class="active"{% endif %}>  Home</a></li>
+            <li><a href="{% url 'storefront:home' %}" {% if active_class == 'home' %}class="active"{% endif %}>  Home</a></li>
             <li id="no-hover" style=" margin-bottom:0rem"><a>Categories</a></li>
             <ul style="color: rgb(255, 255, 255);">
                 <li><a href="{% url 'products:search' %}?gender=M" {% if active_class == 'M' %}class="active"{% endif %}>Men</a></li>
@@ -42,8 +42,8 @@
             <li><a href="{% url 'customer:customer_profile' %}" {% if active_class == 'wishlist' %}class="active"{% endif %}>Wishlist</a></li>
             <li><a href="{% url 'customer:customer_profile' %}" {% if active_class == 'account' %}class="active"{% endif %}>My account</a></li>
             <li><a href="{% url 'customer:customer_settings' %}" {% if active_class == 'settings' %}class="active"{% endif %}>Settings</a></li>
-            <li><a {% if active_class == 'contactus' %}class="active"{% endif %} href="{% url 'core:contact' %}">Contact</a></li>
-            <li><a {% if active_class == 'aboutus' %}class="active"{% endif %} href="{% url 'core:about' %}">About us</a></li>
+            <li><a {% if active_class == 'contactus' %}class="active"{% endif %} href="{% url 'storefront:contact' %}">Contact</a></li>
+            <li><a {% if active_class == 'aboutus' %}class="active"{% endif %} href="{% url 'storefront:about' %}">About us</a></li>
             {% if user.is_authenticated %}
             <li>
             <form method="post" action="{% url 'customer:logout' %}" style="display: inline;">
@@ -52,14 +52,14 @@
             </form>
             </li>
             {% else %}
-            <li><a style="font-size: 1.3rem; margin-top:1.5rem;" {% if active_class == 'login' %}class="active"{% endif %} href="{% url 'core:login' %}">Log in</a></li>
+            <li><a style="font-size: 1.3rem; margin-top:1.5rem;" {% if active_class == 'login' %}class="active"{% endif %} href="{% url 'accounts:login' %}">Log in</a></li>
             {% endif %}
             </ul>
           </nav>
         <div style="margin-left:17%; width: 83%;">
             <header class="shop-header"> <!--The class designs the nav bar-->
 
-                <a class="shop-name" style="font-family: Georgia, 'Times New Roman', Times, serif" href="{% url 'homepage:home' %}">SHOEMAX</a>
+                <a class="shop-name" style="font-family: Georgia, 'Times New Roman', Times, serif" href="{% url 'storefront:home' %}">SHOEMAX</a>
 
                 <div class="search-bar">
                     <form action="{% url 'products:search' %}" method="get">
@@ -90,8 +90,8 @@
                 <div class="link" style="width:40%">
                     <h4 style="padding-left: 5rem;">Menu</h4>
                     <ul style="padding-left: 5rem; line-height: 1.8;">
-                        <li><a href="{% url 'core:about' %}">About us</a></li>
-                        <li><a href="{% url 'core:contact' %}">Contact us</li>
+                        <li><a href="{% url 'storefront:about' %}">About us</a></li>
+                        <li><a href="{% url 'storefront:contact' %}">Contact us</li>
                     </ul>
                 </div>
 

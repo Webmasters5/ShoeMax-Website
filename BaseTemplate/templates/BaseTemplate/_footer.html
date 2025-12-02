@@ -1,0 +1,20 @@
+{% load static %}
+<!-- Footer (extracted from nav.html) -->
+<footer class="site-footer mt-5 py-5 border-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-7 footer-desc mb-4 mb-md-0">
+                <h5>About ShoeMax</h5>
+                <p class="mb-2">At ShoeMax, we're passionate about helping you put your best foot forward. From timeless classics to the latest trends, we offer high-quality footwear for every walk of life.</p>
+                <small class="text-muted">&copy; ShoeMax - 2025</small>
+            </div>
+            <div class="col-12 col-md-5 footer-links">
+                <h6>Menu</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'storefront:about' %}">About us</a></li>
+                    <li><a href="{% url 'storefront:contact' %}">Contact us</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
