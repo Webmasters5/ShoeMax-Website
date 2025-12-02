@@ -18,7 +18,35 @@ class ShoeVariantInline(admin.TabularInline):
     extra = 1
     fields = ('color', 'size', 'stock', 'sku')
 
-# add/move inlines before CustomerAdmin
+    def get_readonly_fields(self, request, obj=None):
+        readonly = list(super().get_readonly_fields(request, obj))
+        if request.user.has_perm('models_app.change_stock_only'): 
+            # allow editing only stock
+            for f in ('color', 'size', 'sku'):
+                if f not in readonly:
+                    readonly.append(f)
+        return readonly
+    
+class ShoeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'brand', 'category', 'gender', 'price')
+    list_filter = ('brand', 'category', 'gender')
+    search_fields = ('name', 'description', 'brand__name', 'variants__sku')
+    inlines = [ShoeImageInline, ShoeVariantInline]
+    autocomplete_fields = ('brand',)
+    save_on_top = True
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = list(super().get_readonly_fields(request, obj))
+
+        if request.user.has_perm('models_app.change_price_only'):  # type: ignore[attr-defined]
+            # explicitly mark other model fields as readonly for this user
+            other_fields = ['name', 'brand', 'category', 'gender', 'description', 'discount']
+            for f in other_fields:
+                if f not in readonly_fields and f not in ('price', 'discount'):
+                    readonly_fields.append(f)
+
+        return readonly_fields
+
 class CartItemInline(admin.TabularInline):
     model = models.CartItem
     extra = 0
@@ -51,13 +79,20 @@ class AddressInline(admin.StackedInline):
     extra = 0
     fields = ('title', 'first_name', 'last_name', 'street', 'city', 'zip_code', 'is_default')
 
-class ShoeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'brand', 'category', 'gender', 'price')
-    list_filter = ('brand', 'category', 'gender')
-    search_fields = ('name', 'description', 'brand__name', 'variants__sku')
-    inlines = [ShoeImageInline, ShoeVariantInline]
-    autocomplete_fields = ('brand',)
-    save_on_top = True
+class ShoeVariantAdmin(admin.ModelAdmin):
+    list_display = ('variant_id', 'shoe', 'color', 'size', 'stock', 'sku')
+    list_filter = ('shoe', 'color', 'size')
+    search_fields = ('sku', 'shoe__name')
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = list(super().get_readonly_fields(request, obj))
+        # If user has special change_stock permission, allow editing only 'stock'
+        if request.user.has_perm('models_app.change_stock_only'):  # type: ignore[attr-defined]
+            for f in ('shoe', 'color', 'size', 'sku'):
+                if f not in readonly_fields:
+                    readonly_fields.append(f)
+        return readonly_fields
+
 
 class BrandAdmin(admin.ModelAdmin):
     list_display = ('name', 'website')
@@ -172,7 +207,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Shoe, ShoeAdmin)
 admin.site.register(models.ShoeImage)
-admin.site.register(models.ShoeVariant)
+admin.site.register(models.ShoeVariant, ShoeVariantAdmin)
 admin.site.register(models.Brand, BrandAdmin)
 admin.site.register(models.Customer, CustomerAdmin)
 admin.site.register(models.Order, OrderAdmin)

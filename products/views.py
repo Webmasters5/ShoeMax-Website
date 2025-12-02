@@ -56,54 +56,59 @@ class WishlistView(LoginRequiredMixin,generic.ListView):
             return qs.filter(customer=customer)
         return qs.none()
 
-def shoe_details(request, shoe_id):
-    shoe = models.Shoe.objects.prefetch_related('images', 'variants').get(pk=shoe_id)
-    
-    #Query set equivalent to SELECT color, SUM(stock) as total_stock FROM ShoeVariant WHERE shoe_id=shoe_id GROUP BY color
-    qs = shoe.variants.values('color').annotate(total_stock=Sum('stock'))
-    
-    #create dictionary for colour availability
-    color_available = {entry['color']: (entry['total_stock'] > 0) for entry in qs}
-    
-    main_image = shoe.images.first() if shoe.images.exists() else None
-    
-    #get selected colour from query parameters
-    selected_color = request.GET.get('color')
-    
-    if selected_color is None: selected_color = list(color_available.keys())[0]
-   
-    variants = shoe.variants.filter(color=selected_color).order_by('size') if selected_color else None
-        
-    context = {
-        'shoe': shoe,
-        'main_image': main_image,
-        'color_available': color_available,
-        'selected_color': selected_color,
-        'variants': variants,
-    }
-    
-    print(color_available)
-    print(variants)
-    print(selected_color)
-    return render(request, 'products/details.html', context)
+class ShoeDetailView(generic.DetailView):
+    model = models.Shoe
+    template_name = 'products/details.html'
+    context_object_name = 'shoe'
+    queryset = models.Shoe.objects.prefetch_related('images', 'variants')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        shoe = self.object
+
+        # Query set equivalent to SELECT color, SUM(stock) as total_stock FROM ShoeVariant WHERE shoe_id=shoe_id GROUP BY color
+        qs = shoe.variants.values('color').annotate(total_stock=Sum('stock'))
+
+        # create dictionary for colour availability
+        color_available = {entry['color']: (entry['total_stock'] > 0) for entry in qs}
+
+        main_image = shoe.images.first()
+
+        # get selected colour from query parameters
+        selected_color = self.request.GET.get('color')
+        # select the first if none selected
+        if selected_color is None:
+            selected_color = list(color_available.keys())[0]
+        # get variants for the selected colour
+        variants = shoe.variants.filter(color=selected_color).order_by('size') if selected_color else None
+
+        context.update({
+            'main_image': main_image,
+            'color_available': color_available,
+            'selected_color': selected_color,
+            'variants': variants,
+        })
+        return context
     
 class ShoeListView(generic.ListView):
     model = models.Shoe
     template_name = 'products/search.html'
     context_object_name = 'shoes'
-    paginate_by = 12
+    paginate_by = 6
 
     def get_queryset(self):
         # retrieve GET query parameters
-        q = self.request.GET.get('q', '').strip()
+        q = self.request.GET.get('q', '').strip() #keyword
         category = self.request.GET.get('category', '').strip()
         brand_id = self.request.GET.get('brand', '').strip()
         gender = self.request.GET.get('gender', '').strip()
         min_price = self.request.GET.get('min_price', '').strip()
         max_price = self.request.GET.get('max_price', '').strip()
 
+        #Get all objects with images
         qs = models.Shoe.objects.all().prefetch_related('images')
 
+        #Build results queryset
         if q:
             qs = qs.filter(Q(name__icontains=q) | Q(description__icontains=q))
 
@@ -128,17 +133,15 @@ class ShoeListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # categories list for filters
-        categories = models.Shoe.CATEGORY_CHOICES
-
-        # brands and genders for dropdowns
+        # brands, genders and categories for dropdowns
         brands = models.Brand.objects.all().order_by('name')
         genders = models.Shoe.GENDER_CHOICES
+        categories = models.Shoe.CATEGORY_CHOICES
 
         # keep original query strings
         q = self.request.GET.get('q', '').strip()
         category = self.request.GET.get('category', '').strip()
-        brand = self.request.GET.get('brand', 0)
+        brand = self.request.GET.get('brand', '').strip()
         gender = self.request.GET.get('gender', '').strip()
         min_price = self.request.GET.get('min_price', '').strip()
         max_price = self.request.GET.get('max_price', '').strip()
@@ -150,7 +153,7 @@ class ShoeListView(generic.ListView):
             'q': q,
             'selected_category': category,
             'selected_gender': gender,
-            'selected_brand': int(brand),
+            'selected_brand': brand,
             'min_price': min_price,
             'max_price': max_price,
         })

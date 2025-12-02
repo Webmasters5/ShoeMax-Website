@@ -94,6 +94,7 @@
               <div>
                 <h1 class="h3 mb-1">{{ shoe.name }}</h1>
                 <p class="text-muted mb-2">{{ shoe.brand.name }}</p>
+                <p class="mb-2"><small class="text-muted">Gender: <span class="badge bg-secondary" aria-label="Gender">{{ shoe.get_gender_display }}</span></small></p>
               </div>
               <div>
                 <form method="post" action="{% url 'products:wishlist_add' shoe.shoe_id %}">

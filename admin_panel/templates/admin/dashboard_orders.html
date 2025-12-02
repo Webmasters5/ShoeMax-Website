@@ -14,7 +14,14 @@
         <strong>Order #{{ order.order_id }}</strong> — {{ order.customer.user.username }} — {{ order.order_date }}
         <ul>
           {% for item in order.items.all %}
-            <li>{{ item.variant.shoe.name }} x {{ item.quantity }}</li>
+            <li style="display:flex;align-items:center;gap:0.5rem">
+              {% with item.variant.shoe.images.all.0 as thumb %}
+                {% if thumb %}
+                  <img src="{{ thumb.image.url }}" alt="{{ item.variant.shoe.name }}" style="width:36px;height:36px;object-fit:cover;border-radius:4px">
+                {% endif %}
+              {% endwith %}
+              <span>{{ item.variant.shoe.name }} x {{ item.quantity }}</span>
+            </li>
           {% endfor %}
         </ul>
       </li>

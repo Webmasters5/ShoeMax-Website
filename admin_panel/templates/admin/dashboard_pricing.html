@@ -8,9 +8,16 @@
 <section>
   <h3>Highest Priced Shoes</h3>
   {% if top_expensive %}
-    <ol>
+    <ol class="pricing-list">
       {% for s in top_expensive %}
-        <li>{{ s.name }} — ${{ s.price }}</li>
+        <li style="display:flex;align-items:center;gap:0.5rem">
+          {% with s.images.all.0 as thumb %}
+            {% if thumb %}
+              <a href="{{ s.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ s.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
+            {% endif %}
+          {% endwith %}
+          <span>{{ s.name }} — ${{ s.price }}</span>
+        </li>
       {% endfor %}
     </ol>
   {% else %}
@@ -21,9 +28,16 @@
 <section style="margin-top:1rem">
   <h3>Lowest Priced Shoes</h3>
   {% if top_cheap %}
-    <ol>
+    <ol class="pricing-list">
       {% for s in top_cheap %}
-        <li>{{ s.name }} — ${{ s.price }}</li>
+        <li style="display:flex;align-items:center;gap:0.5rem">
+          {% with s.images.all.0 as thumb %}
+            {% if thumb %}
+              <a href="{{ s.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ s.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
+            {% endif %}
+          {% endwith %}
+          <span>{{ s.name }} — ${{ s.price }}</span>
+        </li>
       {% endfor %}
     </ol>
   {% else %}

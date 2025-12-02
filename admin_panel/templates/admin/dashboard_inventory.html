@@ -7,6 +7,7 @@
   <table class="summary-table">
     <thead>
       <tr>
+        <th></th>
         <th>Shoe</th>
         <th>Color</th>
         <th>Size</th>
@@ -16,6 +17,15 @@
     <tbody>
       {% for v in low_stock_variants %}
         <tr>
+          <td>
+            {% with v.shoe.images.all.0 as thumb %}
+              {% if thumb %}
+                <a href="{{ v.shoe.get_absolute_url }}">
+                  <img src="{{ thumb.image.url }}" alt="{{ v.shoe.name }}" style="width:48px;height:48px;object-fit:cover;border-radius:4px;">
+                </a>
+              {% endif %}
+            {% endwith %}
+          </td>
           <td><a href="{{ v.shoe.get_absolute_url }}">{{ v.shoe.name }}</a></td>
           <td>{{ v.color }}</td>
           <td>{{ v.size }}</td>

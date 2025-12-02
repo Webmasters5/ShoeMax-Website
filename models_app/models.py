@@ -26,13 +26,14 @@ class Shoe(models.Model):
         'sandals': 'Sandals',
     }
     
-    name = models.CharField(max_length=100, help_text='Name shown to customers.')
-    description = models.TextField(help_text='Product description displayed on the product page.')
-    price = models.DecimalField(max_digits=10, decimal_places=2, help_text='Price in store currency (e.g. 49.99).')
+    shoe_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    description = models.TextField(max_length=2000, help_text='Detailed description of the shoe.')
+    price = models.DecimalField(max_digits=8, decimal_places=2, help_text='Price in store currency (e.g. 49.99).')
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, help_text='Product category (Running, Casual, etc.).')
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, help_text='Target audience (Men/Women/Unisex/Kids).')
-    shoe_id = models.AutoField(primary_key=True)
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE, related_name='shoes', help_text='Brand associated with this shoe.')
+    discount = models.DecimalField(max_digits=8, decimal_places=2, default=0, help_text='Raw discount amount.')
     
     def __str__(self):
         return self.name
@@ -41,7 +42,19 @@ class Shoe(models.Model):
         return reverse('products:shoe_details', args=[self.shoe_id])
 
     def total_stock(self):
-        return sum(variant.stock for variant in self.variants.all())
+        # variants is a related_name from ShoeVariant; keep dynamic access at runtime
+        return sum(variant.stock for variant in self.variants.all())  # type: ignore[attr-defined]
+    
+    @property
+    def original_price(self):
+        if self.discount > 0:
+            return self.price + self.discount
+        return self.price
+
+    class Meta:
+        permissions = [
+            ('change_price_only', 'Can change shoe price (price-only)'),
+        ]
     
 class ShoeImage(models.Model):
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name='images', help_text='Shoe this image belongs to.')
@@ -71,6 +84,10 @@ class ShoeVariant(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['shoe', 'color', 'size'], name='unique_shoe_color_size')
         ]
+        permissions = [
+            ('change_stock_only', 'Can change variant stock (stock-only)'),
+        ]
+    
     
 class Brand(models.Model):
     name = models.CharField(max_length=100, help_text='Brand name.')
@@ -141,7 +158,8 @@ class PaymentMethod(models.Model):
         # If no title is provided, set a default title
         if not self.title or not self.title.strip():
             last4 = self.card_num[-4:] if self.card_num else ''
-            self.title = f"{self.get_card_type_display()} ****{last4}"
+            # get_card_type_display is provided by Django for fields with choices
+            self.title = f"{self.get_card_type_display()} ****{last4}"  # type: ignore[attr-defined]
 
         # If  newly created payment method and no other methods,
         # make it the default automatically.

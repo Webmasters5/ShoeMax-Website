@@ -5,6 +5,7 @@ from django.db.models import Sum, Count, F
 
 from models_app.models import Customer, Order, OrderItem, Shoe, ShoeVariant
 
+# https://docs.djangoproject.com/en/5.2/ref/contrib/admin/#overriding-default-admin-site
 class ShoeMaxAdmin(admin.AdminSite):
     site_header = "ShoeMax Admin Site"
     site_title = "ShoeMax Admin Site"
@@ -19,7 +20,7 @@ class ShoeMaxAdmin(admin.AdminSite):
         request.current_app = self.name
         user = request.user
 
-        # default main stats (used for superuser and fallback)
+        # default main stats (used for superuser)
         total_customers = Customer.objects.count()
         orders_qs = Order.objects.all()
         total_orders = orders_qs.count()
