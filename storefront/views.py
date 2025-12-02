@@ -189,3 +189,18 @@ class BrandListView(generic.ListView):
 
     def get_queryset(self):
         return super().get_queryset().order_by('name')
+
+from django.views.decorators.http import require_POST
+from django.http import HttpResponseRedirect
+
+@require_POST
+def toggle_theme(request):
+    """Toggle the site theme between 'light' and 'dark' using a cookie."""
+
+    next_url = request.META.get('HTTP_REFERER') or '/'
+    current = request.COOKIES.get('theme', 'light')
+    new = 'dark' if current == 'light' else 'light'
+    response = HttpResponseRedirect(next_url)
+    # persist for 1 year
+    response.set_cookie('theme', new, max_age=60 * 60 * 24 * 365, httponly=False)
+    return response

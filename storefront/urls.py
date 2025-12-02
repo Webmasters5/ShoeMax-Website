@@ -8,4 +8,5 @@ urlpatterns=[
     path('about/',views.about,name='about'),
     path('contact/',views.contact,name='contact'),
     path('brands/', views.BrandListView.as_view(), name='brand_list'),
+    path('toggle-theme/', views.toggle_theme, name='toggle_theme'),
 ]

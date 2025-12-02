@@ -39,7 +39,7 @@
                 </li>
                 <!-- Theme toggle -->
                 <li class="nav-item">
-                    <form method="post" action="{% url 'accounts:toggle_theme' %}" class="d-inline">
+                    <form method="post" action="{% url 'storefront:toggle_theme' %}" class="d-inline">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-outline-light ms-2" title="Toggle theme">
                             {% if theme == 'dark' %}
