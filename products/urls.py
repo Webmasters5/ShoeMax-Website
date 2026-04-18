@@ -10,6 +10,7 @@ urlpatterns = [
     path('gender/<str:gender>/', views.ShoeByGenderListView.as_view(), name='by_gender'),
     path('brand/<int:brand_id>/', views.ShoeByBrandListView.as_view(), name='by_brand'),
     path('<int:pk>/', views.ShoeDetailView.as_view(), name='shoe_details'),
+    path('<int:shoe_id>/variants/', views.list_variants, name='shoe_variant_list'),
     path('wishlist/', views.WishlistView.as_view(), name='wishlist'),
     path('wishlist/delete/<int:item_id>/', views.delete_wishlist_item, name='wishlist_delete'),
     path('wishlist/add/<int:shoe_id>/', views.add_wishlist_item, name='wishlist_add'),

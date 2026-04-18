@@ -117,13 +117,14 @@
             </div>
 
             <div class="mb-3">
-              <form method="get" id="colorForm" class="mb-2">
+              <form id="variantForm" method="post" action="{% url 'cart:add_item' %}">
+                {% csrf_token %}
                 <label class="form-label fw-semibold">Color</label>
-                <div class="d-flex gap-2 flex-wrap">
+                <div class="d-flex gap-2 flex-wrap mb-3">
                   {% if color_available %}
                     {% for color, available in color_available.items %}
                       <div>
-                        <input type="radio" class="btn-check" name="color" id="color_{{ color }}" value="{{ color }}" autocomplete="off" {% if color == selected_color %}checked{% endif %} {% if not available %}disabled{% endif %} onchange="this.form.submit();"> <!-- JS to submit upon selection of colour -->
+                        <input type="radio" class="btn-check" name="color" id="color_{{ color }}" value="{{ color }}" autocomplete="off" {% if color == selected_color %}checked{% endif %} {% if not available %}disabled{% endif %}>
                         <label class="btn btn-outline-secondary btn-sm" for="color_{{ color }}">{{ color }}</label>
                       </div>
                     {% endfor %}
@@ -131,12 +132,9 @@
                     <div class="text-muted">No color options available.</div>
                   {% endif %}
                 </div>
-              </form>
 
-              <form id="sizeForm" method="post" action="{% url 'cart:add_item' %}">
-                {% csrf_token %}
                 <label class="form-label fw-semibold">Size</label>
-                <div class="d-flex gap-2 flex-wrap mb-3">
+                <div id="variant-size-options" class="d-flex gap-2 flex-wrap mb-3">
                   {% if variants %}
                     {% for variant in variants %}
                       <div>
@@ -149,7 +147,6 @@
                   {% endif %}
                 </div>
 
-                <input type="hidden" name="color" value="{{ selected_color }}">
                 <div class="d-flex gap-2">
                   <button type="submit" class="btn btn-primary" {% if shoe.total_stock == 0 %}disabled{% endif %}>Add to Cart</button>
                   <a href="{% url 'products:reviews' shoe.shoe_id %}" class="btn btn-outline-success">View reviews</a>
@@ -167,4 +164,59 @@
     </div>
   <!-- </main> -->
 </div>
- {% endblock %}
+{% endblock %}
+
+{% block extra_script %}
+  <script>
+    $(function() {
+      // AJAX endpoint for loading variants by selected color.
+      const variantUrl = "{% url 'products:shoe_variant_list' shoe.shoe_id %}";
+
+      // Container for the size radio buttons; replace this when new variants arrive.
+      const $sizeOptions = $('#variant-size-options');
+
+      // Render the returned array of variants into radio buttons.
+      function renderVariants(variants) {
+        if (variants.length === 0) {
+          $sizeOptions.html('<div class="text-muted">No variants available for this color.</div>');
+          return;
+        }
+
+        const html = $.map(variants, function(variant, index) {
+          const checked = index === 0 ? 'checked' : '';
+          const disabled = variant.stock <= 0 ? 'disabled' : '';
+          const labelClass = variant.stock <= 0 ? 'btn-outline-secondary' : 'btn-outline-primary';
+
+          // Each variant is a radio button + label. The first one is pre-selected.
+          return '<div>' +
+            '<input type="radio" class="btn-check" name="variant" id="variant_' + variant.variant_id + '" value="' + variant.variant_id + '" autocomplete="off" ' + checked + ' ' + disabled + '>' +
+            '<label class="btn ' + labelClass + ' btn-sm" for="variant_' + variant.variant_id + '">' + variant.size + '</label>' +
+          '</div>';
+        }).join('');
+
+        $sizeOptions.html(html);
+      }
+
+      // Perform the AJAX request for the selected color.
+      function loadVariants(color) {
+        $.ajax({
+          url: variantUrl,
+          method: 'GET',
+          dataType: 'json',
+          data: { color: color },
+        })
+        .done(function(data) {
+          renderVariants(data.variants);
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          console.error('Failed to load variants for color:', color, textStatus, errorThrown);
+        });
+      }
+
+      // Trigger variant loading when the user changes the selected color.
+      $('input[name="color"]').on('change', function() {
+        loadVariants($(this).val());
+      });
+    });
+  </script>
+{% endblock %}

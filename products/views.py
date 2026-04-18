@@ -1,4 +1,4 @@
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q, Avg, Sum
 from models_app import models
@@ -89,7 +89,28 @@ class ShoeDetailView(generic.DetailView):
             'variants': variants,
         })
         return context
-    
+
+@login_required
+def list_variants(request, shoe_id):
+    shoe = get_object_or_404(models.Shoe, pk=shoe_id)
+    color = request.GET.get('color') or request.GET.get('colour')
+    if not color:
+        return JsonResponse({'error': 'Missing required query parameter "color".'}, status=400)
+
+    variants = shoe.variants.filter(color__iexact=color).order_by('size')
+    variant_list = [
+        {
+            'variant_id': variant.variant_id,
+            'color': variant.color,
+            'size': variant.size,
+            'stock': variant.stock,
+            'sku': variant.sku,
+        }
+        for variant in variants
+    ]
+
+    return JsonResponse({'variants': variant_list})
+
 class ShoeListView(generic.ListView):
     model = models.Shoe
     template_name = 'products/search.html'
