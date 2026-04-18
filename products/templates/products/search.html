@@ -7,14 +7,14 @@
 	<meta name="description" content="Search for shoes by name, category, and price range.">
 {% endblock %}
 
-<!-- https://bootstrapexamples.com/@juanmz/product-card -->
- 
+<!-- https://bootstrapexamples.com/@razor0/product-list -->
 {% block content %}
+<!-- https://getbootstrap.com/docs/4.0/components/breadcrumb/ -->
 	{% block breadcrumb %}
-		<nav aria-label="breadcrumb" class="mb-3">
+		<nav class="mb-3">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="{% url 'storefront:home' %}">Home</a></li>
-				<li class="breadcrumb-item active" aria-current="page">Search</li>
+				<li class="breadcrumb-item active">Search</li>
 			</ol>
 		</nav>
 	{% endblock breadcrumb %}
@@ -23,7 +23,7 @@
 	{% endblock page_banner %}
 
 	<h1 class="mb-4">Find Your Perfect Pair</h1>
-
+	<!-- https://getbootstrap.com/docs/4.0/components/forms/ -->
 	<form method="get" class="row g-3 mb-4">
 		<input type="hidden" name="q" value="{{ q }}" />
 
@@ -40,9 +40,9 @@
 		<div class="col-md-2">
 			<label for="brand" class="form-label">Brand</label>
 			<select name="brand" id="brand" class="form-select" {% if rendered == 'shoe_by_brand' %}disabled{% endif %}>
-				<option value="0">All brands</option>
+				<option value="">All brands</option>
 				{% for b in brands %}
-					<option value="{{ b.brand_id }}" {% if b.brand_id == selected_brand %}selected{% endif %}>{{ b.name }}</option>
+					<option value="{{ b.brand_id }}" {% if b.brand_id|stringformat:'s' == selected_brand %}selected{% endif %}>{{ b.name }}</option>
 				{% endfor %}
 			</select>
 		</div>
@@ -81,6 +81,39 @@
 			No results found
 		{% endif %}
 	</div>
+    
+	{% if is_paginated %}
+	<nav  class="mt-4">
+		<ul class="pagination justify-content-center">
+		<!-- https://docs.djangoproject.com/en/5.2/topics/pagination/#paginating-a-listview -->
+			<li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+				{% if page_obj.has_previous %}
+					<a class="page-link" href="?{% for key,value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}" aria-label="Previous">&laquo; Previous</a>
+				{% else %}
+					<span class="page-link">Previous</span>
+				{% endif %}
+			</li>
+
+			{% for num in paginator.page_range %}
+				<li class="page-item {% if num == page_obj.number %}active{% endif %}">
+					{% if num == page_obj.number %}
+						<span class="page-link">{{ num }}</span>
+					{% else %}
+						<a class="page-link" href="?{% for key,value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+					{% endif %}
+				</li>
+			{% endfor %}
+
+			<li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+				{% if page_obj.has_next %}
+					<a class="page-link" href="?{% for key,value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}" aria-label="Next">Next &raquo;</a>
+				{% else %}
+					<span class="page-link">Next</span>
+				{% endif %}
+			</li>
+		</ul>
+	</nav>
+	{% endif %}
 
 	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 		{% for shoe in shoes %}

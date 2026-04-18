@@ -47,8 +47,13 @@
   {% if most_sold %}
     <ol>
       {% for item in most_sold %}
-        <li>
-          {{ item.variant.shoe.name }} — <strong>{{ item.total_sold }}</strong> sold
+        <li style="display:flex;align-items:center;gap:0.5rem">
+          {% with item.variant.shoe.images.all.0 as thumb %}
+            {% if thumb %}
+              <a href="{{ item.variant.shoe.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ item.variant.shoe.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
+            {% endif %}
+          {% endwith %}
+          <span>{{ item.variant.shoe.name }} — <strong>{{ item.total_sold }}</strong> sold</span>
         </li>
       {% endfor %}
     </ol>

@@ -8,8 +8,6 @@ from .models import Order, OrderItem, ShoeVariant
 
 @receiver(post_save, sender=OrderItem)
 def orderitem_post_save(sender, instance, created, **kwargs):
-    """When an OrderItem is first created, if its Order is pending, decrement variant stock by quantity.
-    """
     if not created:
         return
 
@@ -21,7 +19,7 @@ def orderitem_post_save(sender, instance, created, **kwargs):
     if order_status != 'pending':
         return
 
-    # Decrement stock safely inside a transaction
+    # Equivalent to BEGIN TRANSACTION
     with transaction.atomic():
         variant = ShoeVariant.objects.select_for_update().get(pk=instance.variant.pk)
         if variant.stock < instance.quantity:
@@ -31,8 +29,6 @@ def orderitem_post_save(sender, instance, created, **kwargs):
 
 @receiver(pre_save, sender=Order)
 def order_pre_save(sender, instance, **kwargs):
-    """When an existing Order changes status from Pending -> Cancelled, return quantities to stock.
-    """
     if not instance.pk:
         return
 

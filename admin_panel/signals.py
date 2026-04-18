@@ -4,10 +4,6 @@ from django.contrib.auth.models import Group, Permission
 
 @receiver(post_migrate)
 def create_default_groups(sender, **kwargs):
-    """
-    Create default groups and attach permissions.
-    This runs after migrations.
-    """
     app_config = kwargs.get('app_config')
     if app_config and app_config.name != 'admin_panel':
         return
@@ -21,12 +17,16 @@ def create_default_groups(sender, **kwargs):
             ('models_app', 'view_shoevariant'),
             ('models_app', 'add_shoevariant'),
             ('models_app', 'change_shoevariant'),
+            ('models_app', 'change_stock_only'),
         ],
+        
         'Pricing Manager': [
             ('models_app', 'view_shoe'),
-            ('models_app', 'change_shoe'),  
-            ('models_app', 'view_order'), 
+            ('models_app', 'change_shoe'),
+            ('models_app', 'change_price_only'),
+            ('models_app', 'view_order'),
         ],
+        
         'Order Manager': [
             ('models_app', 'view_order'),
             ('models_app', 'add_order'),
@@ -34,6 +34,17 @@ def create_default_groups(sender, **kwargs):
             ('models_app', 'delete_order'),
             ('models_app', 'view_orderitem'),
             ('models_app', 'change_orderitem'),
+        ],
+        
+        'Customer Support': [
+            ('models_app', 'view_customer'),
+            ('models_app', 'change_customer'),
+            ('models_app', 'view_address'),
+            ('models_app', 'change_address'),
+            ('models_app', 'view_order'),
+            ('models_app', 'view_orderitem'),
+            ('models_app', 'add_notification'),
+            ('models_app', 'view_notification'),
         ],
     }
 
