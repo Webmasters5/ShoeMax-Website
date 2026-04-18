@@ -1,0 +1,3127 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2025-11-24T18:26:54.794Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "Nike",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2025-11-24T18:27:08.517Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "Adidas",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2025-11-24T18:33:13.942Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "1",
+    "object_repr": "Airmax",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"shoe variant\", \"object\": \"Airmax - black - 40\"}}, {\"added\": {\"name\": \"shoe variant\", \"object\": \"Airmax - white - 40\"}}, {\"added\": {\"name\": \"shoe variant\", \"object\": \"Airmax - black - 41\"}}, {\"added\": {\"name\": \"shoe variant\", \"object\": \"Airmax - white - 41\"}}, {\"added\": {\"name\": \"shoe variant\", \"object\": \"Airmax - black - 42\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2025-11-24T18:33:26.554Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "1",
+    "object_repr": "Airmax",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"shoe variant\", \"object\": \"Airmax - black - 40\", \"fields\": [\"Sku\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2025-11-24T18:34:25.552Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "1",
+    "object_repr": "Airmax",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"shoe image\", \"object\": \"Image for Airmax\"}}, {\"added\": {\"name\": \"shoe image\", \"object\": \"Image for Airmax\"}}, {\"added\": {\"name\": \"shoe image\", \"object\": \"Image for Airmax\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2025-11-24T18:36:20.465Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "2",
+    "object_repr": "Ghost",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"shoe image\", \"object\": \"Image for Ghost\"}}, {\"added\": {\"name\": \"shoe image\", \"object\": \"Image for Ghost\"}}, {\"added\": {\"name\": \"shoe image\", \"object\": \"Image for Ghost\"}}, {\"added\": {\"name\": \"shoe variant\", \"object\": \"Ghost - black - 39\"}}, {\"added\": {\"name\": \"shoe variant\", \"object\": \"Ghost - black - 40\"}}, {\"added\": {\"name\": \"shoe variant\", \"object\": \"Ghost - white - 40\"}}, {\"added\": {\"name\": \"shoe variant\", \"object\": \"Ghost - white - 41\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2025-11-26T19:35:57.467Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2025-11-26T19:36:16.763Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "3",
+    "object_repr": "jane",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2025-11-26T19:36:42.900Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "3",
+    "object_repr": "jane",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2025-11-26T19:36:56.687Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "4",
+    "object_repr": "tom",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2025-11-26T19:37:16.150Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "4",
+    "object_repr": "tom",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2025-11-26T19:37:47.762Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "2",
+    "object_repr": "jane",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Date of birth\", \"Gender\", \"Phone\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2025-11-26T19:38:10.969Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Date of birth\", \"Gender\", \"Phone\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2025-11-26T19:38:21.541Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "3",
+    "object_repr": "tom",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Gender\", \"Phone\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2025-11-26T19:39:11.058Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "2",
+    "object_repr": "Order #2 - jane",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"order item\", \"object\": \"Order #2: Airmax x 1\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2025-11-26T19:39:56.064Z",
+    "user": 1,
+    "content_type": 10,
+    "object_id": "3",
+    "object_repr": "Order #3 - tom",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"order item\", \"object\": \"Order #3: Airmax x 2\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2025-11-26T19:40:45.814Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "1",
+    "object_repr": "Terrible",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2025-11-26T19:41:03.994Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "2",
+    "object_repr": "Excellent",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2025-11-27T09:24:37.265Z",
+    "user": 1,
+    "content_type": 19,
+    "object_id": "1",
+    "object_repr": "PaymentMethod 1 - ****2834 (John Doe)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2025-11-27T09:37:29.191Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"payment method\", \"object\": \"PaymentMethod 1 - ****2834 (John Doe)\", \"fields\": [\"Is default\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2025-11-27T09:40:33.250Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"payment method\", \"object\": \"PaymentMethod 2 - ****0912 (Jack Doe)\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2025-11-29T20:54:56.157Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "Nike",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Logo\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2025-11-29T20:55:05.816Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "Adidas",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Logo\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2025-11-29T20:57:22.511Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "1",
+    "object_repr": "Airmax",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Price\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2025-12-01T12:18:06.466Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "1",
+    "object_repr": "Airmax",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"shoe variant\", \"object\": \"Airmax - black - 40\", \"fields\": [\"Stock\"]}}, {\"changed\": {\"name\": \"shoe variant\", \"object\": \"Airmax - white - 40\", \"fields\": [\"Stock\"]}}, {\"changed\": {\"name\": \"shoe variant\", \"object\": \"Airmax - black - 41\", \"fields\": [\"Stock\"]}}, {\"changed\": {\"name\": \"shoe variant\", \"object\": \"Airmax - white - 41\", \"fields\": [\"Stock\"]}}, {\"changed\": {\"name\": \"shoe variant\", \"object\": \"Airmax - black - 42\", \"fields\": [\"Stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2025-12-02T18:34:19.039Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "1",
+    "object_repr": "Airmax",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Discount\"]}}, {\"added\": {\"name\": \"shoe variant\", \"object\": \"Airmax - blue - 41\"}}, {\"changed\": {\"name\": \"shoe variant\", \"object\": \"Airmax - black - 40\", \"fields\": [\"Stock\"]}}, {\"changed\": {\"name\": \"shoe variant\", \"object\": \"Airmax - white - 40\", \"fields\": [\"Stock\"]}}, {\"changed\": {\"name\": \"shoe variant\", \"object\": \"Airmax - white - 41\", \"fields\": [\"Stock\"]}}, {\"changed\": {\"name\": \"shoe variant\", \"object\": \"Airmax - black - 42\", \"fields\": [\"Stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2025-12-03T10:01:41.889Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2025-12-03T10:02:01.402Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "3",
+    "object_repr": "jane",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2025-12-03T10:02:20.592Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "4",
+    "object_repr": "tom",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2025-12-03T10:09:13.788Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"address\", \"object\": \"Address 1 - Temple Road, Port Louis (john)\", \"fields\": [\"First name\", \"Last name\", \"Street\", \"City\", \"Zip code\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2025-12-03T10:10:07.626Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2025-12-03T10:11:12.710Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"address\", \"object\": \"Address 23 - Seaside Road, Mon Choisy (john)\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2025-12-03T10:11:21.412Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2025-12-03T11:53:27.062Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "5",
+    "object_repr": "PricingMan",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2025-12-03T11:53:42.045Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "5",
+    "object_repr": "PricingMan",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Staff status\", \"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2025-12-03T12:34:34.700Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "6",
+    "object_repr": "inventoryMan",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2025-12-03T12:34:54.953Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "6",
+    "object_repr": "inventoryMan",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Staff status\", \"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2025-12-03T12:35:04.647Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "6",
+    "object_repr": "inventoryMan",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2025-12-03T12:35:18.421Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "7",
+    "object_repr": "orderMan",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 40,
+  "fields": {
+    "action_time": "2025-12-03T12:35:50.108Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "5",
+    "object_repr": "pricingMan",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Username\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 41,
+  "fields": {
+    "action_time": "2025-12-03T12:40:51.278Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "1",
+    "object_repr": "Admin 1 - Lead inventory manager",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 42,
+  "fields": {
+    "action_time": "2025-12-03T12:41:02.225Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "2",
+    "object_repr": "Admin 2 - Lead order manager",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 43,
+  "fields": {
+    "action_time": "2025-12-03T12:41:17.248Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "3",
+    "object_repr": "Admin 3 - Lead pricing manager",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 44,
+  "fields": {
+    "action_time": "2025-12-03T13:37:20.823Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "7",
+    "object_repr": "orderMan",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Staff status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 45,
+  "fields": {
+    "action_time": "2025-12-03T13:38:28.063Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "6",
+    "object_repr": "orderMan",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 46,
+  "fields": {
+    "action_time": "2025-12-03T13:38:28.063Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "5",
+    "object_repr": "inventoryMan",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 47,
+  "fields": {
+    "action_time": "2025-12-03T13:38:28.063Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "4",
+    "object_repr": "pricingMan",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 48,
+  "fields": {
+    "action_time": "2026-04-18T07:33:33.257Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 49,
+  "fields": {
+    "action_time": "2026-04-18T07:34:50.691Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "john",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 50,
+  "fields": {
+    "action_time": "2026-04-18T07:36:13.516Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "1",
+    "object_repr": "admin",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 51,
+  "fields": {
+    "action_time": "2026-04-18T08:12:39.301Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "6",
+    "object_repr": "inventoryMan",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 1,
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": 1,
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 2,
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": 1,
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 3,
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": 1,
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 4,
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": 1,
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 5,
+  "fields": {
+    "name": "Can add permission",
+    "content_type": 2,
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 6,
+  "fields": {
+    "name": "Can change permission",
+    "content_type": 2,
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 7,
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": 2,
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 8,
+  "fields": {
+    "name": "Can view permission",
+    "content_type": 2,
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 9,
+  "fields": {
+    "name": "Can add group",
+    "content_type": 3,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 10,
+  "fields": {
+    "name": "Can change group",
+    "content_type": 3,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 11,
+  "fields": {
+    "name": "Can delete group",
+    "content_type": 3,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 12,
+  "fields": {
+    "name": "Can view group",
+    "content_type": 3,
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 13,
+  "fields": {
+    "name": "Can add user",
+    "content_type": 4,
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 14,
+  "fields": {
+    "name": "Can change user",
+    "content_type": 4,
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 15,
+  "fields": {
+    "name": "Can delete user",
+    "content_type": 4,
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 16,
+  "fields": {
+    "name": "Can view user",
+    "content_type": 4,
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 17,
+  "fields": {
+    "name": "Can add content type",
+    "content_type": 5,
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 18,
+  "fields": {
+    "name": "Can change content type",
+    "content_type": 5,
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 19,
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": 5,
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 20,
+  "fields": {
+    "name": "Can view content type",
+    "content_type": 5,
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 21,
+  "fields": {
+    "name": "Can add session",
+    "content_type": 6,
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 22,
+  "fields": {
+    "name": "Can change session",
+    "content_type": 6,
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 23,
+  "fields": {
+    "name": "Can delete session",
+    "content_type": 6,
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 24,
+  "fields": {
+    "name": "Can view session",
+    "content_type": 6,
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 25,
+  "fields": {
+    "name": "Can add brand",
+    "content_type": 7,
+    "codename": "add_brand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 26,
+  "fields": {
+    "name": "Can change brand",
+    "content_type": 7,
+    "codename": "change_brand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 27,
+  "fields": {
+    "name": "Can delete brand",
+    "content_type": 7,
+    "codename": "delete_brand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 28,
+  "fields": {
+    "name": "Can view brand",
+    "content_type": 7,
+    "codename": "view_brand"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 29,
+  "fields": {
+    "name": "Can add admin",
+    "content_type": 8,
+    "codename": "add_admin"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 30,
+  "fields": {
+    "name": "Can change admin",
+    "content_type": 8,
+    "codename": "change_admin"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 31,
+  "fields": {
+    "name": "Can delete admin",
+    "content_type": 8,
+    "codename": "delete_admin"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 32,
+  "fields": {
+    "name": "Can view admin",
+    "content_type": 8,
+    "codename": "view_admin"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 33,
+  "fields": {
+    "name": "Can add customer",
+    "content_type": 9,
+    "codename": "add_customer"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 34,
+  "fields": {
+    "name": "Can change customer",
+    "content_type": 9,
+    "codename": "change_customer"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 35,
+  "fields": {
+    "name": "Can delete customer",
+    "content_type": 9,
+    "codename": "delete_customer"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 36,
+  "fields": {
+    "name": "Can view customer",
+    "content_type": 9,
+    "codename": "view_customer"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 37,
+  "fields": {
+    "name": "Can add order",
+    "content_type": 10,
+    "codename": "add_order"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 38,
+  "fields": {
+    "name": "Can change order",
+    "content_type": 10,
+    "codename": "change_order"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 39,
+  "fields": {
+    "name": "Can delete order",
+    "content_type": 10,
+    "codename": "delete_order"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 40,
+  "fields": {
+    "name": "Can view order",
+    "content_type": 10,
+    "codename": "view_order"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 41,
+  "fields": {
+    "name": "Can add notification",
+    "content_type": 11,
+    "codename": "add_notification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 42,
+  "fields": {
+    "name": "Can change notification",
+    "content_type": 11,
+    "codename": "change_notification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 43,
+  "fields": {
+    "name": "Can delete notification",
+    "content_type": 11,
+    "codename": "delete_notification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 44,
+  "fields": {
+    "name": "Can view notification",
+    "content_type": 11,
+    "codename": "view_notification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 45,
+  "fields": {
+    "name": "Can add order item",
+    "content_type": 12,
+    "codename": "add_orderitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 46,
+  "fields": {
+    "name": "Can change order item",
+    "content_type": 12,
+    "codename": "change_orderitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 47,
+  "fields": {
+    "name": "Can delete order item",
+    "content_type": 12,
+    "codename": "delete_orderitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 48,
+  "fields": {
+    "name": "Can view order item",
+    "content_type": 12,
+    "codename": "view_orderitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 49,
+  "fields": {
+    "name": "Can add review",
+    "content_type": 13,
+    "codename": "add_review"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 50,
+  "fields": {
+    "name": "Can change review",
+    "content_type": 13,
+    "codename": "change_review"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 51,
+  "fields": {
+    "name": "Can delete review",
+    "content_type": 13,
+    "codename": "delete_review"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 52,
+  "fields": {
+    "name": "Can view review",
+    "content_type": 13,
+    "codename": "view_review"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 53,
+  "fields": {
+    "name": "Can add shoe",
+    "content_type": 14,
+    "codename": "add_shoe"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 54,
+  "fields": {
+    "name": "Can change shoe",
+    "content_type": 14,
+    "codename": "change_shoe"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 55,
+  "fields": {
+    "name": "Can delete shoe",
+    "content_type": 14,
+    "codename": "delete_shoe"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 56,
+  "fields": {
+    "name": "Can view shoe",
+    "content_type": 14,
+    "codename": "view_shoe"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 57,
+  "fields": {
+    "name": "Can add shoe image",
+    "content_type": 15,
+    "codename": "add_shoeimage"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 58,
+  "fields": {
+    "name": "Can change shoe image",
+    "content_type": 15,
+    "codename": "change_shoeimage"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 59,
+  "fields": {
+    "name": "Can delete shoe image",
+    "content_type": 15,
+    "codename": "delete_shoeimage"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 60,
+  "fields": {
+    "name": "Can view shoe image",
+    "content_type": 15,
+    "codename": "view_shoeimage"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 61,
+  "fields": {
+    "name": "Can add shoe variant",
+    "content_type": 16,
+    "codename": "add_shoevariant"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 62,
+  "fields": {
+    "name": "Can change shoe variant",
+    "content_type": 16,
+    "codename": "change_shoevariant"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 63,
+  "fields": {
+    "name": "Can delete shoe variant",
+    "content_type": 16,
+    "codename": "delete_shoevariant"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 64,
+  "fields": {
+    "name": "Can view shoe variant",
+    "content_type": 16,
+    "codename": "view_shoevariant"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 65,
+  "fields": {
+    "name": "Can add cart item",
+    "content_type": 17,
+    "codename": "add_cartitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 66,
+  "fields": {
+    "name": "Can change cart item",
+    "content_type": 17,
+    "codename": "change_cartitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 67,
+  "fields": {
+    "name": "Can delete cart item",
+    "content_type": 17,
+    "codename": "delete_cartitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 68,
+  "fields": {
+    "name": "Can view cart item",
+    "content_type": 17,
+    "codename": "view_cartitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 69,
+  "fields": {
+    "name": "Can add wishlist item",
+    "content_type": 18,
+    "codename": "add_wishlistitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 70,
+  "fields": {
+    "name": "Can change wishlist item",
+    "content_type": 18,
+    "codename": "change_wishlistitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 71,
+  "fields": {
+    "name": "Can delete wishlist item",
+    "content_type": 18,
+    "codename": "delete_wishlistitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 72,
+  "fields": {
+    "name": "Can view wishlist item",
+    "content_type": 18,
+    "codename": "view_wishlistitem"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 73,
+  "fields": {
+    "name": "Can add payment method",
+    "content_type": 19,
+    "codename": "add_paymentmethod"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 74,
+  "fields": {
+    "name": "Can change payment method",
+    "content_type": 19,
+    "codename": "change_paymentmethod"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 75,
+  "fields": {
+    "name": "Can delete payment method",
+    "content_type": 19,
+    "codename": "delete_paymentmethod"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 76,
+  "fields": {
+    "name": "Can view payment method",
+    "content_type": 19,
+    "codename": "view_paymentmethod"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 77,
+  "fields": {
+    "name": "Can add address",
+    "content_type": 20,
+    "codename": "add_address"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 78,
+  "fields": {
+    "name": "Can change address",
+    "content_type": 20,
+    "codename": "change_address"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 79,
+  "fields": {
+    "name": "Can delete address",
+    "content_type": 20,
+    "codename": "delete_address"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 80,
+  "fields": {
+    "name": "Can view address",
+    "content_type": 20,
+    "codename": "view_address"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 81,
+  "fields": {
+    "name": "Can add coupon",
+    "content_type": 21,
+    "codename": "add_coupon"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 82,
+  "fields": {
+    "name": "Can change coupon",
+    "content_type": 21,
+    "codename": "change_coupon"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 83,
+  "fields": {
+    "name": "Can delete coupon",
+    "content_type": 21,
+    "codename": "delete_coupon"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 84,
+  "fields": {
+    "name": "Can view coupon",
+    "content_type": 21,
+    "codename": "view_coupon"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 85,
+  "fields": {
+    "name": "Can change shoe price",
+    "content_type": 14,
+    "codename": "change_price"
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 1,
+  "fields": {
+    "name": "Inventory Manager",
+    "permissions": [
+      53,
+      54,
+      55,
+      56,
+      61,
+      62,
+      64
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 2,
+  "fields": {
+    "name": "Pricing Manager",
+    "permissions": [
+      40,
+      85,
+      54,
+      56
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 3,
+  "fields": {
+    "name": "Order Manager",
+    "permissions": [
+      37,
+      38,
+      39,
+      40,
+      46,
+      48
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 4,
+  "fields": {
+    "name": "Customer Support",
+    "permissions": [
+      78,
+      80,
+      34,
+      36,
+      41,
+      44,
+      40,
+      48
+    ]
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$7rEzRjJiCCeW3PKPtAHPsF$TgsB6p2cSZjMW44WNQrI9Y0KjmHf46Yvj+iuTJPJIWw=",
+    "last_login": "2026-04-18T08:51:07.875Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-24T18:26:01.440Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$AkrDmaAdsGlJ6X5eAVWhe5$hLtfraTjtk7MICKon7LLfamNbKhUkq8vDadf2Cqp9oY=",
+    "last_login": "2026-04-18T08:52:52.669Z",
+    "is_superuser": false,
+    "username": "john",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "jo@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-24T18:38:15Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$m7EIqdvHTs0gV3JkAxrleK$EveRkE7qhlVxjCSwhVmHwG8OexhZQmiA4WKaAgc0Arc=",
+    "last_login": "2026-04-18T08:53:41.543Z",
+    "is_superuser": false,
+    "username": "jane",
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "email": "jane@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-26T19:36:15Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$WyNWAwEdKU7PeSc1NbMSRP$CI5qXgrLEsqbWpsoibjZGxngKRpCBuFiD+KMOwmxqU0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "tom",
+    "first_name": "Tom",
+    "last_name": "Smith",
+    "email": "tom@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-26T19:36:55Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$PppfRvixOeZYWcOxz4FxfK$J2ZB9MAa8qLPlWnZKRdeESL0/Pa27lFiX+f3XBa0P3w=",
+    "last_login": "2025-12-03T13:39:06.623Z",
+    "is_superuser": false,
+    "username": "pricingMan",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-12-03T11:53:24Z",
+    "groups": [
+      2
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$UBulVZi8NdsUArkddInmOa$hD/sKJse+9pho3cNiYRSuySz9J3WAuM7IAZ1eDJ1T1E=",
+    "last_login": "2025-12-03T13:41:11.280Z",
+    "is_superuser": false,
+    "username": "inventoryMan",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-12-03T12:34:32Z",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$fKrC41Tutr08A67VWuDGFY$sPXFfzbQmalv41UfKT+Yq7J+V5+3KkwOSh47vI5YwmQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "orderMan",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-12-03T12:35:16Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 1,
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 2,
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 4,
+  "fields": {
+    "app_label": "auth",
+    "model": "user"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 5,
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 6,
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 7,
+  "fields": {
+    "app_label": "models_app",
+    "model": "brand"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 8,
+  "fields": {
+    "app_label": "models_app",
+    "model": "admin"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 9,
+  "fields": {
+    "app_label": "models_app",
+    "model": "customer"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 10,
+  "fields": {
+    "app_label": "models_app",
+    "model": "order"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 11,
+  "fields": {
+    "app_label": "models_app",
+    "model": "notification"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 12,
+  "fields": {
+    "app_label": "models_app",
+    "model": "orderitem"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 13,
+  "fields": {
+    "app_label": "models_app",
+    "model": "review"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 14,
+  "fields": {
+    "app_label": "models_app",
+    "model": "shoe"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 15,
+  "fields": {
+    "app_label": "models_app",
+    "model": "shoeimage"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 16,
+  "fields": {
+    "app_label": "models_app",
+    "model": "shoevariant"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 17,
+  "fields": {
+    "app_label": "models_app",
+    "model": "cartitem"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 18,
+  "fields": {
+    "app_label": "models_app",
+    "model": "wishlistitem"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 19,
+  "fields": {
+    "app_label": "models_app",
+    "model": "paymentmethod"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 20,
+  "fields": {
+    "app_label": "models_app",
+    "model": "address"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 21,
+  "fields": {
+    "app_label": "models_app",
+    "model": "coupon"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "1bl3kr7tsolr21qlap4qk240dsb2clih",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAUBf-FtSEUKJe6dO83EO4DqZo2Ke3K-O_apAvdnpk5L5Xytta0NVnSyOqsgjr9bpjpIdMO-J6n26xpntZlRL0r-qBNX2eW5-Vw_w5qbvVbm74PzligLnNxhIDcWU-dFCCDxVngaCOCNTI444v3cQjQBwt-IBFW7w_Ytzd6:1vQn6V:YiZD0jCH9LRoJbbpItKjh0R7muvmoUNEd6uglgv-d3Y",
+    "expire_date": "2025-12-17T13:41:11.287Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "1it9mdbusvllnbhcg2ed8dl449n4vwwc",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pBCpxRcuvcMZGYYpWogKe3KeHfbpAvdvvf-f6uI65Lj2mSOU1JnZdTplxHyU8ou0gPLvWquZZkn0nuiD9v0tSZ5XY727yBjy9u6M-xFQj9Q8AJAGELH7GSwoxdvnBARwGhcn7obBPEWEJiN5Q2i8-rzBeLLN64:1vQV9d:KrFhtRu2egHlwSvxrTCewKJH40tPdZhqoTMVW7AuTS0",
+    "expire_date": "2025-12-16T18:31:13.097Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "23ztmqqg6i25zytd6f04ns52dzy6tj7o",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pAwgeng0r1nIAMDUjUlKe2q8e62SRe6_e-9v6nA61LD2vMcRlFXBeryu0VOrzwdQJ48PZpObVrmMepD0Sft-t4kv2-n-3dQude99gmJyFuMJkIpBZNQEiuSLQMhoDEDm4LRGYZCRQQIBiBy3snO1ecL8Bs3yA:1vNbSI:dNqbhkdnfWiFfK_RlW3UNzu9_bvk_hXQcUkdLPRFCkg",
+    "expire_date": "2025-12-08T18:38:30.721Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "6cqflh6evtilxcprf99fqnlruy9nymmw",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pAwgeng0r1nIAMDUjUlKe2q8e62SRe6_e-9v6nA61LD2vMcRlFXBeryu0VOrzwdQJ48PZpObVrmMepD0Sft-t4kv2-n-3dQude99gmJyFuMJkIpBZNQEiuSLQMhoDEDm4LRGYZCRQQIBiBy3snO1ecL8Bs3yA:1vPzhm:zl8YWjL2joqpH19IL2lnZVd-1lCxwnnFAhDcn-rmS0Y",
+    "expire_date": "2025-12-15T08:56:22.291Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "6zje78nq4drefh75b19ebo442k8764c2",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pBCpxRcuvcMZGYYpWogKe3KeHfbpAvdvvf-f6uI65Lj2mSOU1JnZdTplxHyU8ou0gPLvWquZZkn0nuiD9v0tSZ5XY727yBjy9u6M-xFQj9Q8AJAGELH7GSwoxdvnBARwGhcn7obBPEWEJiN5Q2i8-rzBeLLN64:1vPRxN:Pgwvcr2vbZQXVlXnBH74_mZ9O4e8jTNOjsecxdHIsfw",
+    "expire_date": "2025-12-13T20:54:13.372Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "bqddk6qpl1mgs73y701tspvxbo8pm5o2",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pAwgeng0r1nIAMDUjUlKe2q8e62SRe6_e-9v6nA61LD2vMcRlFXBeryu0VOrzwdQJ48PZpObVrmMepD0Sft-t4kv2-n-3dQude99gmJyFuMJkIpBZNQEiuSLQMhoDEDm4LRGYZCRQQIBiBy3snO1ecL8Bs3yA:1vQLbp:2AL8JbT0gSGcuO21ilY1ShDOzMUh0KOAv69uAWwQodw",
+    "expire_date": "2025-12-16T08:19:41.722Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "bzifwholy5pjj5a5rp6wvayl7h1k5578",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pAwgeng0r1nIAMDUjUlKe2q8e62SRe6_e-9v6nA61LD2vMcRlFXBeryu0VOrzwdQJ48PZpObVrmMepD0Sft-t4kv2-n-3dQude99gmJyFuMJkIpBZNQEiuSLQMhoDEDm4LRGYZCRQQIBiBy3snO1ecL8Bs3yA:1vQLf0:Topqc2KNftyYIHiCdQkK9BPM0cD7p5pbr0feHtVXJCU",
+    "expire_date": "2025-12-16T08:22:58.694Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "gkgr44xh2h1qjv2jnu6vsjqnckm23xzt",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pAwgeng0r1nIAMDUjUlKe2q8e62SRe6_e-9v6nA61LD2vMcRlFXBeryu0VOrzwdQJ48PZpObVrmMepD0Sft-t4kv2-n-3dQude99gmJyFuMJkIpBZNQEiuSLQMhoDEDm4LRGYZCRQQIBiBy3snO1ecL8Bs3yA:1vQLm8:sygUl7dxAfEXzlXn82M7JHKDkaderiAYqOcjQ_tuqPg",
+    "expire_date": "2025-12-16T08:30:20.076Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "m9crnq2fmvj7u3x655gxiagx4qljd947",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pAwgeng0r1nIAMDUjUlKe2q8e62SRe6_e-9v6nA61LD2vMcRlFXBeryu0VOrzwdQJ48PZpObVrmMepD0Sft-t4kv2-n-3dQude99gmJyFuMJkIpBZNQEiuSLQMhoDEDm4LRGYZCRQQIBiBy3snO1ecL8Bs3yA:1vQLqK:1PO4lWaOZ6FIhr44DOra9txUBpjAZ1G4tNTXiRW_Du4",
+    "expire_date": "2025-12-16T08:34:40.182Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "o0bc2lq4lp5ym8l3past575uhoplt9m1",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pBCpxRcuvcMZGYYpWogKe3KeHfbpAvdvvf-f6uI65Lj2mSOU1JnZdTplxHyU8ou0gPLvWquZZkn0nuiD9v0tSZ5XY727yBjy9u6M-xFQj9Q8AJAGELH7GSwoxdvnBARwGhcn7obBPEWEJiN5Q2i8-rzBeLLN64:1vQ2qS:WYWNaIvooGXC-dh2yV4gQxeYY5Au5VjuKaHLq3cx37s",
+    "expire_date": "2025-12-15T12:17:32.920Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "r58q7s00gobkg2axx69qlaxakbcv3am5",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pAwgeng0r1nIAMDUjUlKe2q8e62SRe6_e-9v6nA61LD2vMcRlFXBeryu0VOrzwdQJ48PZpObVrmMepD0Sft-t4kv2-n-3dQude99gmJyFuMJkIpBZNQEiuSLQMhoDEDm4LRGYZCRQQIBiBy3snO1ecL8Bs3yA:1vPchq:-cZvjKyQfy8g_QfGt8ql6lVi9QEAufPVAMW5MVBRYLo",
+    "expire_date": "2025-12-14T08:22:54.673Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "y3iniqgezi0iszc6vzk8au1xfrz9uhu0",
+  "fields": {
+    "session_data": ".eJxVjLsOAiEQAP-F2hA5joW1tPcbCOwu3qmB5B6V8d8NyRXazkzmrWLatynuqyxxZnVRVp1-WU70lNoFP1K9N02tbsucdU_0YVd9ayyv69H-Daa0Tn2LELwXBosETILjiJYNDOgAi_cFQpBgaKAUBAZiKNadMY8ObQHj1OcLy0s3Jw:1wE1Qr:Ld4uzxDcA4lBjrfZUeRiwaOE23DS9EDz93Www6cT6Lc",
+    "expire_date": "2026-05-02T08:53:41.549Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "zu6t0huyzaxmbbsvt9b3dlli8xj2w38d",
+  "fields": {
+    "session_data": ".eJxVjEEOgyAQRe8y64aECeDgsvuewQwMFNsGE8WV8e7VxI3b_977G0SeG_Tb_oCB11aGdUnzMAr0gHDbAsdvqieQD9f3pOJU2zwGdSrqoot6TZJ-z8u9HRReylH76IjIGxd0wJyzi0JRjEgyjOTQad2xzi5YzZgpiyBhh0TWWzk47H83bjsU:1vQLWC:XM1uGlqpw_XMCxCOQcovTsGeQ9GNqpqTZXNQ-fI3aWY",
+    "expire_date": "2025-12-16T08:13:52.048Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "zwkb3n6acjweochn156nptleub2muxqr",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pAwgeng0r1nIAMDUjUlKe2q8e62SRe6_e-9v6nA61LD2vMcRlFXBeryu0VOrzwdQJ48PZpObVrmMepD0Sft-t4kv2-n-3dQude99gmJyFuMJkIpBZNQEiuSLQMhoDEDm4LRGYZCRQQIBiBy3snO1ecL8Bs3yA:1vQLo7:ht3Lz9czCG0hQdBnJyNNfjKQLyF0W4OYj5zN8HhXbhw",
+    "expire_date": "2025-12-16T08:32:23.708Z"
+  }
+},
+{
+  "model": "models_app.shoe",
+  "pk": 1,
+  "fields": {
+    "name": "Airmax",
+    "description": "airmax description",
+    "price": "2000.00",
+    "category": "casual",
+    "gender": "M",
+    "brand": 1,
+    "discount": "200.00"
+  }
+},
+{
+  "model": "models_app.shoe",
+  "pk": 2,
+  "fields": {
+    "name": "Ghost",
+    "description": "ghost description",
+    "price": "1000.00",
+    "category": "running",
+    "gender": "W",
+    "brand": 2,
+    "discount": "0.00"
+  }
+},
+{
+  "model": "models_app.shoe",
+  "pk": 3,
+  "fields": {
+    "name": "StrideRunner",
+    "description": "Lightweight running shoe for daily training and long runs.",
+    "price": "1500.00",
+    "category": "running",
+    "gender": "M",
+    "brand": 1,
+    "discount": "150.00"
+  }
+},
+{
+  "model": "models_app.shoe",
+  "pk": 4,
+  "fields": {
+    "name": "EverydayCas",
+    "description": "Versatile casual shoe for everyday wear with breathable upper.",
+    "price": "800.00",
+    "category": "casual",
+    "gender": "W",
+    "brand": 2,
+    "discount": "0.00"
+  }
+},
+{
+  "model": "models_app.shoe",
+  "pk": 5,
+  "fields": {
+    "name": "StreetSneak",
+    "description": "Urban sneakers with modern styling and cushioned midsole.",
+    "price": "1200.00",
+    "category": "sneakers",
+    "gender": "W",
+    "brand": 1,
+    "discount": "100.00"
+  }
+},
+{
+  "model": "models_app.shoe",
+  "pk": 6,
+  "fields": {
+    "name": "OfficeForm",
+    "description": "Classic formal shoe crafted for comfort during long office hours.",
+    "price": "1800.00",
+    "category": "formal",
+    "gender": "M",
+    "brand": 2,
+    "discount": "200.00"
+  }
+},
+{
+  "model": "models_app.shoe",
+  "pk": 7,
+  "fields": {
+    "name": "TrailBoot",
+    "description": "Rugged boots built for trail and harsh conditions with extra grip.",
+    "price": "2200.00",
+    "category": "boots",
+    "gender": "K",
+    "brand": 1,
+    "discount": "250.00"
+  }
+},
+{
+  "model": "models_app.shoe",
+  "pk": 8,
+  "fields": {
+    "name": "MiniRunner",
+    "description": "Lightweight kids running shoe for play and training.",
+    "price": "600.00",
+    "category": "running",
+    "gender": "K",
+    "brand": 1,
+    "discount": "50.00"
+  }
+},
+{
+  "model": "models_app.shoe",
+  "pk": 9,
+  "fields": {
+    "name": "TinyCas",
+    "description": "Comfortable casual shoe designed for kids' daily wear.",
+    "price": "400.00",
+    "category": "casual",
+    "gender": "K",
+    "brand": 2,
+    "discount": "0.00"
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 1,
+  "fields": {
+    "shoe": 1,
+    "image": "shoe_images/nike1.jpg",
+    "alt_text": ""
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 2,
+  "fields": {
+    "shoe": 1,
+    "image": "shoe_images/nike2.webp",
+    "alt_text": ""
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 3,
+  "fields": {
+    "shoe": 1,
+    "image": "shoe_images/nike8.jpg",
+    "alt_text": ""
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 4,
+  "fields": {
+    "shoe": 2,
+    "image": "shoe_images/women-shoe-white-pink_yqDfHN0.jpg",
+    "alt_text": ""
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 5,
+  "fields": {
+    "shoe": 2,
+    "image": "shoe_images/Screenshot_2025-09-13_125843.png",
+    "alt_text": ""
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 6,
+  "fields": {
+    "shoe": 2,
+    "image": "shoe_images/nike9.jpg",
+    "alt_text": ""
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 7,
+  "fields": {
+    "shoe": 3,
+    "image": "shoe_images/men-shoe1.png",
+    "alt_text": "StrideRunner side view"
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 8,
+  "fields": {
+    "shoe": 4,
+    "image": "shoe_images/women-shoe1.png",
+    "alt_text": "EverydayCas lifestyle image"
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 9,
+  "fields": {
+    "shoe": 5,
+    "image": "shoe_images/women-shoe2.png",
+    "alt_text": "StreetSneak top view"
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 10,
+  "fields": {
+    "shoe": 6,
+    "image": "shoe_images/men-shoe2.png",
+    "alt_text": "OfficeForm polished"
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 11,
+  "fields": {
+    "shoe": 7,
+    "image": "shoe_images/kids-shoe1.png",
+    "alt_text": "TrailBoot on a trail"
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 12,
+  "fields": {
+    "shoe": 8,
+    "image": "shoe_images/kids-shoe1.png",
+    "alt_text": "MiniRunner kids running"
+  }
+},
+{
+  "model": "models_app.shoeimage",
+  "pk": 13,
+  "fields": {
+    "shoe": 9,
+    "image": "shoe_images/kids-shoe2.png",
+    "alt_text": "TinyCas kids casual"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 1,
+  "fields": {
+    "shoe": 1,
+    "color": "black",
+    "size": 40,
+    "stock": 5,
+    "sku": "1-BLA-40"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 2,
+  "fields": {
+    "shoe": 1,
+    "color": "white",
+    "size": 40,
+    "stock": 5,
+    "sku": "1-WHI-40"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 3,
+  "fields": {
+    "shoe": 1,
+    "color": "black",
+    "size": 41,
+    "stock": 0,
+    "sku": "1-BLA-41"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 4,
+  "fields": {
+    "shoe": 1,
+    "color": "white",
+    "size": 41,
+    "stock": 5,
+    "sku": "1-WHI-41"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 5,
+  "fields": {
+    "shoe": 1,
+    "color": "black",
+    "size": 42,
+    "stock": 5,
+    "sku": "1-BLA-42"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 6,
+  "fields": {
+    "shoe": 2,
+    "color": "black",
+    "size": 39,
+    "stock": 5,
+    "sku": "2-BLA-39"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 7,
+  "fields": {
+    "shoe": 2,
+    "color": "black",
+    "size": 40,
+    "stock": 5,
+    "sku": "2-BLA-40"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 8,
+  "fields": {
+    "shoe": 2,
+    "color": "white",
+    "size": 40,
+    "stock": 5,
+    "sku": "2-WHI-40"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 9,
+  "fields": {
+    "shoe": 2,
+    "color": "white",
+    "size": 41,
+    "stock": 5,
+    "sku": "2-WHI-41"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 10,
+  "fields": {
+    "shoe": 1,
+    "color": "blue",
+    "size": 41,
+    "stock": 0,
+    "sku": "1-BLU-41"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 11,
+  "fields": {
+    "shoe": 3,
+    "color": "blue",
+    "size": 40,
+    "stock": 10,
+    "sku": "3-BLU-40"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 12,
+  "fields": {
+    "shoe": 3,
+    "color": "black",
+    "size": 41,
+    "stock": 8,
+    "sku": "3-BLA-41"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 13,
+  "fields": {
+    "shoe": 3,
+    "color": "white",
+    "size": 42,
+    "stock": 5,
+    "sku": "3-WHI-42"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 14,
+  "fields": {
+    "shoe": 4,
+    "color": "gray",
+    "size": 39,
+    "stock": 12,
+    "sku": "4-GRY-39"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 15,
+  "fields": {
+    "shoe": 4,
+    "color": "tan",
+    "size": 40,
+    "stock": 15,
+    "sku": "4-TAN-40"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 16,
+  "fields": {
+    "shoe": 4,
+    "color": "white",
+    "size": 41,
+    "stock": 7,
+    "sku": "4-WHI-41"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 17,
+  "fields": {
+    "shoe": 5,
+    "color": "red",
+    "size": 40,
+    "stock": 9,
+    "sku": "5-RED-40"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 18,
+  "fields": {
+    "shoe": 5,
+    "color": "black",
+    "size": 41,
+    "stock": 6,
+    "sku": "5-BLA-41"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 19,
+  "fields": {
+    "shoe": 5,
+    "color": "navy",
+    "size": 42,
+    "stock": 4,
+    "sku": "5-NAV-42"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 20,
+  "fields": {
+    "shoe": 6,
+    "color": "brown",
+    "size": 41,
+    "stock": 11,
+    "sku": "6-BRN-41"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 21,
+  "fields": {
+    "shoe": 6,
+    "color": "black",
+    "size": 42,
+    "stock": 5,
+    "sku": "6-BLA-42"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 22,
+  "fields": {
+    "shoe": 6,
+    "color": "oxblood",
+    "size": 43,
+    "stock": 3,
+    "sku": "6-OXB-43"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 23,
+  "fields": {
+    "shoe": 7,
+    "color": "olive",
+    "size": 41,
+    "stock": 6,
+    "sku": "7-OLI-41"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 24,
+  "fields": {
+    "shoe": 7,
+    "color": "brown",
+    "size": 42,
+    "stock": 4,
+    "sku": "7-BRN-42"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 25,
+  "fields": {
+    "shoe": 7,
+    "color": "black",
+    "size": 43,
+    "stock": 2,
+    "sku": "7-BLA-43"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 26,
+  "fields": {
+    "shoe": 8,
+    "color": "blue",
+    "size": 30,
+    "stock": 12,
+    "sku": "8-BLU-30"
+  }
+},
+{
+  "model": "models_app.shoevariant",
+  "pk": 27,
+  "fields": {
+    "shoe": 9,
+    "color": "pink",
+    "size": 29,
+    "stock": 10,
+    "sku": "9-PIN-29"
+  }
+},
+{
+  "model": "models_app.brand",
+  "pk": 1,
+  "fields": {
+    "name": "Nike",
+    "description": "nike description",
+    "website": "http://nike.com",
+    "logo": "brand_logos/Nike-Logo-1978-present.jpg"
+  }
+},
+{
+  "model": "models_app.brand",
+  "pk": 2,
+  "fields": {
+    "name": "Adidas",
+    "description": "adidas description",
+    "website": "http://adidas.com",
+    "logo": "brand_logos/Adidas-Logo-1971-present-1679153898.png"
+  }
+},
+{
+  "model": "models_app.customer",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "date_of_birth": "2001-11-26",
+    "gender": "M",
+    "phone": "57123456",
+    "mobile": "",
+    "theme_preference": "light"
+  }
+},
+{
+  "model": "models_app.customer",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "date_of_birth": "2000-11-26",
+    "gender": "F",
+    "phone": "123415614",
+    "mobile": "",
+    "theme_preference": "light"
+  }
+},
+{
+  "model": "models_app.customer",
+  "pk": 3,
+  "fields": {
+    "user": 4,
+    "date_of_birth": null,
+    "gender": "M",
+    "phone": "1234156",
+    "mobile": "",
+    "theme_preference": "light"
+  }
+},
+{
+  "model": "models_app.paymentmethod",
+  "pk": 1,
+  "fields": {
+    "title": "Home",
+    "customer": 1,
+    "card_num": "1234567832834",
+    "exp_date": "2025-12-27",
+    "card_type": "credit",
+    "holder_name": "John Doe",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.paymentmethod",
+  "pk": 2,
+  "fields": {
+    "title": "Father's card",
+    "customer": 1,
+    "card_num": "1234576890912",
+    "exp_date": "2026-11-27",
+    "card_type": "debit",
+    "holder_name": "Jack Doe",
+    "is_default": true
+  }
+},
+{
+  "model": "models_app.paymentmethod",
+  "pk": 3,
+  "fields": {
+    "title": "Mother's card",
+    "customer": 1,
+    "card_num": "1234576890912",
+    "exp_date": "2027-11-27",
+    "card_type": "credit",
+    "holder_name": "Mary Doe",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.paymentmethod",
+  "pk": 4,
+  "fields": {
+    "title": "Credit ****6453",
+    "customer": null,
+    "card_num": "1234564366453",
+    "exp_date": "2025-12-07",
+    "card_type": "credit",
+    "holder_name": "fjsalgjgaldkjfal",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.paymentmethod",
+  "pk": 5,
+  "fields": {
+    "title": "Credit ****4156",
+    "customer": null,
+    "card_num": "1234153234156",
+    "exp_date": "2025-12-07",
+    "card_type": "credit",
+    "holder_name": "aghgposidh",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 1,
+  "fields": {
+    "title": "Home",
+    "customer": 1,
+    "street": "Temple Road",
+    "city": "Port Louis",
+    "zip_code": "12345",
+    "first_name": "John",
+    "last_name": "Doe",
+    "is_default": true
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 12,
+  "fields": {
+    "title": "hello-dsj-adsajl",
+    "customer": null,
+    "street": "dsj",
+    "city": "adsajl",
+    "zip_code": "djask",
+    "first_name": "hello",
+    "last_name": "world",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 13,
+  "fields": {
+    "title": "hello-dsj-adsajl",
+    "customer": null,
+    "street": "dsj",
+    "city": "adsajl",
+    "zip_code": "djask",
+    "first_name": "hello",
+    "last_name": "world",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 14,
+  "fields": {
+    "title": "hello-dsj-adsajl",
+    "customer": null,
+    "street": "dsj",
+    "city": "adsajl",
+    "zip_code": "djask",
+    "first_name": "hello",
+    "last_name": "world",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 15,
+  "fields": {
+    "title": "hello-dsj-adsajl",
+    "customer": null,
+    "street": "dsj",
+    "city": "adsajl",
+    "zip_code": "djask",
+    "first_name": "hello",
+    "last_name": "world",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 16,
+  "fields": {
+    "title": "Dead-fja-Mon Gout",
+    "customer": null,
+    "street": "fja",
+    "city": "Mon Gout",
+    "zip_code": "20514",
+    "first_name": "Dead",
+    "last_name": "Person",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 17,
+  "fields": {
+    "title": "Dead-fja-Mon Gout",
+    "customer": null,
+    "street": "fja",
+    "city": "Mon Gout",
+    "zip_code": "20514",
+    "first_name": "Dead",
+    "last_name": "Person",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 18,
+  "fields": {
+    "title": "Dead-fja-Mon Gout",
+    "customer": null,
+    "street": "fja",
+    "city": "Mon Gout",
+    "zip_code": "20514",
+    "first_name": "Dead",
+    "last_name": "Person",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 19,
+  "fields": {
+    "title": "Dead-fja-Mon Gout",
+    "customer": null,
+    "street": "fja",
+    "city": "Mon Gout",
+    "zip_code": "20514",
+    "first_name": "Dead",
+    "last_name": "Person",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 20,
+  "fields": {
+    "title": "Dead-fja-Mon Gout",
+    "customer": null,
+    "street": "fja",
+    "city": "Mon Gout",
+    "zip_code": "20514",
+    "first_name": "Dead",
+    "last_name": "Person",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 21,
+  "fields": {
+    "title": "2314125-2dasjfl-dfagjl",
+    "customer": null,
+    "street": "2dasjfl",
+    "city": "dfagjl",
+    "zip_code": "gjals",
+    "first_name": "2314125",
+    "last_name": "2314566",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 22,
+  "fields": {
+    "title": "2314125-2dasjfl-dfagjl",
+    "customer": null,
+    "street": "2dasjfl",
+    "city": "dfagjl",
+    "zip_code": "gjals",
+    "first_name": "2314125",
+    "last_name": "2314566",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.address",
+  "pk": 23,
+  "fields": {
+    "title": "Work",
+    "customer": 1,
+    "street": "Seaside Road",
+    "city": "Mon Choisy",
+    "zip_code": "12345",
+    "first_name": "Jack",
+    "last_name": "Black",
+    "is_default": false
+  }
+},
+{
+  "model": "models_app.order",
+  "pk": 1,
+  "fields": {
+    "customer": 1,
+    "order_date": "2025-11-28",
+    "delivery_date": null,
+    "status": "pending",
+    "total_price": "2000.00",
+    "shipping_address": 1,
+    "billing_address": 1,
+    "payment_method": null,
+    "shipping_cost": "100.00",
+    "subtotal": "0.00",
+    "discount_amount": "0.00"
+  }
+},
+{
+  "model": "models_app.order",
+  "pk": 2,
+  "fields": {
+    "customer": 1,
+    "order_date": "2025-11-28",
+    "delivery_date": null,
+    "status": "Pending",
+    "total_price": "1000.00",
+    "shipping_address": 1,
+    "billing_address": 1,
+    "payment_method": null,
+    "shipping_cost": "100.00",
+    "subtotal": "0.00",
+    "discount_amount": "0.00"
+  }
+},
+{
+  "model": "models_app.order",
+  "pk": 3,
+  "fields": {
+    "customer": 1,
+    "order_date": "2025-11-29",
+    "delivery_date": null,
+    "status": "Pending",
+    "total_price": "2000.00",
+    "shipping_address": 1,
+    "billing_address": 1,
+    "payment_method": null,
+    "shipping_cost": "100.00",
+    "subtotal": "0.00",
+    "discount_amount": "0.00"
+  }
+},
+{
+  "model": "models_app.order",
+  "pk": 4,
+  "fields": {
+    "customer": 1,
+    "order_date": "2025-11-29",
+    "delivery_date": null,
+    "status": "Pending",
+    "total_price": "0.00",
+    "shipping_address": 1,
+    "billing_address": 1,
+    "payment_method": null,
+    "shipping_cost": "100.00",
+    "subtotal": "0.00",
+    "discount_amount": "0.00"
+  }
+},
+{
+  "model": "models_app.order",
+  "pk": 5,
+  "fields": {
+    "customer": 1,
+    "order_date": "2025-11-29",
+    "delivery_date": null,
+    "status": "cancelled",
+    "total_price": "2000.00",
+    "shipping_address": 20,
+    "billing_address": 20,
+    "payment_method": 1,
+    "shipping_cost": "100.00",
+    "subtotal": "0.00",
+    "discount_amount": "0.00"
+  }
+},
+{
+  "model": "models_app.order",
+  "pk": 6,
+  "fields": {
+    "customer": 1,
+    "order_date": "2025-11-29",
+    "delivery_date": null,
+    "status": "Pending",
+    "total_price": "2000.00",
+    "shipping_address": 22,
+    "billing_address": 22,
+    "payment_method": null,
+    "shipping_cost": "100.00",
+    "subtotal": "0.00",
+    "discount_amount": "0.00"
+  }
+},
+{
+  "model": "models_app.order",
+  "pk": 7,
+  "fields": {
+    "customer": 1,
+    "order_date": "2025-11-29",
+    "delivery_date": null,
+    "status": "Pending",
+    "total_price": "1000.00",
+    "shipping_address": 1,
+    "billing_address": 1,
+    "payment_method": 4,
+    "shipping_cost": "100.00",
+    "subtotal": "0.00",
+    "discount_amount": "0.00"
+  }
+},
+{
+  "model": "models_app.order",
+  "pk": 8,
+  "fields": {
+    "customer": 1,
+    "order_date": "2025-11-29",
+    "delivery_date": null,
+    "status": "Pending",
+    "total_price": "1000.00",
+    "shipping_address": 1,
+    "billing_address": 1,
+    "payment_method": 5,
+    "shipping_cost": "100.00",
+    "subtotal": "0.00",
+    "discount_amount": "0.00"
+  }
+},
+{
+  "model": "models_app.order",
+  "pk": 9,
+  "fields": {
+    "customer": 1,
+    "order_date": "2025-12-01",
+    "delivery_date": null,
+    "status": "cancelled",
+    "total_price": "2000.00",
+    "shipping_address": 1,
+    "billing_address": 1,
+    "payment_method": 1,
+    "shipping_cost": "100.00",
+    "subtotal": "0.00",
+    "discount_amount": "0.00"
+  }
+},
+{
+  "model": "models_app.orderitem",
+  "pk": 4,
+  "fields": {
+    "order": 1,
+    "quantity": 2,
+    "price": "1000.00",
+    "variant": 3
+  }
+},
+{
+  "model": "models_app.orderitem",
+  "pk": 5,
+  "fields": {
+    "order": 2,
+    "quantity": 1,
+    "price": "1000.00",
+    "variant": 1
+  }
+},
+{
+  "model": "models_app.orderitem",
+  "pk": 6,
+  "fields": {
+    "order": 3,
+    "quantity": 2,
+    "price": "1000.00",
+    "variant": 1
+  }
+},
+{
+  "model": "models_app.orderitem",
+  "pk": 7,
+  "fields": {
+    "order": 5,
+    "quantity": 2,
+    "price": "1000.00",
+    "variant": 1
+  }
+},
+{
+  "model": "models_app.orderitem",
+  "pk": 8,
+  "fields": {
+    "order": 6,
+    "quantity": 2,
+    "price": "1000.00",
+    "variant": 1
+  }
+},
+{
+  "model": "models_app.orderitem",
+  "pk": 9,
+  "fields": {
+    "order": 7,
+    "quantity": 1,
+    "price": "1000.00",
+    "variant": 1
+  }
+},
+{
+  "model": "models_app.orderitem",
+  "pk": 10,
+  "fields": {
+    "order": 8,
+    "quantity": 1,
+    "price": "1000.00",
+    "variant": 1
+  }
+},
+{
+  "model": "models_app.orderitem",
+  "pk": 11,
+  "fields": {
+    "order": 9,
+    "quantity": 1,
+    "price": "2000.00",
+    "variant": 1
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 1,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #1 has been confirmed!",
+    "is_read": true,
+    "created_at": "2025-11-25T04:55:37.211Z",
+    "related_order": null
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 2,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #1 has been placed.",
+    "is_read": true,
+    "created_at": "2025-11-28T12:14:10.094Z",
+    "related_order": 1
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 3,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #2 has been confirmed!",
+    "is_read": true,
+    "created_at": "2025-11-28T15:58:44.624Z",
+    "related_order": 2
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 4,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #3 has been confirmed!",
+    "is_read": true,
+    "created_at": "2025-11-29T04:01:39.852Z",
+    "related_order": 3
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 5,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #4 has been confirmed!",
+    "is_read": true,
+    "created_at": "2025-11-29T04:05:37.987Z",
+    "related_order": 4
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 6,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #5 has been confirmed!",
+    "is_read": true,
+    "created_at": "2025-11-29T07:05:29.272Z",
+    "related_order": 5
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 7,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #5 has been cancelled.",
+    "is_read": false,
+    "created_at": "2025-11-29T07:05:36.507Z",
+    "related_order": 5
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 8,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #6 has been confirmed!",
+    "is_read": false,
+    "created_at": "2025-11-29T07:14:41.019Z",
+    "related_order": 6
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 9,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #7 has been confirmed!",
+    "is_read": false,
+    "created_at": "2025-11-29T07:18:37.146Z",
+    "related_order": 7
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 10,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #8 has been confirmed!",
+    "is_read": false,
+    "created_at": "2025-11-29T07:21:42.631Z",
+    "related_order": 8
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 11,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #9 has been confirmed!",
+    "is_read": false,
+    "created_at": "2025-12-01T06:08:55.601Z",
+    "related_order": 9
+  }
+},
+{
+  "model": "models_app.notification",
+  "pk": 12,
+  "fields": {
+    "customer": 1,
+    "message": "Your order #9 has been cancelled.",
+    "is_read": false,
+    "created_at": "2025-12-01T07:36:00.535Z",
+    "related_order": 9
+  }
+},
+{
+  "model": "models_app.admin",
+  "pk": 1,
+  "fields": {
+    "user": 6,
+    "role": "Lead inventory manager",
+    "description": ""
+  }
+},
+{
+  "model": "models_app.admin",
+  "pk": 2,
+  "fields": {
+    "user": 7,
+    "role": "Lead order manager",
+    "description": ""
+  }
+},
+{
+  "model": "models_app.admin",
+  "pk": 3,
+  "fields": {
+    "user": 5,
+    "role": "Lead pricing manager",
+    "description": ""
+  }
+}
+]
