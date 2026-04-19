@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import permissions, viewsets
 from django.contrib.auth.models import User
 from .serializers import *
 
@@ -9,25 +9,24 @@ class UserViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class ShoeViewSet(viewsets.ModelViewSet):
+class ShoeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Shoe.objects.all()
     serializer_class = ShoeSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class ShoeImageViewSet(viewsets.ModelViewSet):
+class ShoeImageViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ShoeImage.objects.all()
     serializer_class = ShoeImageSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class ShoeVariantViewSet(viewsets.ModelViewSet):
+class ShoeVariantViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ShoeVariant.objects.all()
     serializer_class = ShoeVariantSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class BrandViewSet(viewsets.ModelViewSet):
+class BrandViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
