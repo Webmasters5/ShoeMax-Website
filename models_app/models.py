@@ -53,7 +53,7 @@ class Shoe(models.Model):
 
     class Meta:
         permissions = [
-            ('change_price_only', 'Can change shoe price (price-only)'),
+            ('change_price_only', 'Can change shoe price only'),
         ]
     
 class ShoeImage(models.Model):
