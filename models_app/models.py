@@ -303,7 +303,7 @@ class Review(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, help_text='When the review was submitted.')
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], help_text='Rating from 1 to 5.')
     order_item = models.ForeignKey('OrderItem', on_delete=models.CASCADE, related_name='review', help_text='Order item this review refers to.')
-    
+    image= models.ImageField(upload_to='reviews/',null=True,blank=True)
     def __str__(self):
         return self.title
 
