@@ -79,15 +79,17 @@ class CouponSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class OrderSerializer(serializers.HyperlinkedModelSerializer):
+class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Order
+        model = OrderItem
         fields = '__all__'
 
 
-class OrderItemSerializer(serializers.HyperlinkedModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(source='orderitem_set', many=True)
+
     class Meta:
-        model = OrderItem
+        model = Order
         fields = '__all__'
 
 
