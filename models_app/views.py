@@ -12,7 +12,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    http_method_names = ['get', 'patch', 'put']
+    http_method_names = ['get', 'post', 'patch', 'put']
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
@@ -149,9 +149,15 @@ class NotificationViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def mark_read(self, request, pk=None):
         notification = self.get_object()
-        notification.is_read = True
+        notification.is_read = not notification.is_read
         notification.save()
-        return Response({"status": "read"})
+        return Response({"status": "toggled", "is_read": notification.is_read})
+
+    @action(detail=False, methods=['post'])
+    def mark_all(self, request):
+        notifications = self.get_queryset()
+        notifications.update(is_read=True)
+        return Response({"status": "all marked as read"})
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

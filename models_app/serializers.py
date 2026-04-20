@@ -50,11 +50,13 @@ class BrandSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class CustomerSerializer(serializers.HyperlinkedModelSerializer):
+class CustomerSerializer(serializers.ModelSerializer):
     user = serializers.HyperlinkedRelatedField(
         view_name='user-detail',
         queryset=User.objects.all(),
     )
+    email = serializers.EmailField(source='user.email', read_only=True)
+    full_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = Customer
@@ -80,23 +82,25 @@ class CouponSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    shoe_name = serializers.CharField(source='variant.shoe.name', read_only=True)
+
     class Meta:
         model = OrderItem
-        fields = '__all__'
+        fields = ['id', 'order', 'quantity', 'price', 'variant', 'shoe_name']
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(source='orderitem_set', many=True)
+    items = OrderItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Order
         fields = '__all__'
 
 
-class NotificationSerializer(serializers.HyperlinkedModelSerializer):
+class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = '__all__'
+        fields = ['id', 'customer', 'message', 'is_read', 'created_at']
 
 
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
