@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'patch', 'put']
@@ -62,6 +63,7 @@ class BrandViewSet(viewsets.ModelViewSet):
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
+    queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -74,18 +76,19 @@ class CustomerViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-#class PaymentMethodViewSet(viewsets.ModelViewSet):
-#    serializer_class = PaymentMethodSerializer
-#    permission_classes = [permissions.IsAuthenticated]
+class PaymentMethodViewSet(viewsets.ModelViewSet):
+    queryset = PaymentMethod.objects.all()
+    serializer_class = PaymentMethodSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    def get_queryset(self):
+        return PaymentMethod.objects.filter(customer__user=self.request.user)
 
-#    def get_queryset(self):
-#        return PaymentMethod.objects.filter(customer__user=self.request.user)
-
-#    def perform_create(self, serializer):
-#        serializer.save(customer=self.request.user.customer_profile)
+    def perform_create(self, serializer):
+        serializer.save(customer=self.request.user.customer_profile)
 
 
 class AddressViewSet(viewsets.ModelViewSet):
+    queryset = Address.objects.all()
     serializer_class = AddressSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -109,6 +112,7 @@ class CouponViewSet(viewsets.ModelViewSet):
 
 
 class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -126,6 +130,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 class OrderItemViewSet(viewsets.ModelViewSet):
+    queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -134,6 +139,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 
 
 class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -161,6 +167,7 @@ class AdminViewSet(viewsets.ModelViewSet):
 
 
 class WishlistItemViewSet(viewsets.ModelViewSet):
+    queryset = WishlistItem.objects.all()
     serializer_class = WishlistItemSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -169,6 +176,7 @@ class WishlistItemViewSet(viewsets.ModelViewSet):
 
 
 class CartItemViewSet(viewsets.ModelViewSet):
+    queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
     permission_classes = [permissions.IsAuthenticated]
 
