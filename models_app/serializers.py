@@ -26,15 +26,17 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'id', 'username', 'email', 'first_name', 'last_name']
 
 
-class ShoeSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Shoe
-        fields = '__all__'
-
-
 class ShoeImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ShoeImage
+        fields = '__all__'
+
+
+class ShoeSerializer(serializers.HyperlinkedModelSerializer):
+    images = ShoeImageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Shoe
         fields = '__all__'
 
 
