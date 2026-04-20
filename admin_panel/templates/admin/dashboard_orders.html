@@ -8,25 +8,39 @@
 <h1 class="dashboard-heading">Order Manager — Cancelled Orders</h1>
 
 {% if cancelled_orders %}
-  <ul>
-    {% for order in cancelled_orders %}
-      <li>
-        <strong>Order #{{ order.order_id }}</strong> — {{ order.customer.user.username }} — {{ order.order_date }}
-        <ul>
-          {% for item in order.items.all %}
-            <li style="display:flex;align-items:center;gap:0.5rem">
-              {% with item.variant.shoe.images.all.0 as thumb %}
-                {% if thumb %}
-                  <img src="{{ thumb.image.url }}" alt="{{ item.variant.shoe.name }}" style="width:36px;height:36px;object-fit:cover;border-radius:4px">
-                {% endif %}
-              {% endwith %}
-              <span>{{ item.variant.shoe.name }} x {{ item.quantity }}</span>
-            </li>
-          {% endfor %}
-        </ul>
-      </li>
-    {% endfor %}
-  </ul>
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>Order</th>
+        <th>Customer</th>
+        <th>Cancelled Date</th>
+        <th>Items</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in cancelled_orders %}
+        <tr>
+          <td><strong>#{{ order.order_id }}</strong></td>
+          <td>{{ order.customer.user.username }}</td>
+          <td>{{ order.order_date }}</td>
+          <td>
+            <ul class="order-items-list">
+              {% for item in order.items.all %}
+                <li class="order-item-row" style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                  {% with item.variant.shoe.images.all.0 as thumb %}
+                    {% if thumb %}
+                      <img src="{{ thumb.image.url }}" alt="{{ item.variant.shoe.name }}" style="width:36px;height:36px;object-fit:cover;border-radius:4px">
+                    {% endif %}
+                  {% endwith %}
+                  <span>{{ item.variant.shoe.name }} x {{ item.quantity }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% else %}
   <p>No cancelled orders.</p>
 {% endif %}
