@@ -86,9 +86,18 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class OrderItemSerializer(serializers.HyperlinkedModelSerializer):
+    shoe_name = serializers.CharField(source="variant.shoe.name")
+    size = serializers.CharField(source="variant.size")
+    color = serializers.CharField(source="variant.color")
+    image = serializers.SerializerMethodField()
     class Meta:
         model = OrderItem
         fields = '__all__'
+    def get_image(self, obj):
+        image = obj.variant.shoe.images.first()
+        if image:
+            return image.image.url
+        return None
 
 
 class NotificationSerializer(serializers.HyperlinkedModelSerializer):
