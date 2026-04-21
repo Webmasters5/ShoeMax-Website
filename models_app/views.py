@@ -188,3 +188,9 @@ class CartItemViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return CartItem.objects.filter(customer__user=self.request.user)
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class StoreLocationViewSet(viewsets.ModelViewSet):
+    queryset = StoreLocation.objects.all()
+    serializer_class = StoreLocationSerializer

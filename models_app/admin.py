@@ -205,6 +205,12 @@ class CustomerAdmin(admin.ModelAdmin):
     inlines = [CartItemInline, WishlistItemInline, NotificationInline, PaymentMethodInline, AddressInline]
 
 
+class StoreLocationAdmin(admin.ModelAdmin):
+    list_display = ("name", "latitude", "longitude", "created_at")
+    search_fields = ("name", "address")
+    list_filter = ("created_at",)
+
+
 admin.site.register(models.Shoe, ShoeAdmin)
 admin.site.register(models.ShoeImage)
 admin.site.register(models.ShoeVariant, ShoeVariantAdmin)
@@ -219,3 +225,4 @@ admin.site.register(models.WishlistItem, WishlistItemAdmin)
 admin.site.register(models.CartItem, CartItemAdmin)
 admin.site.register(models.PaymentMethod, PaymentMethodAdmin)
 admin.site.register(models.Address, AddressAdmin)
+admin.site.register(models.StoreLocation, StoreLocationAdmin)
