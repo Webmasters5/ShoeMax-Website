@@ -1,5 +1,6 @@
 from rest_framework import permissions, viewsets
 from django.contrib.auth.models import User
+from django.db.models import Q
 from .serializers import *
 
 # Create your views here.
@@ -12,6 +13,46 @@ class UserViewSet(viewsets.ModelViewSet):
 class ShoeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Shoe.objects.all()
     serializer_class = ShoeSerializer
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', '').strip()
+        category = self.request.GET.get('category', '').strip()
+        brand = self.request.GET.get('brand', '').strip()
+        gender = self.request.GET.get('gender', '').strip()
+        min_price = self.request.GET.get('min_price', '').strip()
+        max_price = self.request.GET.get('max_price', '').strip()
+
+        qs = Shoe.objects.all().prefetch_related('images')
+
+        if q:
+            qs = qs.filter(Q(name__icontains=q) | Q(description__icontains=q))
+
+        if category:
+            qs = qs.filter(category__iexact=category)
+
+        if brand:
+            try:
+                brand_id = int(brand)
+                qs = qs.filter(brand_id=brand_id)
+            except (ValueError, TypeError):
+                pass
+
+        if gender:
+            qs = qs.filter(gender__iexact=gender)
+
+        if min_price:
+            try:
+                qs = qs.filter(price__gte=float(min_price))
+            except (ValueError, TypeError):
+                pass
+
+        if max_price:
+            try:
+                qs = qs.filter(price__lte=float(max_price))
+            except (ValueError, TypeError):
+                pass
+
+        return qs.order_by('price', 'name')
 
 
 class ShoeImageViewSet(viewsets.ReadOnlyModelViewSet):
