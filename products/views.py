@@ -32,12 +32,14 @@ def add_wishlist_item(request, shoe_id):
 def delete_wishlist_item(request, item_id):
     item = get_object_or_404(models.WishlistItem, pk=item_id)
 
-    #customers can only delete their own wishlist items
+    # customers can only delete their own wishlist items
     if not ((hasattr(item.customer, 'user') and item.customer.user == request.user)):
         return HttpResponseForbidden("Not allowed")
 
     if request.method == "POST":
         item.delete()
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': True, 'item_id': item_id})
 
     return redirect(reverse('products:wishlist'))
 
