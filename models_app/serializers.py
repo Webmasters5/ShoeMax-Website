@@ -17,6 +17,7 @@ from .models import (
     Admin,
     WishlistItem,
     CartItem,
+    StoreLocation,
 )
 
 
@@ -125,3 +126,9 @@ class CartItemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CartItem
         fields = '__all__'
+
+
+class StoreLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StoreLocation
+        fields = ['id', 'name', 'address', 'latitude', 'longitude', 'created_at']
