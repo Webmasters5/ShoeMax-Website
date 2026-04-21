@@ -33,11 +33,13 @@ class ShoeAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description', 'brand__name', 'variants__sku')
     inlines = [ShoeImageInline, ShoeVariantInline]
     autocomplete_fields = ('brand',)
+    #raw_id_fields = ('brand',)
     save_on_top = True
 
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = list(super().get_readonly_fields(request, obj))
 
+      
         if not request.user.is_superuser and request.user.has_perm('models_app.change_price_only'):  # type: ignore[attr-defined]
             # explicitly mark other model fields as readonly for this user
             other_fields = ['name', 'brand', 'category', 'gender', 'description', 'discount']

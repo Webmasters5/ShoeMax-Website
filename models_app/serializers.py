@@ -128,13 +128,29 @@ class WishlistItemSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class CartItemSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = CartItem
-        fields = '__all__'
-
-
 class StoreLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = StoreLocation
         fields = ['id', 'name', 'address', 'latitude', 'longitude', 'created_at']
+        fields = '__all__' 
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    shoe_name = serializers.CharField(source='variant.shoe.name', read_only=True)
+    price = serializers.FloatField(source='variant.shoe.price', read_only=True)
+    color = serializers.CharField(source='variant.color', read_only=True)
+    size = serializers.CharField(source='variant.size', read_only=True)
+    image = serializers.ImageField(source='variant.shoe.image', read_only=True)
+    item_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CartItem
+        fields = [
+            'id', 'variant', 'shoe_name',
+            'price', 'quantity',
+            'color', 'size', 'image',
+            'item_total'
+        ]
+
+    def get_item_total(self, obj):
+        return obj.total_price

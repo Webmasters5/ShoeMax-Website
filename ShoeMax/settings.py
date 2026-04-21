@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #'django.contrib.admin',
+    'django.contrib.admin',
     'admin_panel.apps.AdminPanelConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'models_app.apps.ModelsAppConfig',
     'customer.apps.CustomerConfig',
     'cart.apps.CartConfig',
-    'admin_panel.apps.AdminAppConfig',
+    #'admin_panel.apps.AdminAppConfig',
     'rest_framework',
     'rest_framework.authtoken',
 ]
