@@ -18,6 +18,7 @@ from .views import (
     AdminViewSet,
     WishlistItemViewSet,
     CartItemViewSet,
+    StoreLocationViewSet,
 )
 
 router = DefaultRouter()
@@ -37,6 +38,7 @@ router.register(r'reviews', ReviewViewSet)
 router.register(r'admins', AdminViewSet)
 router.register(r'wishlist-items', WishlistItemViewSet)
 router.register(r'cart-items', CartItemViewSet)
+router.register(r'stores', StoreLocationViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

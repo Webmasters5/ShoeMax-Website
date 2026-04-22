@@ -1,13 +1,27 @@
-from django.shortcuts import render,redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
-from .forms import signupform , loginform
-from django.contrib.auth.views import PasswordResetView
-from django.urls import reverse_lazy
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.views import PasswordResetView
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+from django.urls import reverse, reverse_lazy
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+
+from rest_framework import generics, status
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .forms import signupform, loginform
+from .serializers import RegisterSerializer, LoginSerializer
+
+User = get_user_model()
 
 # Create your views here.
-###      login 
+##      login 
 def log_in(request):
 
     next_param = request.GET.get('next') or request.POST.get('next') or ''
@@ -80,3 +94,65 @@ class forgot_password_view(PasswordResetView):
             "protocol": "http",          # use "https" in production
         })
         return ctx
+
+
+# REGISTER
+class RegisterView(generics.CreateAPIView):
+    serializer_class = RegisterSerializer
+    permission_classes = [AllowAny]
+
+
+# LOGIN
+class LoginView(APIView):
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = authenticate(
+            username=serializer.validated_data["username"],
+            password=serializer.validated_data["password"]
+        )
+        if user:
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({"token": token.key}, status=status.HTTP_200_OK)
+        return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+# LOGOUT
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        # Delete the user's token to "log them out"
+        request.user.auth_token.delete()
+        return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
+
+
+# FORGOT PASSWORD
+class ForgotPasswordView(APIView):
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email")
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+
+        reset_link = request.build_absolute_uri(
+            reverse("accounts:password_reset_confirm", kwargs={"uidb64": uid, "token": token})
+        )
+        send_mail(
+            "Password Reset",
+            f"Click the link to reset your password: {reset_link}",
+            "noreply@shoemax.com",
+            [email],
+        )
+        return Response({"message": "Password reset email sent"}, status=status.HTTP_200_OK)

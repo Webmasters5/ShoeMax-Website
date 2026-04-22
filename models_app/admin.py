@@ -20,7 +20,7 @@ class ShoeVariantInline(admin.TabularInline):
 
     def get_readonly_fields(self, request, obj=None):
         readonly = list(super().get_readonly_fields(request, obj))
-        if request.user.has_perm('models_app.change_stock_only'): 
+        if not request.user.is_superuser and request.user.has_perm('models_app.change_stock_only'): 
             # allow editing only stock
             for f in ('color', 'size', 'sku'):
                 if f not in readonly:
@@ -33,12 +33,14 @@ class ShoeAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description', 'brand__name', 'variants__sku')
     inlines = [ShoeImageInline, ShoeVariantInline]
     autocomplete_fields = ('brand',)
+    #raw_id_fields = ('brand',)
     save_on_top = True
 
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = list(super().get_readonly_fields(request, obj))
 
-        if request.user.has_perm('models_app.change_price_only'):  # type: ignore[attr-defined]
+      
+        if not request.user.is_superuser and request.user.has_perm('models_app.change_price_only'):  # type: ignore[attr-defined]
             # explicitly mark other model fields as readonly for this user
             other_fields = ['name', 'brand', 'category', 'gender', 'description', 'discount']
             for f in other_fields:
@@ -87,7 +89,7 @@ class ShoeVariantAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = list(super().get_readonly_fields(request, obj))
         # If user has special change_stock permission, allow editing only 'stock'
-        if request.user.has_perm('models_app.change_stock_only'):  # type: ignore[attr-defined]
+        if not request.user.is_superuser and request.user.has_perm('models_app.change_stock_only'):  # type: ignore[attr-defined]
             for f in ('shoe', 'color', 'size', 'sku'):
                 if f not in readonly_fields:
                     readonly_fields.append(f)
@@ -205,6 +207,12 @@ class CustomerAdmin(admin.ModelAdmin):
     inlines = [CartItemInline, WishlistItemInline, NotificationInline, PaymentMethodInline, AddressInline]
 
 
+class StoreLocationAdmin(admin.ModelAdmin):
+    list_display = ("name", "latitude", "longitude", "created_at")
+    search_fields = ("name", "address")
+    list_filter = ("created_at",)
+
+
 admin.site.register(models.Shoe, ShoeAdmin)
 admin.site.register(models.ShoeImage)
 admin.site.register(models.ShoeVariant, ShoeVariantAdmin)
@@ -219,3 +227,4 @@ admin.site.register(models.WishlistItem, WishlistItemAdmin)
 admin.site.register(models.CartItem, CartItemAdmin)
 admin.site.register(models.PaymentMethod, PaymentMethodAdmin)
 admin.site.register(models.Address, AddressAdmin)
+admin.site.register(models.StoreLocation, StoreLocationAdmin)

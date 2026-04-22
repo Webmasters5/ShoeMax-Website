@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CustomerForm, UserForm, PaymentMethodForm, AddressForm
+from django.http import JsonResponse
 
 def get_customer_or_redirect_login(request):
 	# check for customer profile
@@ -130,23 +131,32 @@ def settings(request):
 	return render(request, "customer/settings.html", {"customer": customer, "active": "settings"})
 
 @login_required
+@require_POST
 def mark_notification_read(request, notification_id):
-	customer = get_customer_or_redirect_login(request)
-	if not isinstance(customer, Customer):
-		return customer
-	notification = get_object_or_404(Notification, id=notification_id, customer=customer)
-	notification.is_read = not notification.is_read
-	notification.save()
-	return redirect('customer:customer_notifications')
+    customer = get_customer_or_redirect_login(request)
+    if not isinstance(customer, Customer):
+        return JsonResponse({"error": "Unauthorized"}, status=403)
+
+    notification = get_object_or_404(Notification, id=notification_id, customer=customer)
+    notification.is_read = not notification.is_read
+    notification.save()
+
+    return JsonResponse({
+        "success": True,
+        "is_read": notification.is_read,
+        "notification_id": notification.id
+    })
 
 @login_required
+@require_POST
 def mark_all_notifications_read(request):
-	customer = get_customer_or_redirect_login(request)
-	if not isinstance(customer, Customer):
-		return customer
-	notifications = customer.notifications.all()
-	notifications.update(is_read=True)
-	return redirect('customer:customer_notifications')
+    customer = get_customer_or_redirect_login(request)
+    if not isinstance(customer, Customer):
+        return JsonResponse({"error": "Unauthorized"}, status=403)
+
+    customer.notifications.update(is_read=True)
+
+    return JsonResponse({"success": True})
 
 
 @login_required

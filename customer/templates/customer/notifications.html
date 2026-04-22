@@ -6,6 +6,9 @@
         <div class="card-body">
             <h1 class="card-title">Notifications</h1>
 
+            <!-- CSRF token for AJAX -->
+            <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+
             {% if notifications %}
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -19,14 +22,28 @@
                     </thead>
                     <tbody>
                         {% for n in notifications %}
-                        <tr>
+                        <tr id="notification-{{ n.id }}">
                             <td>{{ n.created_at|date:"Y-m-d H:i" }}</td>
                             <td>{{ n.message }}</td>
-                            <td>{% if n.is_read %}<span class="badge bg-secondary">Read</span>{% else %}<span class="badge bg-warning text-dark">Unread</span>{% endif %}</td>
+
+                            <!-- STATUS -->
+                            <td class="status">
+                                {% if n.is_read %}
+                                    <span class="badge bg-secondary">Read</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Unread</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- ACTION -->
                             <td>
-                                <a href="{% url 'customer:mark_notification_read' n.id %}" class="btn btn-sm btn-outline-primary">
-                                Mark as {% if n.is_read %} unread{% else %} read{% endif %}
-                                </a>
+                                <button 
+                                    type="button"
+                                    class="btn btn-sm btn-outline-primary mark-read-btn"
+                                    data-id="{{ n.id }}"
+                                >
+                                    Mark as {% if n.is_read %}unread{% else %}read{% endif %}
+                                </button>
                             </td>
                         </tr>
                         {% endfor %}
@@ -34,15 +51,75 @@
                 </table>
             </div>
 
-            <form method="post" action="{% url 'customer:mark_all_notifications_read' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary">Mark All as Read</button>
-            </form>
+            <!-- Mark all -->
+            <button id="mark-all-btn" class="btn btn-primary">
+                Mark All as Read
+            </button>
+
             {% else %}
                 <p>No notifications yet.</p>
             {% endif %}
         </div>
     </div>
 </div>
+{% endblock %}
 
+
+{% block extra_script %}
+<script>
+$(document).ready(function() {
+
+    function getCSRFToken() {
+        return $("#csrf-token").val();
+    }
+
+    // MARK SINGLE NOTIFICATION
+    $(".mark-read-btn").click(function() {
+        let btn = $(this);
+        let id = btn.data("id");
+
+        $.ajax({
+            url: `/customer/notifications/mark-read/${id}/`,
+            type: "POST",
+            headers: {
+                "X-CSRFToken": getCSRFToken()
+            },
+            success: function(response) {
+                let row = $("#notification-" + id);
+                let statusCell = row.find(".status");
+
+                if (response.is_read) {
+                    statusCell.html('<span class="badge bg-secondary">Read</span>');
+                    btn.text("Mark as unread");
+                } else {
+                    statusCell.html('<span class="badge bg-warning text-dark">Unread</span>');
+                    btn.text("Mark as read");
+                }
+            },
+            error: function() {
+                alert("Error updating notification.");
+            }
+        });
+    });
+
+    // MARK ALL NOTIFICATIONS
+    $("#mark-all-btn").click(function() {
+        $.ajax({
+            url: `/customer/notifications/mark-all/`,
+            type: "POST",
+            headers: {
+                "X-CSRFToken": getCSRFToken()
+            },
+            success: function() {
+                $(".status").html('<span class="badge bg-secondary">Read</span>');
+                $(".mark-read-btn").text("Mark as unread");
+            },
+            error: function() {
+                alert("Error updating all notifications.");
+            }
+        });
+    });
+
+});
+</script>
 {% endblock %}
