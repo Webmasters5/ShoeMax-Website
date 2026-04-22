@@ -32,17 +32,18 @@ class ShoeImageSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class ShoeSerializer(serializers.HyperlinkedModelSerializer):
-    images = ShoeImageSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Shoe
-        fields = '__all__'
-
-
 class ShoeVariantSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ShoeVariant
+        fields = '__all__'
+
+
+class ShoeSerializer(serializers.HyperlinkedModelSerializer):
+    images = ShoeImageSerializer(many=True, read_only=True)
+    variants = ShoeVariantSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Shoe
         fields = '__all__'
 
 
