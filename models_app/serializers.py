@@ -88,28 +88,13 @@ class CouponSerializer(serializers.HyperlinkedModelSerializer):
         model = Coupon
         fields = '__all__'
 
-
-class OrderItemSerializer(serializers.ModelSerializer):
-    shoe_name = serializers.CharField(source='variant.shoe.name', read_only=True)
-
-    class Meta:
-        model = OrderItem
-        fields = ['id', 'order', 'quantity', 'price', 'variant', 'shoe_name']
-
-
-class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Order
-        fields = '__all__'
-
-
 class OrderItemSerializer(serializers.HyperlinkedModelSerializer):
     shoe_name = serializers.CharField(source="variant.shoe.name")
     size = serializers.CharField(source="variant.size")
     color = serializers.CharField(source="variant.color")
     image = serializers.SerializerMethodField()
+    id = serializers.ReadOnlyField(source="item_id")
+
     class Meta:
         model = OrderItem
         fields = '__all__'
@@ -119,6 +104,12 @@ class OrderItemSerializer(serializers.HyperlinkedModelSerializer):
             return image.image.url
         return None
 
+class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = '__all__'
 
 class NotificationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
