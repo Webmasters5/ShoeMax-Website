@@ -33,12 +33,16 @@ class ShoeImageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ShoeVariantSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField(source='variant_id')
+
     class Meta:
         model = ShoeVariant
         fields = '__all__'
+        
 
 
 class ShoeSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField(source='shoe_id')
     images = ShoeImageSerializer(many=True, read_only=True)
     variants = ShoeVariantSerializer(many=True, read_only=True)
 
