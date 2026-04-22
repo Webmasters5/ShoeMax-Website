@@ -25,6 +25,9 @@ def add_wishlist_item(request, shoe_id):
         return redirect('products:shoe_details', shoe_id=shoe_id)
 
     models.WishlistItem.objects.get_or_create(customer=customer, shoe=shoe)
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'success': True})
     
     return redirect(shoe.get_absolute_url())
 
