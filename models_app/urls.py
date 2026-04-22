@@ -22,7 +22,7 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'shoes', ShoeViewSet)
+router.register(r'shoes', ShoeViewSet, basename='shoe')
 router.register(r'shoe-images', ShoeImageViewSet)
 router.register(r'shoe-variants', ShoeVariantViewSet)
 router.register(r'brands', BrandViewSet)

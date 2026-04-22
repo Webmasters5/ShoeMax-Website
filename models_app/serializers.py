@@ -27,12 +27,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'id', 'username', 'email', 'first_name', 'last_name']
 
 
-class ShoeSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Shoe
-        fields = '__all__'
-
-
 class ShoeImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ShoeImage
@@ -40,15 +34,28 @@ class ShoeImageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ShoeVariantSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField(source='variant_id')
+
     class Meta:
         model = ShoeVariant
+        fields = '__all__'
+        
+
+
+class ShoeSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField(source='shoe_id')
+    images = ShoeImageSerializer(many=True, read_only=True)
+    variants = ShoeVariantSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Shoe
         fields = '__all__'
 
 
 class BrandSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Brand
-        fields = '__all__'
+        fields = ['url', 'brand_id', 'name', 'description', 'website', 'logo']
 
 
 class CustomerSerializer(serializers.ModelSerializer):
