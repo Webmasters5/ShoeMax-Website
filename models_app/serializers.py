@@ -49,7 +49,7 @@ class ShoeVariantSerializer(serializers.HyperlinkedModelSerializer):
 class BrandSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Brand
-        fields = '__all__'
+        fields = ['url', 'brand_id', 'name', 'description', 'website', 'logo']
 
 
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
