@@ -239,10 +239,10 @@ class StoreLocationAdmin(admin.ModelAdmin):
     search_fields = ("name", "address")
     list_filter = ("created_at",)
 
-class CouponAdmin(admin.ModelAdmin):
-    list_display = ('promo_code', 'percent_off', 'is_active', 'exp_date')
-    search_fields = ('promo_code',)
-    list_filter = ('is_active', 'exp_date')
+# class CouponAdmin(admin.ModelAdmin):
+    # list_display = ('promo_code', 'percent_off', 'is_active', 'exp_date')
+    # search_fields = ('promo_code',)
+    # list_filter = ('is_active', 'exp_date')
 
 
 class PromoAdmin(admin.ModelAdmin):
@@ -267,4 +267,4 @@ admin.site.register(models.CartItem, CartItemAdmin)
 admin.site.register(models.PaymentMethod, PaymentMethodAdmin)
 admin.site.register(models.Address, AddressAdmin)
 admin.site.register(models.StoreLocation, StoreLocationAdmin)
-admin.site.register(models.Coupon, CouponAdmin)
+# admin.site.register(models.Coupon, CouponAdmin)
