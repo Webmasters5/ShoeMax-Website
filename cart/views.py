@@ -115,6 +115,7 @@ def apply_promo(request):
             'error': 'Promo code not found or expired.'
         }, status=404)
 
+    request.session['promo_id'] = promo.id
     customer = request.user.customer_profile
     cart_items = customer.cart_items.all()
     subtotal = sum(item.total_price for item in cart_items)
@@ -297,281 +298,133 @@ def _calculate_session_totals(cart):
         "discount": discount,
         "total": final_total
     }
-    
+
+
 @login_required
 def checkout(request):
-    from models_app.models import Coupon
     from django.contrib import messages
     from decimal import Decimal
+    from models_app.models import Address, PaymentMethod, Order, OrderItem, Notification, Promo
 
     customer = request.user.customer_profile
-    cart_items = customer.cart_items.all()  # via related name
+    cart_items = customer.cart_items.all()
     addresses = customer.addresses.all()
     payment_methods = customer.payment_methods.all()
 
     subtotal = sum(item.total_price for item in cart_items)
+
+    # ─────────────────────────────
+    # PROMO (UNIFIED SYSTEM)
+    # ─────────────────────────────
+    promo_id = request.session.get('promo_id')
+    applied_promo = None
     discount = Decimal('0.00')
 
-    if request.method == 'POST':
-        if 'apply_coupon' in request.POST:
-            promo_code = request.POST.get('promo_code', '').strip()
-            if promo_code:
-                try:
-                    coupon = Coupon.objects.get(promo_code__iexact=promo_code)
-                    if coupon.is_valid():
-                        request.session['coupon_id'] = coupon.coupon_id
-                        messages.success(request, f"Coupon '{promo_code}' applied successfully!")
-                    else:
-                        messages.error(request, "This coupon is expired or invalid.")
-                except Coupon.DoesNotExist:
-                    messages.error(request, "Invalid coupon code.")
-            else:
-                if 'coupon_id' in request.session:
-                    del request.session['coupon_id']
-                messages.info(request, "Coupon removed.")
-            return redirect('cart:checkout')
-        
-        elif 'place_order' in request.POST:
-            from .forms import AddressForm, PaymentMethodForm, ContactForm
-            from models_app.models import Address, PaymentMethod, Order, OrderItem, Notification
-            
-            shipping_existing = request.POST.get('shipping_existing')
-            billing_existing = request.POST.get('billing_existing')
-            payment_existing = request.POST.get('payment_existing')
-            
-            shipping_address = None
-            billing_address = None
-            payment_method = None
-            
-            # Helper to get subtotal and discount again since we're in POST
-            coupon_id = request.session.get('coupon_id')
-            discount = Decimal('0.00')
-            if coupon_id:
-                try:
-                    applied_coupon = Coupon.objects.get(coupon_id=coupon_id)
-                    if applied_coupon.is_valid():
-                        discount = (subtotal * applied_coupon.percent_off) / Decimal('100.00')
-                except Coupon.DoesNotExist:
-                    pass
-            
-            shipping_cost = Decimal('100.00')
-            final_total = subtotal - discount + shipping_cost
-
-            # Shipping
-            if shipping_existing == 'new':
-                shipping_form = AddressForm(request.POST, prefix='shipping')
-                if shipping_form.is_valid():
-                    shipping_address = shipping_form.save(commit=False)
-                    shipping_address.customer = customer
-                    shipping_address.save()
-            else:
-                shipping_address = Address.objects.filter(addr_id=shipping_existing, customer=customer).first()
-                
-            # Billing
-            if billing_existing == 'same':
-                billing_address = shipping_address
-            elif billing_existing == 'new':
-                billing_form = AddressForm(request.POST, prefix='billing')
-                if billing_form.is_valid():
-                    billing_address = billing_form.save(commit=False)
-                    billing_address.customer = customer
-                    billing_address.save()
-            else:
-                billing_address = Address.objects.filter(addr_id=billing_existing, customer=customer).first()
-                
-            # Payment
-            if payment_existing == 'new':
-                payment_form = PaymentMethodForm(request.POST)
-                if payment_form.is_valid():
-                    payment_method = payment_form.save(commit=False)
-                    payment_method.customer = customer
-                    payment_method.save()
-            elif payment_existing == 'cod':
-                payment_method = None
-            else:
-                payment_method = PaymentMethod.objects.filter(card_id=payment_existing, customer=customer).first()
-                
-            # Create Order
-            if shipping_address:
-                order = Order.objects.create(
-                    customer=customer,
-                    status='Pending',
-                    shipping_address=shipping_address,
-                    billing_address=billing_address,
-                    payment_method=payment_method,
-                    subtotal=subtotal,
-                    discount_amount=discount,
-                    shipping_cost=shipping_cost,
-                    total_price=final_total
-                )
-                
-                # Create OrderItems and reduce stock
-                for item in cart_items:
-                    OrderItem.objects.create(
-                        order=order,
-                        variant=item.variant,
-                        quantity=item.quantity,
-                        price=item.variant.shoe.price
-                    )
-                    # Decrease stock
-                    if item.variant.stock >= item.quantity:
-                        item.variant.stock -= item.quantity
-                        item.variant.save()
-                
-                # Clear cart
-                cart_items.delete()
-                
-                # Clear coupon
-                if 'coupon_id' in request.session:
-                    del request.session['coupon_id']
-                    
-                # Create Notification
-                Notification.objects.create(
-                    customer=customer,
-                    message=f"Your order #{order.order_id} has been placed successfully!",
-                    related_order=order
-                )
-                
-                messages.success(request, f"Order placed successfully!")
-                return redirect('customer:customer_orders')
-            else:
-                messages.error(request, "Failed to place order. Please check your shipping address.")
-    coupon_id = request.session.get('coupon_id')
-    applied_coupon = None
-    if coupon_id:
+    if promo_id:
         try:
-            applied_coupon = Coupon.objects.get(coupon_id=coupon_id)
-            if applied_coupon.is_valid():
-                discount = (subtotal * applied_coupon.percent_off) / Decimal('100.00')
+            applied_promo = Promo.objects.get(id=promo_id)
+            if applied_promo.is_valid():
+                discount = (subtotal * applied_promo.percent_off / Decimal('100')).quantize(Decimal('0.01'))
             else:
-                del request.session['coupon_id']
-        except Coupon.DoesNotExist:
-            del request.session['coupon_id']
+                del request.session['promo_id']
+        except Promo.DoesNotExist:
+            del request.session['promo_id']
 
     final_total = subtotal - discount
 
-    from .forms import AddressForm, PaymentMethodForm, ContactForm
+    # ─────────────────────────────
+    # FORMS
+    # ─────────────────────────────
     contact_form = ContactForm(initial={
-        'full_name': request.user.get_full_name(),
+        'full_name': customer.full_name,
         'email': request.user.email,
-        'phone': customer.phone,
+        'phone': customer.phone or '',
     })
+
     shipping_form = AddressForm(prefix='shipping')
     billing_form = AddressForm(prefix='billing')
     payment_form = PaymentMethodForm()
 
-    addresses = customer.addresses.all()
-    payment_methods = customer.payment_methods.all()
-    # Prefill contact from the logged-in user
-    contact_initial = {
-        'full_name': customer.full_name,
-        'email': request.user.email,
-        'phone': customer.phone or '',
-    }
-    contact_form = ContactForm(initial=contact_initial)
-    shipping_form = AddressForm(prefix='shipping')
-    billing_form = AddressForm(prefix='billing')
-    payment_form = PaymentMethodForm()
-    # defaults for select inputs (used to preserve selection on errors)
     shipping_selected = 'new'
     billing_selected = 'same'
     payment_selected = 'new'
 
+    # ─────────────────────────────
+    # PLACE ORDER
+    # ─────────────────────────────
     if request.method == 'POST' and 'place_order' in request.POST:
-        discount = Decimal(request.POST.get('discount') or '0')
-        total_price = Decimal(request.POST.get('total_price') or '0')
 
-        # Bind forms only as needed
         contact_form = ContactForm(request.POST)
+
         shipping_existing = request.POST.get('shipping_existing')
         billing_existing = request.POST.get('billing_existing')
         payment_existing = request.POST.get('payment_existing')
 
-        # preserve what the user selected so we can re-render the selects on error
         shipping_selected = shipping_existing or 'new'
         billing_selected = billing_existing or 'same'
         payment_selected = payment_existing or 'new'
 
-        # Validate contact
         valid = True
+
         if not contact_form.is_valid():
             valid = False
 
-        # Create correct shipping address instance
-        shipping_address_obj = None
-        if shipping_existing and shipping_existing != 'new':
-            try:
-                shipping_address_obj = Address.objects.get(addr_id=shipping_existing, customer=customer)
-            except Address.DoesNotExist:
+        # SHIPPING
+        if shipping_existing != 'new':
+            shipping_address = Address.objects.filter(addr_id=shipping_existing, customer=customer).first()
+            if not shipping_address:
                 valid = False
-                shipping_form.add_error(None, 'Selected shipping address not found.')
         else:
             shipping_form = AddressForm(request.POST, prefix='shipping')
             if shipping_form.is_valid():
-                shipping_address_obj = shipping_form.save(commit=False)
-                # Do not attach to customer for order-only address
-                shipping_address_obj.customer = None
-                shipping_address_obj.save()
+                shipping_address = shipping_form.save(commit=False)
+                shipping_address.customer = customer
+                shipping_address.save()
             else:
                 valid = False
 
-        # Create correct billing address instance
-        billing_address_obj = None
+        # BILLING
         if billing_existing == 'same':
-            billing_address_obj = shipping_address_obj
-        elif not billing_existing or billing_existing == 'new':
+            billing_address = shipping_address
+        elif billing_existing != 'new':
+            billing_address = Address.objects.filter(addr_id=billing_existing, customer=customer).first()
+            if not billing_address:
+                valid = False
+        else:
             billing_form = AddressForm(request.POST, prefix='billing')
             if billing_form.is_valid():
-                billing_address_obj = billing_form.save(commit=False)
-                # Do not attach to customer for order-only address
-                billing_address_obj.customer = None
-                billing_address_obj.save()
+                billing_address = billing_form.save(commit=False)
+                billing_address.customer = customer
+                billing_address.save()
             else:
-                billing_form.add_error(None, 'Invalid billing address.')
-        else:
-            try:
-                billing_address_obj = Address.objects.get(addr_id=billing_existing, customer=customer)
-            except Address.DoesNotExist:
                 valid = False
-                billing_form.add_error(None, 'Selected billing address not found.')
 
-        # Validate payment: prefer 'new' payment, then COD, then existing-selection lookup
-        payment_method_obj = None
-
+        # PAYMENT
         if payment_existing == 'new':
             payment_form = PaymentMethodForm(request.POST)
-            if not payment_form.is_valid():
-                valid = False
+            if payment_form.is_valid():
+                payment_method = payment_form.save(commit=False)
+                payment_method.customer = customer
+                payment_method.save()
             else:
-                payment_method_obj = payment_form.save(commit=False)
-                payment_method_obj.customer = None
-                payment_method_obj.save()
-        elif payment_existing == 'cod':
-            # Cash on delivery: explicitly no payment method object
-            payment_method_obj = None
-        elif payment_existing:
-            try:
-                payment_method_obj = PaymentMethod.objects.get(card_id=payment_existing, customer=customer)
-            except PaymentMethod.DoesNotExist:
                 valid = False
-                payment_form.add_error(None, 'Selected payment method not found.')
+        elif payment_existing == 'cod':
+            payment_method = None
         else:
-            # No payment option picked
-            valid = False
-            payment_form.add_error(None, 'Please select a payment method.')
+            payment_method = PaymentMethod.objects.filter(card_id=payment_existing, customer=customer).first()
+            if not payment_method:
+                valid = False
 
-        total = sum(item.total_price for item in cart_items)
-
+        # FINAL CHECK
         if not valid:
             return render(request, 'cart/checkout.html', {
                 'cart_items': cart_items,
-                'total': total,
+                'subtotal': subtotal,
                 'discount': discount,
-                'final_total': total_price,
+                'final_total': final_total,
                 'customer': customer,
                 'addresses': addresses,
                 'payment_methods': payment_methods,
-                # forms with errors
                 'contact_form': contact_form,
                 'shipping_form': shipping_form,
                 'billing_form': billing_form,
@@ -579,20 +432,19 @@ def checkout(request):
                 'shipping_selected': shipping_selected,
                 'billing_selected': billing_selected,
                 'payment_selected': payment_selected,
+                'applied_promo': applied_promo,
             })
 
-        # Create order using Address FKs
-        total = sum(item.total_price for item in cart_items)
-
+        # CREATE ORDER
         order = Order.objects.create(
             customer=customer,
-            total_price=total_price,
-            shipping_address=shipping_address_obj,
-            billing_address=billing_address_obj,
-            payment_method=payment_method_obj,
             status='Pending',
+            shipping_address=shipping_address,
+            billing_address=billing_address,
+            payment_method=payment_method,
+            subtotal=subtotal,
             discount_amount=discount,
-            subtotal=total,
+            total_price=final_total
         )
 
         for item in cart_items:
@@ -600,42 +452,45 @@ def checkout(request):
                 order=order,
                 variant=item.variant,
                 quantity=item.quantity,
-                price=item.variant.shoe.price,
+                price=item.variant.shoe.price
             )
+
+            if item.variant.stock >= item.quantity:
+                item.variant.stock -= item.quantity
+                item.variant.save()
+
+        cart_items.delete()
+
+        # clear promo after use
+        if 'promo_id' in request.session:
+            del request.session['promo_id']
 
         Notification.objects.create(
             customer=customer,
-            message=f"Your order #{order.order_id} has been confirmed!",
-            related_order=order,
+            message=f"Your order #{order.order_id} has been placed successfully!",
+            related_order=order
         )
 
-        # Clear cart
-        cart_items.delete()
-
+        messages.success(request, "Order placed successfully!")
         return redirect('customer:customer_orders')
 
-    # GET: render checkout
-    total = sum(item.total_price for item in cart_items)
-    discount = Decimal('0.00')
-    final_total = total - discount
-
-    context = {
+    # ─────────────────────────────
+    # RENDER
+    # ─────────────────────────────
+    return render(request, 'cart/checkout.html', {
         'cart_items': cart_items,
         'subtotal': subtotal,
-        'total': subtotal,  # keep for backward compatibility if needed
         'discount': discount,
         'final_total': final_total,
         'customer': customer,
-        'applied_coupon': applied_coupon,
         'addresses': addresses,
         'payment_methods': payment_methods,
         'contact_form': contact_form,
         'shipping_form': shipping_form,
         'billing_form': billing_form,
         'payment_form': payment_form,
-    })
         'shipping_selected': shipping_selected,
         'billing_selected': billing_selected,
         'payment_selected': payment_selected,
-    }
-    return render(request, 'cart/checkout.html', context)
+        'applied_promo': applied_promo,
+    })
