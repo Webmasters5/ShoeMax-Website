@@ -8,18 +8,32 @@
 <section>
   <h3>Highest Priced Shoes</h3>
   {% if top_expensive %}
-    <ol class="pricing-list">
-      {% for s in top_expensive %}
-        <li style="display:flex;align-items:center;gap:0.5rem">
-          {% with s.images.all.0 as thumb %}
-            {% if thumb %}
-              <a href="{{ s.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ s.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
-            {% endif %}
-          {% endwith %}
-          <span>{{ s.name }} — ${{ s.price }}</span>
-        </li>
-      {% endfor %}
-    </ol>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Product</th>
+          <th>Brand</th>
+          <th class="text-right">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in top_expensive %}
+          <tr>
+            <td>
+              {% with s.images.all.0 as thumb %}
+                {% if thumb %}
+                  <a href="{{ s.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ s.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
+                {% endif %}
+              {% endwith %}
+            </td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.brand.name }}</td>
+            <td class="text-right">${{ s.price }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
     <p>No shoes found.</p>
   {% endif %}
@@ -28,18 +42,32 @@
 <section style="margin-top:1rem">
   <h3>Lowest Priced Shoes</h3>
   {% if top_cheap %}
-    <ol class="pricing-list">
-      {% for s in top_cheap %}
-        <li style="display:flex;align-items:center;gap:0.5rem">
-          {% with s.images.all.0 as thumb %}
-            {% if thumb %}
-              <a href="{{ s.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ s.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
-            {% endif %}
-          {% endwith %}
-          <span>{{ s.name }} — ${{ s.price }}</span>
-        </li>
-      {% endfor %}
-    </ol>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Product</th>
+          <th>Brand</th>
+          <th class="text-right">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in top_cheap %}
+          <tr>
+            <td>
+              {% with s.images.all.0 as thumb %}
+                {% if thumb %}
+                  <a href="{{ s.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ s.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
+                {% endif %}
+              {% endwith %}
+            </td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.brand.name }}</td>
+            <td class="text-right">${{ s.price }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
     <p>No shoes found.</p>
   {% endif %}

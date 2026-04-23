@@ -9,7 +9,7 @@ from .models import (
     Customer,
     PaymentMethod,
     Address,
-    Coupon,
+    Promo,
     Order,
     OrderItem,
     Notification,
@@ -27,12 +27,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'id', 'username', 'email', 'first_name', 'last_name']
 
 
-class ShoeSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Shoe
-        fields = '__all__'
-
-
 class ShoeImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ShoeImage
@@ -40,15 +34,28 @@ class ShoeImageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ShoeVariantSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField(source='variant_id')
+
     class Meta:
         model = ShoeVariant
+        fields = '__all__'
+        
+
+
+class ShoeSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField(source='shoe_id')
+    images = ShoeImageSerializer(many=True, read_only=True)
+    variants = ShoeVariantSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Shoe
         fields = '__all__'
 
 
 class BrandSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Brand
-        fields = '__all__'
+        fields = ['url', 'brand_id', 'name', 'description', 'website', 'logo']
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -76,19 +83,26 @@ class AddressSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class CouponSerializer(serializers.HyperlinkedModelSerializer):
+class PromoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Coupon
+        model = Promo
         fields = '__all__'
 
-
-class OrderItemSerializer(serializers.ModelSerializer):
-    shoe_name = serializers.CharField(source='variant.shoe.name', read_only=True)
+class OrderItemSerializer(serializers.HyperlinkedModelSerializer):
+    shoe_name = serializers.CharField(source="variant.shoe.name")
+    size = serializers.CharField(source="variant.size")
+    color = serializers.CharField(source="variant.color")
+    image = serializers.SerializerMethodField()
+    id = serializers.ReadOnlyField(source="item_id")
 
     class Meta:
         model = OrderItem
-        fields = ['id', 'order', 'quantity', 'price', 'variant', 'shoe_name']
-
+        fields = '__all__'
+    def get_image(self, obj):
+        image = obj.variant.shoe.images.first()
+        if image:
+            return image.image.url
+        return None
 
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)
@@ -97,8 +111,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
-
-class NotificationSerializer(serializers.ModelSerializer):
+class NotificationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Notification
         fields = ['id', 'customer', 'message', 'is_read', 'created_at']
