@@ -46,10 +46,18 @@ class ShoeSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField(source='shoe_id')
     images = ShoeImageSerializer(many=True, read_only=True)
     variants = ShoeVariantSerializer(many=True, read_only=True)
+    total_stock = serializers.SerializerMethodField()
+    original_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Shoe
         fields = '__all__'
+
+    def get_total_stock(self, obj):
+        return obj.total_stock()
+
+    def get_original_price(self, obj):
+        return obj.original_price
 
 
 class BrandSerializer(serializers.HyperlinkedModelSerializer):
