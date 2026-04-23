@@ -46,10 +46,18 @@ class ShoeSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField(source='shoe_id')
     images = ShoeImageSerializer(many=True, read_only=True)
     variants = ShoeVariantSerializer(many=True, read_only=True)
+    total_stock = serializers.SerializerMethodField()
+    original_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Shoe
         fields = '__all__'
+
+    def get_total_stock(self, obj):
+        return obj.total_stock()
+
+    def get_original_price(self, obj):
+        return obj.original_price
 
 
 class BrandSerializer(serializers.HyperlinkedModelSerializer):
@@ -118,6 +126,8 @@ class NotificationSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
+    shoe_id = serializers.IntegerField(source='order_item.variant.shoe.shoe_id', read_only=True)
+
     class Meta:
         model = Review
         fields = '__all__'
@@ -136,9 +146,19 @@ class AdminSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class WishlistItemSerializer(serializers.HyperlinkedModelSerializer):
+    customer = serializers.HyperlinkedRelatedField(
+        view_name='customer-detail',
+        read_only=True,
+    )
+    shoe = serializers.HyperlinkedRelatedField(
+        view_name='shoe-detail',
+        queryset=Shoe.objects.all(),
+    )
+
     class Meta:
         model = WishlistItem
-        fields = '__all__'
+        fields = ['url', 'id', 'customer', 'shoe', 'date_added']
+        read_only_fields = ['customer', 'date_added']
 
 
 class StoreLocationSerializer(serializers.ModelSerializer):

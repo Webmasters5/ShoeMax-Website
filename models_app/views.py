@@ -265,6 +265,14 @@ class WishlistItemViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return WishlistItem.objects.filter(customer__user=self.request.user)
 
+    def perform_create(self, serializer):
+        serializer.save(customer=self.request.user.customer_profile)
+
+    def perform_destroy(self, instance):
+        if instance.customer.user != self.request.user:
+            raise PermissionDenied("Cannot delete another user's wishlist item.")
+        instance.delete()
+
 class StoreLocationViewSet(viewsets.ModelViewSet):
     queryset = StoreLocation.objects.all()
     serializer_class = StoreLocationSerializer
