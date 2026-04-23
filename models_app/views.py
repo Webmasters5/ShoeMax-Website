@@ -202,6 +202,13 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         cart_items.delete()
 
+        # Create a notification for the customer
+        Notification.objects.create(
+            customer=customer,
+            message=f"Your order #{order.order_id} has been placed successfully.",
+            related_order=order
+        )
+
         return Response({
             "message": "Order placed",
             "order_id": order.order_id
