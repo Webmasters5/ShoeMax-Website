@@ -240,6 +240,12 @@ class StoreLocationAdmin(admin.ModelAdmin):
     list_filter = ("created_at",)
 
 
+class PromoAdmin(admin.ModelAdmin):
+    list_display = ('promo_code', 'percent_off', 'is_active', 'exp_date')
+    list_filter = ('is_active', 'exp_date')
+    search_fields = ('promo_code', 'description')
+
+
 admin.site.register(models.Shoe, ShoeAdmin)
 admin.site.register(models.ShoeImage)
 admin.site.register(models.ShoeVariant, ShoeVariantAdmin)
@@ -250,6 +256,7 @@ admin.site.register(models.OrderItem, OrderItemAdmin)
 admin.site.register(models.Notification, NotificationAdmin)
 admin.site.register(models.Review, ReviewAdmin)
 admin.site.register(models.Admin, SiteAdminAdmin)
+admin.site.register(models.Promo, PromoAdmin)
 admin.site.register(models.WishlistItem, WishlistItemAdmin)
 admin.site.register(models.CartItem, CartItemAdmin)
 admin.site.register(models.PaymentMethod, PaymentMethodAdmin)

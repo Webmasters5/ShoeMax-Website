@@ -10,7 +10,7 @@ from .views import (
     CustomerViewSet,
     PaymentMethodViewSet,
     AddressViewSet,
-    CouponViewSet,
+    PromoViewSet,
     OrderViewSet,
     OrderItemViewSet,
     NotificationViewSet,
@@ -29,7 +29,7 @@ router.register(r'brands', BrandViewSet)
 router.register(r'customers', CustomerViewSet)
 router.register(r'payment-methods', PaymentMethodViewSet)
 router.register(r'addresses', AddressViewSet)
-router.register(r'coupons', CouponViewSet)
+router.register(r'promos', PromoViewSet)
 router.register(r'orders', OrderViewSet)
 router.register(r'order-items', OrderItemViewSet)
 router.register(r'notifications', NotificationViewSet)

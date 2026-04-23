@@ -1,8 +1,10 @@
 import json
+from decimal import Decimal, InvalidOperation
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 from models_app.models import *
 from .forms import *
@@ -95,6 +97,38 @@ def cart_summary_api(request):
         totals = _calculate_session_totals(cart)
 
     return JsonResponse(totals)
+
+@login_required
+@require_POST
+def apply_promo(request):
+    promo_code = (request.POST.get('promo_code') or '').strip()
+    if not promo_code:
+        return JsonResponse({
+            'success': False,
+            'error': 'Please enter a promo code.'
+        }, status=400)
+
+    promo = Promo.objects.filter(promo_code__iexact=promo_code).first()
+    if not promo or not promo.is_valid():
+        return JsonResponse({
+            'success': False,
+            'error': 'Promo code not found or expired.'
+        }, status=404)
+
+    customer = request.user.customer_profile
+    cart_items = customer.cart_items.all()
+    subtotal = sum(item.total_price for item in cart_items)
+    discount = (subtotal * promo.percent_off / Decimal('100')).quantize(Decimal('0.01'))
+    final_total = subtotal - discount
+
+    return JsonResponse({
+        'success': True,
+        'promo_code': promo.promo_code,
+        'discount': str(discount),
+        'subtotal': str(subtotal),
+        'final_total': str(final_total),
+        'message': f'Promo code "{promo.promo_code}" applied successfully.'
+    })
 # ─────────────────────────────────────────────
 # UPDATE QUANTITY (AJAX + fallback support)
 # ─────────────────────────────────────────────
@@ -287,6 +321,9 @@ def checkout(request):
     payment_selected = 'new'
 
     if request.method == 'POST' and 'place_order' in request.POST:
+        discount = Decimal(request.POST.get('discount') or '0')
+        total_price = Decimal(request.POST.get('total_price') or '0')
+
         # Bind forms only as needed
         contact_form = ContactForm(request.POST)
         shipping_existing = request.POST.get('shipping_existing')
@@ -366,15 +403,14 @@ def checkout(request):
             valid = False
             payment_form.add_error(None, 'Please select a payment method.')
 
+        total = sum(item.total_price for item in cart_items)
+
         if not valid:
-            total = sum(item.total_price for item in cart_items)
-            discount = 0
-            final_total = total - discount
             return render(request, 'cart/checkout.html', {
                 'cart_items': cart_items,
                 'total': total,
                 'discount': discount,
-                'final_total': final_total,
+                'final_total': total_price,
                 'customer': customer,
                 'addresses': addresses,
                 'payment_methods': payment_methods,
@@ -390,17 +426,15 @@ def checkout(request):
 
         # Create order using Address FKs
         total = sum(item.total_price for item in cart_items)
-        discount = 0
-        final_total = total - discount
 
         order = Order.objects.create(
             customer=customer,
-            total_price=final_total,
+            total_price=total_price,
             shipping_address=shipping_address_obj,
             billing_address=billing_address_obj,
             payment_method=payment_method_obj,
             status='Pending',
-            discount_amount=0.00,
+            discount_amount=discount,
             subtotal=total,
         )
 
@@ -425,7 +459,7 @@ def checkout(request):
 
     # GET: render checkout
     total = sum(item.total_price for item in cart_items)
-    discount = 0
+    discount = Decimal('0.00')
     final_total = total - discount
 
     context = {

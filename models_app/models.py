@@ -211,8 +211,8 @@ class Address(models.Model):
 
         return f'Address {self.addr_id} - {self.street}, {self.city} ({cust})'
 
-class Coupon(models.Model):
-    coupon_id = models.AutoField(primary_key=True)
+class Promo(models.Model):
+    promo_id = models.AutoField(primary_key=True)
     promo_code = models.CharField(max_length=50, unique=True, help_text='Code customers enter to receive the discount.')
     description = models.TextField(blank=True, help_text='Optional description for the coupon.')
     percent_off = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)], help_text='Discount percentage 0-100.')
@@ -227,7 +227,7 @@ class Coupon(models.Model):
         return True
 
     def __str__(self):
-        return f'Coupon {self.promo_code} - {self.percent_off}%'
+        return f'Promo {self.promo_code} - {self.percent_off}%'
 
 class Order(models.Model):
     STATUS_CHOICES = [

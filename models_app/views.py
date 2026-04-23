@@ -148,9 +148,9 @@ class AddressViewSet(viewsets.ModelViewSet):
         serializer.save(customer=customer)
 
 
-class CouponViewSet(viewsets.ModelViewSet):
-    queryset = Coupon.objects.all()
-    serializer_class = CouponSerializer
+class PromoViewSet(viewsets.ModelViewSet):
+    queryset = Promo.objects.all()
+    serializer_class = PromoSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 

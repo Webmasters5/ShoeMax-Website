@@ -9,7 +9,7 @@ from .models import (
     Customer,
     PaymentMethod,
     Address,
-    Coupon,
+    Promo,
     Order,
     OrderItem,
     Notification,
@@ -83,9 +83,9 @@ class AddressSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class CouponSerializer(serializers.HyperlinkedModelSerializer):
+class PromoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Coupon
+        model = Promo
         fields = '__all__'
 
 class OrderItemSerializer(serializers.HyperlinkedModelSerializer):
