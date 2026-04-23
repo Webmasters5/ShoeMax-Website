@@ -118,6 +118,8 @@ class NotificationSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
+    shoe_id = serializers.IntegerField(source='order_item.variant.shoe.shoe_id', read_only=True)
+
     class Meta:
         model = Review
         fields = '__all__'
