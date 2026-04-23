@@ -115,7 +115,7 @@ def apply_promo(request):
             'error': 'Promo code not found or expired.'
         }, status=404)
 
-    request.session['promo_id'] = promo.id
+    request.session['promo_id'] = promo.promo_id
     customer = request.user.customer_profile
     cart_items = customer.cart_items.all()
     subtotal = sum(item.total_price for item in cart_items)
@@ -125,6 +125,7 @@ def apply_promo(request):
     return JsonResponse({
         'success': True,
         'promo_code': promo.promo_code,
+        'percent_off': str(promo.percent_off),
         'discount': str(discount),
         'subtotal': str(subtotal),
         'final_total': str(final_total),
@@ -322,7 +323,7 @@ def checkout(request):
 
     if promo_id:
         try:
-            applied_promo = Promo.objects.get(id=promo_id)
+            applied_promo = Promo.objects.get(promo_id=promo_id)
             if applied_promo.is_valid():
                 discount = (subtotal * applied_promo.percent_off / Decimal('100')).quantize(Decimal('0.01'))
             else:
@@ -353,6 +354,9 @@ def checkout(request):
     # PLACE ORDER
     # ─────────────────────────────
     if request.method == 'POST' and 'place_order' in request.POST:
+        shipping_address = None
+        billing_address = None
+        payment_method = None
 
         contact_form = ContactForm(request.POST)
 
