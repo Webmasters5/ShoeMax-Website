@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from .serializers import *
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.decorators import action
@@ -381,20 +382,37 @@ class CartItemViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def add(self, request):
         if not request.user.is_authenticated:
-         return Response({"error": "Authentication required"}, status=401)
+            return Response({"error": "Authentication required"}, status=401)
 
         variant_id = request.data.get('variant')
-        variant = ShoeVariant.objects.get(variant_id=variant_id)
+        quantity = request.data.get('quantity', 1)
+
+        try:
+            quantity = int(quantity)
+        except (TypeError, ValueError):
+            return Response({"error": "Quantity must be a number."}, status=400)
+
+        if quantity < 1:
+            return Response({"error": "Quantity must be at least 1."}, status=400)
+
+        variant = get_object_or_404(ShoeVariant, variant_id=variant_id)
+        if quantity > variant.stock:
+            return Response({"error": f"Only {variant.stock} item(s) available for this variant."}, status=400)
+
         customer = request.user.customer_profile
         item, created = CartItem.objects.get_or_create(
             customer=customer,
             variant=variant,
-            defaults={'quantity': 1}
+            defaults={'quantity': quantity}
         )
         if not created:
-            item.quantity += 1
+            new_quantity = item.quantity + quantity
+            if new_quantity > variant.stock:
+                return Response({"error": f"Only {variant.stock} item(s) available for this variant."}, status=400)
+
+            item.quantity = new_quantity
             item.save()
-        return Response({"message": "Added to cart"})
+        return Response({"message": "Added to cart", "quantity": item.quantity if not created else quantity})
 
     @action(detail=True, methods=['post']) 
     def increment(self, request, pk=None):
