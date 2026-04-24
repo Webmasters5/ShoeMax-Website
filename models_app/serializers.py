@@ -152,14 +152,17 @@ class WishlistItemSerializer(serializers.HyperlinkedModelSerializer):
         view_name='customer-detail',
         read_only=True,
     )
-    shoe = serializers.HyperlinkedRelatedField(
+    shoe = ShoeSerializer(read_only=True)
+    shoe_url = serializers.HyperlinkedRelatedField(
         view_name='shoe-detail',
+        source='shoe',
         queryset=Shoe.objects.all(),
+        write_only=True,
     )
 
     class Meta:
         model = WishlistItem
-        fields = ['url', 'id', 'customer', 'shoe', 'date_added']
+        fields = ['url', 'id', 'customer', 'shoe', 'shoe_url', 'date_added']
         read_only_fields = ['customer', 'date_added']
 
 

@@ -318,7 +318,11 @@ class WishlistItemViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return WishlistItem.objects.filter(customer__user=self.request.user)
+        return WishlistItem.objects.filter(customer__user=self.request.user).select_related(
+            'shoe',
+            'customer',
+            'customer__user',
+        ).prefetch_related('shoe__images')
 
     def perform_create(self, serializer):
         serializer.save(customer=self.request.user.customer_profile)
@@ -414,7 +418,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
             item.save()
         return Response({"message": "Added to cart", "quantity": item.quantity if not created else quantity})
 
-    @action(detail=True, methods=['post']) 
+    @action(detail=True, methods=['patch']) 
     def increment(self, request, pk=None):
         if not request.user.is_authenticated:
             return Response({"error": "Authentication required"}, status=401)
@@ -424,7 +428,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
         item.save()
         return Response({"quantity": item.quantity, "total_price": float(item.total_price)})
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['patch'])
     def decrement(self, request, pk=None):
         if not request.user.is_authenticated:
             return Response({"error": "Authentication required"}, status=401)
