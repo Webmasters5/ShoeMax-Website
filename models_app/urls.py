@@ -10,7 +10,7 @@ from .views import (
     CustomerViewSet,
     PaymentMethodViewSet,
     AddressViewSet,
-    CouponViewSet,
+    PromoViewSet,
     OrderViewSet,
     OrderItemViewSet,
     NotificationViewSet,
@@ -18,17 +18,18 @@ from .views import (
     AdminViewSet,
     WishlistItemViewSet,
     CartItemViewSet,
+    StoreLocationViewSet,
 )
 
 router = DefaultRouter()
-router.register(r'shoes', ShoeViewSet)
+router.register(r'shoes', ShoeViewSet, basename='shoe')
 router.register(r'shoe-images', ShoeImageViewSet)
 router.register(r'shoe-variants', ShoeVariantViewSet)
 router.register(r'brands', BrandViewSet)
 router.register(r'customers', CustomerViewSet)
 router.register(r'payment-methods', PaymentMethodViewSet)
 router.register(r'addresses', AddressViewSet)
-router.register(r'coupons', CouponViewSet)
+router.register(r'promos', PromoViewSet)
 router.register(r'orders', OrderViewSet)
 router.register(r'order-items', OrderItemViewSet)
 router.register(r'notifications', NotificationViewSet)
@@ -37,6 +38,7 @@ router.register(r'reviews', ReviewViewSet)
 router.register(r'admins', AdminViewSet)
 router.register(r'wishlist-items', WishlistItemViewSet)
 router.register(r'cart-items', CartItemViewSet)
+router.register(r'stores', StoreLocationViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
