@@ -79,13 +79,15 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PaymentMethodSerializer(serializers.HyperlinkedModelSerializer):
+class PaymentMethodSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = PaymentMethod
         fields = '__all__'
 
 
-class AddressSerializer(serializers.HyperlinkedModelSerializer):
+class AddressSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Address
         fields = '__all__'
@@ -126,8 +128,9 @@ class NotificationSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
-    shoe_id = serializers.IntegerField(source='order_item.variant.shoe.shoe_id', read_only=True)
-
+    shoe_id = serializers.IntegerField(source="order_item.variant.shoe.shoe_id", read_only=True)
+    shoe_name = serializers.CharField(source="order_item.variant.shoe.name", read_only=True)
+    customer_id = serializers.IntegerField(source='order_item.order.customer.customer_id', read_only=True)
     class Meta:
         model = Review
         fields = '__all__'
@@ -150,14 +153,17 @@ class WishlistItemSerializer(serializers.HyperlinkedModelSerializer):
         view_name='customer-detail',
         read_only=True,
     )
-    shoe = serializers.HyperlinkedRelatedField(
+    shoe = ShoeSerializer(read_only=True)
+    shoe_url = serializers.HyperlinkedRelatedField(
         view_name='shoe-detail',
+        source='shoe',
         queryset=Shoe.objects.all(),
+        write_only=True,
     )
 
     class Meta:
         model = WishlistItem
-        fields = ['url', 'id', 'customer', 'shoe', 'date_added']
+        fields = ['url', 'id', 'customer', 'shoe', 'shoe_url', 'date_added']
         read_only_fields = ['customer', 'date_added']
 
 
