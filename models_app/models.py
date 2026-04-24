@@ -241,7 +241,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders', help_text='Customer who placed the order.')
     order_date = models.DateField(auto_now_add=True, help_text='Date order was created.')
     delivery_date = models.DateTimeField(null=True, blank=True, help_text='Estimated or actual delivery date/time.')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', help_text='Order status.')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending', help_text='Order status.')
     total_price = models.DecimalField(max_digits=8, decimal_places=2, default=0, help_text='Total charged for the order (includes shipping/discounts).') #to replace
     shipping_address = models.ForeignKey('Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders_with_shipping', help_text='Shipping address used for this order.')
     billing_address = models.ForeignKey('Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders_with_billing', help_text='Billing address used for this order.')

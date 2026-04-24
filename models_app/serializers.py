@@ -79,13 +79,15 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PaymentMethodSerializer(serializers.HyperlinkedModelSerializer):
+class PaymentMethodSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = PaymentMethod
         fields = '__all__'
 
 
-class AddressSerializer(serializers.HyperlinkedModelSerializer):
+class AddressSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Address
         fields = '__all__'

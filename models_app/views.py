@@ -178,18 +178,69 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])  
     def checkout(self, request):            
-        customer = request.user.customer_profile
+        customer = getattr(request.user, "customer_profile", None)
+        if not customer:
+            return Response({"error": "No customer profile found"}, status=400)
+
         cart_items = CartItem.objects.filter(customer=customer)
 
         if not cart_items.exists():
             return Response({"error": "Cart is empty"}, status=400)
 
+        print("[OrderViewSet.checkout] user:", request.user.username)
+        print("[OrderViewSet.checkout] customer_id:", customer.customer_id)
+        print("[OrderViewSet.checkout] cart_count:", cart_items.count())
+
+        shipping_address_id = request.data.get("shipping_address")
+        billing_address_id = request.data.get("billing_address")
+        payment_method_id = request.data.get("payment_method")
+
+        print("[OrderViewSet.checkout] request.data:", dict(request.data))
+        print("[OrderViewSet.checkout] shipping_address_id:", shipping_address_id)
+        print("[OrderViewSet.checkout] billing_address_id:", billing_address_id)
+        print("[OrderViewSet.checkout] payment_method_id:", payment_method_id)
+
+        if not shipping_address_id:
+            return Response({"error": "Shipping address is required"}, status=400)
+
+        try:
+            shipping_address = Address.objects.get(addr_id=shipping_address_id, customer=customer)
+            print("[OrderViewSet.checkout] shipping_address:", shipping_address.addr_id, shipping_address.street, shipping_address.city)
+        except Address.DoesNotExist:
+            return Response({"error": "Shipping address not found"}, status=404)
+
+        if billing_address_id in (None, "", "same"):
+            billing_address = shipping_address
+            print("[OrderViewSet.checkout] billing_address: same as shipping")
+        else:
+            try:
+                billing_address = Address.objects.get(addr_id=billing_address_id, customer=customer)
+                print("[OrderViewSet.checkout] billing_address:", billing_address.addr_id, billing_address.street, billing_address.city)
+            except Address.DoesNotExist:
+                return Response({"error": "Billing address not found"}, status=404)
+
+        payment_method = None
+        if payment_method_id not in (None, "", "cod"):
+            try:
+                payment_method = PaymentMethod.objects.get(card_id=payment_method_id, customer=customer)
+                print("[OrderViewSet.checkout] payment_method:", payment_method.card_id, payment_method.masked, payment_method.holder_name)
+            except PaymentMethod.DoesNotExist:
+                return Response({"error": "Payment method not found"}, status=404)
+        else:
+            print("[OrderViewSet.checkout] payment_method: COD / none")
+
         total = sum(item.total_price for item in cart_items)
+        print("[OrderViewSet.checkout] total:", total)
 
         order = Order.objects.create(
             customer=customer,
             total_price=total,
-            status='pending'
+            status='Pending',
+            shipping_address=shipping_address,
+            billing_address=billing_address,
+            payment_method=payment_method,
+            subtotal=total,
+            discount_amount=0,
         )
 
         for item in cart_items:
@@ -208,6 +259,9 @@ class OrderViewSet(viewsets.ModelViewSet):
             message=f"Your order #{order.order_id} has been placed successfully.",
             related_order=order
         )
+
+        print("[OrderViewSet.checkout] order_id:", order.order_id)
+        print("[OrderViewSet.checkout] items_created:", cart_items.count())
 
         return Response({
             "message": "Order placed",
