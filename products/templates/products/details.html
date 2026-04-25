@@ -97,7 +97,7 @@
                 <p class="mb-2"><small class="text-muted">Gender: <span class="badge bg-secondary" aria-label="Gender">{{ shoe.get_gender_display }}</span></small></p>
               </div>
               <div>
-                <form method="post" action="{% url 'products:wishlist_add' shoe.shoe_id %}">
+                <form id="wishlist-add-form" class="wishlist-add-form" method="post" action="{% url 'products:wishlist_add' shoe.shoe_id %}">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-outline-danger" aria-label="Add to wishlist" title="Add to wishlist">
                     <i class="far fa-heart"></i>
@@ -216,6 +216,30 @@
       // Trigger variant loading when the user changes the selected color.
       $('input[name="color"]').on('change', function() {
         loadVariants($(this).val());
+      });
+
+      $('#wishlist-add-form').on('submit', function(event) {
+        event.preventDefault();
+        var $form = $(this);
+        var $button = $form.find('button[type="submit"]');
+        var url = $form.attr('action');
+        var data = $form.serialize();
+
+        $.ajax({
+          url: url,
+          type: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          data: data,
+          success: function(response) {
+            if (response.success) {
+              $button.prop('disabled', true).removeClass('btn-outline-danger').addClass('btn-danger');
+              $button.html('<i class="fas fa-heart"></i> Added');
+            }
+          },
+          error: function() {
+            window.location.href = window.location.href;
+          }
+        });
       });
     });
   </script>

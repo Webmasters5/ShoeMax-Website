@@ -53,7 +53,7 @@ class Shoe(models.Model):
 
     class Meta:
         permissions = [
-            ('change_price_only', 'Can change shoe price (price-only)'),
+            ('change_price_only', 'Can change shoe price only'),
         ]
     
 class ShoeImage(models.Model):
@@ -211,8 +211,8 @@ class Address(models.Model):
 
         return f'Address {self.addr_id} - {self.street}, {self.city} ({cust})'
 
-class Coupon(models.Model):
-    coupon_id = models.AutoField(primary_key=True)
+class Promo(models.Model):
+    promo_id = models.AutoField(primary_key=True)
     promo_code = models.CharField(max_length=50, unique=True, help_text='Code customers enter to receive the discount.')
     description = models.TextField(blank=True, help_text='Optional description for the coupon.')
     percent_off = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)], help_text='Discount percentage 0-100.')
@@ -227,7 +227,7 @@ class Coupon(models.Model):
         return True
 
     def __str__(self):
-        return f'Coupon {self.promo_code} - {self.percent_off}%'
+        return f'Promo {self.promo_code} - {self.percent_off}%'
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -241,7 +241,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders', help_text='Customer who placed the order.')
     order_date = models.DateField(auto_now_add=True, help_text='Date order was created.')
     delivery_date = models.DateTimeField(null=True, blank=True, help_text='Estimated or actual delivery date/time.')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', help_text='Order status.')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending', help_text='Order status.')
     total_price = models.DecimalField(max_digits=8, decimal_places=2, default=0, help_text='Total charged for the order (includes shipping/discounts).') #to replace
     shipping_address = models.ForeignKey('Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders_with_shipping', help_text='Shipping address used for this order.')
     billing_address = models.ForeignKey('Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders_with_billing', help_text='Billing address used for this order.')
@@ -303,7 +303,7 @@ class Review(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, help_text='When the review was submitted.')
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], help_text='Rating from 1 to 5.')
     order_item = models.ForeignKey('OrderItem', on_delete=models.CASCADE, related_name='review', help_text='Order item this review refers to.')
-    
+    image= models.ImageField(upload_to='reviews/',null=True,blank=True)
     def __str__(self):
         return self.title
 

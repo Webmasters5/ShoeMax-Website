@@ -1,10 +1,13 @@
 import json
+from decimal import Decimal, InvalidOperation
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
-from models_app.models import ShoeVariant, CartItem
+from models_app.models import *
+from .forms import *
 
 
 # ─────────────────────────────────────────────
@@ -94,6 +97,40 @@ def cart_summary_api(request):
         totals = _calculate_session_totals(cart)
 
     return JsonResponse(totals)
+
+@login_required
+@require_POST
+def apply_promo(request):
+    promo_code = (request.POST.get('promo_code') or '').strip()
+    if not promo_code:
+        return JsonResponse({
+            'success': False,
+            'error': 'Please enter a promo code.'
+        }, status=400)
+
+    promo = Promo.objects.filter(promo_code__iexact=promo_code).first()
+    if not promo or not promo.is_valid():
+        return JsonResponse({
+            'success': False,
+            'error': 'Promo code not found or expired.'
+        }, status=404)
+
+    request.session['promo_id'] = promo.promo_id
+    customer = request.user.customer_profile
+    cart_items = customer.cart_items.all()
+    subtotal = sum(item.total_price for item in cart_items)
+    discount = (subtotal * promo.percent_off / Decimal('100')).quantize(Decimal('0.01'))
+    final_total = subtotal - discount
+
+    return JsonResponse({
+        'success': True,
+        'promo_code': promo.promo_code,
+        'percent_off': str(promo.percent_off),
+        'discount': str(discount),
+        'subtotal': str(subtotal),
+        'final_total': str(final_total),
+        'message': f'Promo code "{promo.promo_code}" applied successfully.'
+    })
 # ─────────────────────────────────────────────
 # UPDATE QUANTITY (AJAX + fallback support)
 # ─────────────────────────────────────────────
@@ -262,20 +299,202 @@ def _calculate_session_totals(cart):
         "discount": discount,
         "total": final_total
     }
-    
+
+
 @login_required
 def checkout(request):
+    from django.contrib import messages
+    from decimal import Decimal
+    from models_app.models import Address, PaymentMethod, Order, OrderItem, Notification, Promo
+
     customer = request.user.customer_profile
     cart_items = customer.cart_items.all()
+    addresses = customer.addresses.all()
+    payment_methods = customer.payment_methods.all()
 
-    total = sum(item.total_price for item in cart_items)
-    discount = 0
-    final_total = total - discount
+    subtotal = sum(item.total_price for item in cart_items)
 
+    # ─────────────────────────────
+    # PROMO (UNIFIED SYSTEM)
+    # ─────────────────────────────
+    promo_id = request.session.get('promo_id')
+    applied_promo = None
+    discount = Decimal('0.00')
+
+    if promo_id:
+        try:
+            applied_promo = Promo.objects.get(promo_id=promo_id)
+            if applied_promo.is_valid():
+                discount = (subtotal * applied_promo.percent_off / Decimal('100')).quantize(Decimal('0.01'))
+            else:
+                del request.session['promo_id']
+        except Promo.DoesNotExist:
+            del request.session['promo_id']
+
+    final_total = subtotal - discount
+
+    # ─────────────────────────────
+    # FORMS
+    # ─────────────────────────────
+    contact_form = ContactForm(initial={
+        'full_name': customer.full_name,
+        'email': request.user.email,
+        'phone': customer.phone or '',
+    })
+
+    shipping_form = AddressForm(prefix='shipping')
+    billing_form = AddressForm(prefix='billing')
+    payment_form = PaymentMethodForm()
+
+    shipping_selected = 'new'
+    billing_selected = 'same'
+    payment_selected = 'new'
+
+    # ─────────────────────────────
+    # PLACE ORDER
+    # ─────────────────────────────
+    if request.method == 'POST' and 'place_order' in request.POST:
+        shipping_address = None
+        billing_address = None
+        payment_method = None
+
+        contact_form = ContactForm(request.POST)
+
+        shipping_existing = request.POST.get('shipping_existing')
+        billing_existing = request.POST.get('billing_existing')
+        payment_existing = request.POST.get('payment_existing')
+
+        shipping_selected = shipping_existing or 'new'
+        billing_selected = billing_existing or 'same'
+        payment_selected = payment_existing or 'new'
+
+        valid = True
+
+        if not contact_form.is_valid():
+            valid = False
+
+        # SHIPPING
+        if shipping_existing != 'new':
+            shipping_address = Address.objects.filter(addr_id=shipping_existing, customer=customer).first()
+            if not shipping_address:
+                valid = False
+        else:
+            shipping_form = AddressForm(request.POST, prefix='shipping')
+            if shipping_form.is_valid():
+                shipping_address = shipping_form.save(commit=False)
+                shipping_address.customer = customer
+                shipping_address.save()
+            else:
+                valid = False
+
+        # BILLING
+        if billing_existing == 'same':
+            billing_address = shipping_address
+        elif billing_existing != 'new':
+            billing_address = Address.objects.filter(addr_id=billing_existing, customer=customer).first()
+            if not billing_address:
+                valid = False
+        else:
+            billing_form = AddressForm(request.POST, prefix='billing')
+            if billing_form.is_valid():
+                billing_address = billing_form.save(commit=False)
+                billing_address.customer = customer
+                billing_address.save()
+            else:
+                valid = False
+
+        # PAYMENT
+        if payment_existing == 'new':
+            payment_form = PaymentMethodForm(request.POST)
+            if payment_form.is_valid():
+                payment_method = payment_form.save(commit=False)
+                payment_method.customer = customer
+                payment_method.save()
+            else:
+                valid = False
+        elif payment_existing == 'cod':
+            payment_method = None
+        else:
+            payment_method = PaymentMethod.objects.filter(card_id=payment_existing, customer=customer).first()
+            if not payment_method:
+                valid = False
+
+        # FINAL CHECK
+        if not valid:
+            return render(request, 'cart/checkout.html', {
+                'cart_items': cart_items,
+                'subtotal': subtotal,
+                'discount': discount,
+                'final_total': final_total,
+                'customer': customer,
+                'addresses': addresses,
+                'payment_methods': payment_methods,
+                'contact_form': contact_form,
+                'shipping_form': shipping_form,
+                'billing_form': billing_form,
+                'payment_form': payment_form,
+                'shipping_selected': shipping_selected,
+                'billing_selected': billing_selected,
+                'payment_selected': payment_selected,
+                'applied_promo': applied_promo,
+            })
+
+        # CREATE ORDER
+        order = Order.objects.create(
+            customer=customer,
+            status='Pending',
+            shipping_address=shipping_address,
+            billing_address=billing_address,
+            payment_method=payment_method,
+            subtotal=subtotal,
+            discount_amount=discount,
+            total_price=final_total
+        )
+
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                variant=item.variant,
+                quantity=item.quantity,
+                price=item.variant.shoe.price
+            )
+
+            if item.variant.stock >= item.quantity:
+                item.variant.stock -= item.quantity
+                item.variant.save()
+
+        cart_items.delete()
+
+        # clear promo after use
+        if 'promo_id' in request.session:
+            del request.session['promo_id']
+
+        Notification.objects.create(
+            customer=customer,
+            message=f"Your order #{order.order_id} has been placed successfully!",
+            related_order=order
+        )
+
+        messages.success(request, "Order placed successfully!")
+        return redirect('customer:customer_orders')
+
+    # ─────────────────────────────
+    # RENDER
+    # ─────────────────────────────
     return render(request, 'cart/checkout.html', {
         'cart_items': cart_items,
-        'total': total,
+        'subtotal': subtotal,
         'discount': discount,
-        "total": final_total,
+        'final_total': final_total,
         'customer': customer,
+        'addresses': addresses,
+        'payment_methods': payment_methods,
+        'contact_form': contact_form,
+        'shipping_form': shipping_form,
+        'billing_form': billing_form,
+        'payment_form': payment_form,
+        'shipping_selected': shipping_selected,
+        'billing_selected': billing_selected,
+        'payment_selected': payment_selected,
+        'applied_promo': applied_promo,
     })

@@ -10,7 +10,7 @@ from .views import (
     CustomerViewSet,
     PaymentMethodViewSet,
     AddressViewSet,
-    CouponViewSet,
+    PromoViewSet,
     OrderViewSet,
     OrderItemViewSet,
     NotificationViewSet,
@@ -22,14 +22,14 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'shoes', ShoeViewSet)
-router.register(r'shoe-images', ShoeImageViewSet)
-router.register(r'shoe-variants', ShoeVariantViewSet)
+router.register(r'shoes', ShoeViewSet, basename='shoe')
+router.register(r'shoe-images', ShoeImageViewSet, basename='shoeimage')
+router.register(r'shoe-variants', ShoeVariantViewSet, basename='shoevariant')
 router.register(r'brands', BrandViewSet)
 router.register(r'customers', CustomerViewSet)
 router.register(r'payment-methods', PaymentMethodViewSet)
 router.register(r'addresses', AddressViewSet)
-router.register(r'coupons', CouponViewSet)
+router.register(r'promos', PromoViewSet)
 router.register(r'orders', OrderViewSet)
 router.register(r'order-items', OrderItemViewSet)
 router.register(r'notifications', NotificationViewSet)

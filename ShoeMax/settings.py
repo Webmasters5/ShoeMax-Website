@@ -26,13 +26,13 @@ SECRET_KEY = 'django-insecure-jf6t2rrvs0mxaj18i4kz&f$ya=q$o4j_rn!3t+c82k*@z=38sm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1'] ### TEMP FOR TESTING
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'admin_panel.apps.AdminPanelConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'models_app.apps.ModelsAppConfig',
     'customer.apps.CustomerConfig',
     'cart.apps.CartConfig',
-    #'admin_panel.apps.AdminAppConfig',
+    'admin_panel.apps.AdminAppConfig',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',

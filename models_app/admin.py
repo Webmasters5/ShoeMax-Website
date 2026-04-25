@@ -1,6 +1,9 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.contrib.admin.helpers import ActionForm
+from django import forms
 from django.forms import Textarea
 from django.db import models as dj_models
+from decimal import Decimal, InvalidOperation
 from models_app import models
 
 class OrderItemInline(admin.TabularInline):
@@ -27,6 +30,17 @@ class ShoeVariantInline(admin.TabularInline):
                     readonly.append(f)
         return readonly
     
+class DiscountActionForm(ActionForm):
+    discount_amount = forms.DecimalField(
+        label='Discount amount',
+        max_digits=8,
+        decimal_places=2,
+        min_value=0,
+        required=True,
+        help_text='Set the raw discount amount to apply to selected shoes.',
+    )
+
+
 class ShoeAdmin(admin.ModelAdmin):
     list_display = ('name', 'brand', 'category', 'gender', 'price')
     list_filter = ('brand', 'category', 'gender')
@@ -35,6 +49,19 @@ class ShoeAdmin(admin.ModelAdmin):
     autocomplete_fields = ('brand',)
     #raw_id_fields = ('brand',)
     save_on_top = True
+    actions = ('apply_discount',)
+    action_form = DiscountActionForm
+
+    def has_change_price_permission(self, request):
+        # print(request.user.get_all_permissions())
+        return (request.user.has_perm('models_app.change_price_only')) # type: ignore[attr-defined]
+
+    @admin.action(description='Apply discount to selected shoes', permissions=['change_price'])
+    def apply_discount(self, request, queryset):
+        discount_amount = Decimal(request.POST.get('discount_amount', '0'))
+
+        updated = queryset.update(discount=discount_amount)
+        self.message_user(request, f'Applied discount amount Rs {discount_amount} to {updated} selected shoe(s).')
 
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = list(super().get_readonly_fields(request, obj))
@@ -212,6 +239,17 @@ class StoreLocationAdmin(admin.ModelAdmin):
     search_fields = ("name", "address")
     list_filter = ("created_at",)
 
+# class CouponAdmin(admin.ModelAdmin):
+    # list_display = ('promo_code', 'percent_off', 'is_active', 'exp_date')
+    # search_fields = ('promo_code',)
+    # list_filter = ('is_active', 'exp_date')
+
+
+class PromoAdmin(admin.ModelAdmin):
+    list_display = ('promo_code', 'percent_off', 'is_active', 'exp_date')
+    list_filter = ('is_active', 'exp_date')
+    search_fields = ('promo_code', 'description')
+
 
 admin.site.register(models.Shoe, ShoeAdmin)
 admin.site.register(models.ShoeImage)
@@ -223,8 +261,10 @@ admin.site.register(models.OrderItem, OrderItemAdmin)
 admin.site.register(models.Notification, NotificationAdmin)
 admin.site.register(models.Review, ReviewAdmin)
 admin.site.register(models.Admin, SiteAdminAdmin)
+admin.site.register(models.Promo, PromoAdmin)
 admin.site.register(models.WishlistItem, WishlistItemAdmin)
 admin.site.register(models.CartItem, CartItemAdmin)
 admin.site.register(models.PaymentMethod, PaymentMethodAdmin)
 admin.site.register(models.Address, AddressAdmin)
 admin.site.register(models.StoreLocation, StoreLocationAdmin)
+# admin.site.register(models.Coupon, CouponAdmin)

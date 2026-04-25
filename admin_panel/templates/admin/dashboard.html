@@ -45,18 +45,34 @@
 <section style="margin-top:1.25rem">
   <h3>Top Sold Items</h3>
   {% if most_sold %}
-    <ol>
-      {% for item in most_sold %}
-        <li style="display:flex;align-items:center;gap:0.5rem">
-          {% with item.variant.shoe.images.all.0 as thumb %}
-            {% if thumb %}
-              <a href="{{ item.variant.shoe.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ item.variant.shoe.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
-            {% endif %}
-          {% endwith %}
-          <span>{{ item.variant.shoe.name }} — <strong>{{ item.total_sold }}</strong> sold</span>
-        </li>
-      {% endfor %}
-    </ol>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Product</th>
+          <th>Brand</th>
+          <th>Gender</th>
+          <th class="text-right">Sold</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in most_sold %}
+          <tr>
+            <td>
+              {% with item.shoe.images.all.0 as thumb %}
+                {% if thumb %}
+                  <a href="{{ item.shoe.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ item.shoe.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
+                {% endif %}
+              {% endwith %}
+            </td>
+            <td>{{ item.shoe.name }}</td>
+            <td>{{ item.shoe.brand.name }}</td>
+            <td>{{ item.shoe.get_gender_display }}</td>
+            <td class="text-right"><strong>{{ item.total_sold }}</strong></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
     <p>No sales yet.</p>
   {% endif %}

@@ -18,7 +18,7 @@
   <div class="row g-4">
     {% for item in wishlist_items %}
       {% with item.shoe.images.all|first as main_image %}
-      <div class="col-12 col-md-6 col-lg-4">
+      <div class="col-12 col-md-6 col-lg-4 wishlist-item-card" data-item-id="{{ item.id }}">
         <div class="card h-100 shadow-sm">
           {% if main_image %}
             <img src="{{ main_image.image.url }}" class="card-img-top img-fluid" alt="{{ item.shoe.name }}">
@@ -37,7 +37,7 @@
               <a href="{{ item.shoe.get_absolute_url }}" class="btn btn-sm btn-outline-primary">View</a>
 
               {% if item.id %}
-              <form method="post" action="{% url 'products:wishlist_delete' item.id %}">
+              <form class="wishlist-delete-form" method="post" action="{% url 'products:wishlist_delete' item.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-sm btn-danger" title="Remove from wishlist">
                   <i class="fas fa-trash me-1"></i> Remove
@@ -75,6 +75,37 @@
       {% endif %}
     </ul>
   </nav>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-3gJwYp4o8m+Y7R8ZbsqICP9zIa4PVd8VI+Xt1GmQ7yk=" crossorigin="anonymous"></script>
+  <script>
+    $(function() {
+      $('.wishlist-delete-form').on('submit', function(event) {
+        event.preventDefault();
+        var $form = $(this);
+        var $card = $form.closest('.wishlist-item-card');
+        var url = $form.attr('action');
+
+        $.ajax({
+          url: url,
+          type: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          data: $form.serialize(),
+          success: function(response) {
+            if (response.success) {
+              $card.fadeOut(200, function() {
+                $(this).remove();
+                if ($('.wishlist-item-card').length === 0) {
+                  $('.container.py-4').html('<div class="alert alert-info" role="alert">Your wishlist is empty.</div>');
+                }
+              });
+            }
+          },
+          error: function() {
+            window.location.href = window.location.href;
+          }
+        });
+      });
+    });
+  </script>
 <!-- https://www.w3schools.com/bootstrap5/bootstrap_alerts.php -->
   {% else %}
   <div class="alert alert-info" role="alert">
