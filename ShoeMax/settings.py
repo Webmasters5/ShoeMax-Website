@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-jf6t2rrvs0mxaj18i4kz&f$ya=q$o4j_rn!3t+c82k*@z=38sm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1'] ### TEMP FOR TESTING
 
 
 # Application definition
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     #'admin_panel.apps.AdminAppConfig',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # Must be at the top
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'ShoeMax.urls'
@@ -168,3 +171,5 @@ EMAIL_HOST_PASSWORD = 'tfij tiwy zsso nmml'
 ### remember me ##
 SESSION_COOKIE_AGE = 1209600  # 2 weeks
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+CORS_ALLOW_ALL_ORIGINS = True # Only use this for development testing
