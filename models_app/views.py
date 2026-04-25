@@ -55,7 +55,7 @@ class ShoeViewSet(viewsets.ReadOnlyModelViewSet):
         min_price = self.request.GET.get('min_price', '').strip()
         max_price = self.request.GET.get('max_price', '').strip()
 
-        qs = Shoe.objects.all().prefetch_related('images')
+        qs = Shoe.objects.select_related('brand').prefetch_related('images')
 
         if q:
             qs = qs.filter(Q(name__icontains=q) | Q(description__icontains=q))
@@ -93,11 +93,31 @@ class ShoeImageViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ShoeImageSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        shoe_id = self.request.query_params.get('shoe_id', '').strip()
+        if shoe_id:
+            try:
+                qs = qs.filter(shoe_id=int(shoe_id))
+            except (TypeError, ValueError):
+                pass
+        return qs
+
 
 class ShoeVariantViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ShoeVariant.objects.all()
     serializer_class = ShoeVariantSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        shoe_id = self.request.query_params.get('shoe_id', '').strip()
+        if shoe_id:
+            try:
+                qs = qs.filter(shoe_id=int(shoe_id))
+            except (TypeError, ValueError):
+                pass
+        return qs
 
 
 class BrandViewSet(viewsets.ReadOnlyModelViewSet):
@@ -320,8 +340,6 @@ class WishlistItemViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return WishlistItem.objects.filter(customer__user=self.request.user).select_related(
             'shoe',
-            'customer',
-            'customer__user',
         ).prefetch_related('shoe__images')
 
     def perform_create(self, serializer):

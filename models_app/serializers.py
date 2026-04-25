@@ -27,25 +27,27 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'id', 'username', 'email', 'first_name', 'last_name']
 
 
-class ShoeImageSerializer(serializers.HyperlinkedModelSerializer):
+class ShoeImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoeImage
         fields = '__all__'
 
 
-class ShoeVariantSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField(source='variant_id')
-
+class ShoeVariantSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoeVariant
         fields = '__all__'
-        
+
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = '__all__'
 
 
 class ShoeSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField(source='shoe_id')
+    brand = BrandSerializer(read_only=True)
     images = ShoeImageSerializer(many=True, read_only=True)
-    variants = ShoeVariantSerializer(many=True, read_only=True)
     total_stock = serializers.SerializerMethodField()
     original_price = serializers.SerializerMethodField()
 
@@ -58,12 +60,6 @@ class ShoeSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_original_price(self, obj):
         return obj.original_price
-
-
-class BrandSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Brand
-        fields = ['url', 'brand_id', 'name', 'description', 'website', 'logo']
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -149,10 +145,6 @@ class AdminSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class WishlistItemSerializer(serializers.HyperlinkedModelSerializer):
-    customer = serializers.HyperlinkedRelatedField(
-        view_name='customer-detail',
-        read_only=True,
-    )
     shoe = ShoeSerializer(read_only=True)
     shoe_url = serializers.HyperlinkedRelatedField(
         view_name='shoe-detail',
@@ -163,8 +155,8 @@ class WishlistItemSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = WishlistItem
-        fields = ['url', 'id', 'customer', 'shoe', 'shoe_url', 'date_added']
-        read_only_fields = ['customer', 'date_added']
+        exclude=['customer']
+        read_only_fields = ['date_added']
 
 
 class StoreLocationSerializer(serializers.ModelSerializer):

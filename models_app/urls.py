@@ -23,8 +23,8 @@ from .views import (
 
 router = DefaultRouter()
 router.register(r'shoes', ShoeViewSet, basename='shoe')
-router.register(r'shoe-images', ShoeImageViewSet)
-router.register(r'shoe-variants', ShoeVariantViewSet)
+router.register(r'shoe-images', ShoeImageViewSet, basename='shoeimage')
+router.register(r'shoe-variants', ShoeVariantViewSet, basename='shoevariant')
 router.register(r'brands', BrandViewSet)
 router.register(r'customers', CustomerViewSet)
 router.register(r'payment-methods', PaymentMethodViewSet)
