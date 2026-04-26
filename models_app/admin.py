@@ -3,6 +3,7 @@ from django.contrib.admin.helpers import ActionForm
 from django import forms
 from django.forms import Textarea
 from django.db import models as dj_models
+from django.db.models import ExpressionWrapper, F
 from decimal import Decimal, InvalidOperation
 from models_app import models
 
@@ -30,6 +31,7 @@ class ShoeVariantInline(admin.TabularInline):
                     readonly.append(f)
         return readonly
     
+# https://docs.djangoproject.com/en/6.0/ref/contrib/admin/actions/
 class DiscountActionForm(ActionForm):
     discount_amount = forms.DecimalField(
         label='Discount amount',
@@ -42,7 +44,7 @@ class DiscountActionForm(ActionForm):
 
 
 class ShoeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'brand', 'category', 'gender', 'price')
+    list_display = ('name', 'brand', 'category', 'gender', 'price', 'discount')
     list_filter = ('brand', 'category', 'gender')
     search_fields = ('name', 'description', 'brand__name', 'variants__sku')
     inlines = [ShoeImageInline, ShoeVariantInline]
@@ -54,13 +56,17 @@ class ShoeAdmin(admin.ModelAdmin):
 
     def has_change_price_permission(self, request):
         # print(request.user.get_all_permissions())
-        return (request.user.has_perm('models_app.change_price_only')) # type: ignore[attr-defined]
+        return (request.user.has_perm('models_app.change_price_only')) 
 
     @admin.action(description='Apply discount to selected shoes', permissions=['change_price'])
     def apply_discount(self, request, queryset):
         discount_amount = Decimal(request.POST.get('discount_amount', '0'))
 
-        updated = queryset.update(discount=discount_amount)
+        updated = queryset.update(
+            price=(F('price') + F('discount') - discount_amount),
+            discount=discount_amount,
+        )
+
         self.message_user(request, f'Applied discount amount Rs {discount_amount} to {updated} selected shoe(s).')
 
     def get_readonly_fields(self, request, obj=None):

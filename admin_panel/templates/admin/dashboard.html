@@ -59,15 +59,15 @@
         {% for item in most_sold %}
           <tr>
             <td>
-              {% with item.shoe.images.all.0 as thumb %}
+              {% with item.images.all.0 as thumb %}
                 {% if thumb %}
-                  <a href="{{ item.shoe.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ item.shoe.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
+                  <a href="{{ item.get_absolute_url }}"><img src="{{ thumb.image.url }}" alt="{{ item.name }}" style="width:40px;height:40px;object-fit:cover;border-radius:4px"></a>
                 {% endif %}
               {% endwith %}
             </td>
-            <td>{{ item.shoe.name }}</td>
-            <td>{{ item.shoe.brand.name }}</td>
-            <td>{{ item.shoe.get_gender_display }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.brand.name }}</td>
+            <td>{{ item.get_gender_display }}</td>
             <td class="text-right"><strong>{{ item.total_sold }}</strong></td>
           </tr>
         {% endfor %}

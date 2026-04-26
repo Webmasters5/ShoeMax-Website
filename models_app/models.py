@@ -41,6 +41,7 @@ class Shoe(models.Model):
     def get_absolute_url(self):
         return reverse('products:shoe_details', args=[self.shoe_id])
 
+    @property
     def total_stock(self):
         # variants is a related_name from ShoeVariant; keep dynamic access at runtime
         return sum(variant.stock for variant in self.variants.all())  # type: ignore[attr-defined]
