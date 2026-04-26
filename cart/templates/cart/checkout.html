@@ -272,30 +272,17 @@
             {% endfor %}
           </ul>
 
-          <form method="POST" class="card p-2 mb-3">
-            {% csrf_token %}
-            <div class="input-group">
-              <input type="text" class="form-control" name="promo_code" placeholder="Promo code" value="{% if applied_coupon %}{{ applied_coupon.promo_code }}{% endif %}">
-              <button type="submit" name="apply_coupon" class="btn btn-secondary">Redeem</button>
-            </div>
-            {% if messages %}
-              {% for message in messages %}
-                <small class="text-{{ message.tags }} mt-1">{{ message }}</small>
-              {% endfor %}
-            {% endif %}
-          </form>
+
 
           <ul class="list-group list-group-flush mb-3">
             <li class="list-group-item d-flex justify-content-between">
               <span>Subtotal</span>
               <strong>Rs {{ subtotal }}</strong>
             </li>
-            <li class="list-group-item d-flex justify-content-between text-success">
-              <span>Discount {% if applied_coupon %}({{ applied_coupon.percent_off }}%){% endif %}</span>
-              <strong>- Rs {{ discount }}</strong>
+
             <li class="list-group-item d-flex justify-content-between text-success align-items-center">
-              <span>
-                Discount {% if applied_coupon %}({{ applied_coupon.percent_off }}%){% endif %}
+              <span id="discount-label">
+                Discount {% if applied_promo %}({{ applied_promo.percent_off }}%){% endif %}
               </span>
               <strong id="discount-field">- Rs {{ discount }}</strong>
             </li>
@@ -339,6 +326,7 @@
         success: function(data) {
           $('#checkout-discount').text('Rs ' + data.discount);
           $('#checkout-final-total').text('Rs ' + data.final_total);
+          $('#discount-label').text('Discount (' + data.percent_off + '%)');
           $('#discount-field').text('- Rs ' + data.discount);
           $('#total-price-field').val(data.final_total);
           $('#promo-feedback').text(data.message).removeClass('text-danger').addClass('text-success');
