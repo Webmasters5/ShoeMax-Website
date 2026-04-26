@@ -34,6 +34,11 @@ class ShoeMaxAdmin(admin.AdminSite):
             status_summary[name] = {'count': cnt, 'percent': round(pct, 1)}
 
         total_sales = orders_qs.aggregate(total=Sum('total_price'))['total'] or 0
+        most_sold = (
+            ShoeVariant.objects.annotate(total_sold=Sum('order_items__quantity'))
+            .select_related('shoe', 'shoe__brand')
+            .order_by('-total_sold')[:10]
+        )
 
         if user.is_superuser:
             template = "admin/dashboard.html"
@@ -43,10 +48,9 @@ class ShoeMaxAdmin(admin.AdminSite):
                 'total_orders': total_orders,
                 'status_summary': status_summary,
                 'total_sales': total_sales,
-                'most_sold': list(
-                    OrderItem.objects.values().annotate(total_sold=Sum('quantity')).order_by('-total_sold')[:10]
-                ),
+                'most_sold': most_sold,
             })
+            print("dashboard_view most_sold:", list(context.get('most_sold')))
             return TemplateResponse(request, template, context)
 
         # Inventory Manager
@@ -98,10 +102,9 @@ class ShoeMaxAdmin(admin.AdminSite):
             'total_orders': total_orders,
             'status_summary': status_summary,
             'total_sales': total_sales,
-            'most_sold': list(
-                OrderItem.objects.values().annotate(total_sold=Sum('quantity')).order_by('-total_sold')[:10]
-            ),
+            'most_sold': most_sold,
         })
+        print("dashboard_view most_sold:", list(context.get('most_sold')))
         return TemplateResponse(request, template, context)
     
     def get_urls(self):
