@@ -56,7 +56,7 @@ def cart_summary(request):
            'cart_items': cart_items,
            'subtotal': total,
            'discount': discount,
-           'total': final_total,
+           'final_total': final_total,
         })
 
     session_cart = request.session.get('cart', {})
@@ -83,9 +83,9 @@ def cart_summary(request):
 
     return render(request, 'cart/summary.html', {
         'cart_items': cart_items,
-        'total': total,
+        'subtotal': total,
         'discount': discount,
-        "total": final_total,
+        'final_total': final_total,
     })
 
 def cart_summary_api(request):
