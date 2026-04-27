@@ -56,7 +56,7 @@ class ShoeSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
     def get_total_stock(self, obj):
-        return obj.total_stock()
+        return obj.total_stock
 
     def get_original_price(self, obj):
         return obj.original_price
