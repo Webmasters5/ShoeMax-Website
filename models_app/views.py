@@ -103,6 +103,11 @@ class ShoeImageViewSet(viewsets.ReadOnlyModelViewSet):
                 pass
         return qs
 
+class BrandViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
 
 class ShoeVariantViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ShoeVariant.objects.all()
@@ -119,12 +124,23 @@ class ShoeVariantViewSet(viewsets.ReadOnlyModelViewSet):
                 pass
         return qs
 
+class WishlistItemViewSet(viewsets.ModelViewSet):
+    queryset = WishlistItem.objects.all()
+    serializer_class = WishlistItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-class BrandViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Brand.objects.all()
-    serializer_class = BrandSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get_queryset(self):
+        return WishlistItem.objects.filter(customer__user=self.request.user).select_related(
+            'shoe',
+        ).prefetch_related('shoe__images')
 
+    def perform_create(self, serializer):
+        serializer.save(customer=self.request.user.customer_profile)
+
+    def perform_destroy(self, instance):
+        if instance.customer.user != self.request.user:
+            raise PermissionDenied("Cannot delete another user's wishlist item.")
+        instance.delete()
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
@@ -330,25 +346,6 @@ class AdminViewSet(viewsets.ModelViewSet):
     queryset = Admin.objects.all()
     serializer_class = AdminSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-
-class WishlistItemViewSet(viewsets.ModelViewSet):
-    queryset = WishlistItem.objects.all()
-    serializer_class = WishlistItemSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return WishlistItem.objects.filter(customer__user=self.request.user).select_related(
-            'shoe',
-        ).prefetch_related('shoe__images')
-
-    def perform_create(self, serializer):
-        serializer.save(customer=self.request.user.customer_profile)
-
-    def perform_destroy(self, instance):
-        if instance.customer.user != self.request.user:
-            raise PermissionDenied("Cannot delete another user's wishlist item.")
-        instance.delete()
 
 class StoreLocationViewSet(viewsets.ModelViewSet):
     queryset = StoreLocation.objects.all()
