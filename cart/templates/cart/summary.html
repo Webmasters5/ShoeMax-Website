@@ -172,57 +172,61 @@ $(document).ready(function(){
     return $('input[name="csrfmiddlewaretoken"]').val();
 }
 
-  // UPDATE QUANTITY
- $(".qty-btn").click(function(){
-    let itemId = $(this).data("id");
-    let action = $(this).data("action");
+   // UPDATE QUANTITY
+  $(document).on("click", ".qty-btn", function(){
+    let btn    = $(this);
+    let itemId = btn.data("id");
+    let action = btn.data("action");
 
-    let url = `/api/cart-items/${itemId}/${action}/`;
+    btn.prop("disabled", true);
 
     $.ajax({
-        url: url,
+        url: "{% url 'cart:update_quantity' 0 %}".replace("0", itemId),
         type: "POST",
-        headers: {
-            "X-CSRFToken": getCSRFToken()
-        },
+        headers: { "X-CSRFToken": getCSRFToken() },
+        data: { action: action },
         success: function(response){
-
             if (response.removed) {
                 $(`#cart-item-${itemId}`).remove();
             } else {
                 $(`.qty-value-${itemId}`).text(response.quantity);
-                $(`#item-total-${itemId}`).text("Rs " + response.total_price);
+                $(`#item-total-${itemId}`).text("Rs " + response.item_total);
             }
-
             refreshSummary();
+        },
+        error: function(xhr){
+            console.log("QTY ERROR:", xhr.responseText);
+        },
+        complete: function(){
+            btn.prop("disabled", false);
         }
     });
-});
+  });
 
   // REMOVE ITEM
-$(".remove-item").click(function(){
+  $(document).on("click", ".remove-item", function(){
     let itemId = $(this).data("id");
 
     $.ajax({
-        url: `/api/cart-items/${itemId}/remove/`,
-        type: "DELETE",
-        headers: {
-            "X-CSRFToken": getCSRFToken()
-        },
+        url: "{% url 'cart:remove_item' 0 %}".replace("0", itemId),
+        type: "DELETE", 
+        headers: { "X-CSRFToken": getCSRFToken() },
         success: function(){
             $(`#cart-item-${itemId}`).remove();
             refreshSummary();
+        },
+        error: function(xhr){
+            console.log("REMOVE ERROR:", xhr.responseText);
         }
     });
-});
+  });
 
   // REFRESH SUMMARY
-function refreshSummary(){
+  function refreshSummary(){
     $.ajax({
-        url: "/api/cart-items/my_cart/",
+        url: "{% url 'cart:cart_summary_api' %}",
         type: "GET",
         success: function(response){
-
             $("#subtotal").text("Rs " + response.subtotal);
             $("#discount").text("Rs " + response.discount);
             $("#final-total").text("Rs " + response.total);
@@ -231,9 +235,8 @@ function refreshSummary(){
             console.log("SUMMARY ERROR:", xhr.responseText);
         }
     });
-}
+  }
 
 });
 </script>
-
 {% endblock %}

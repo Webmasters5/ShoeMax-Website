@@ -229,7 +229,7 @@ def update_quantity(request, item_id):
 # ─────────────────────────────────────────────
 def remove_from_cart(request, item_id):
 
-    if request.method != "POST":
+    if request.method != "DELETE":
         return redirect('cart:summary')
 
     # LOGGED IN USER
@@ -243,7 +243,7 @@ def remove_from_cart(request, item_id):
 
         totals = _calculate_totals(request.user.customer_profile)
 
-        if request.method == "POST":
+        if request.method == "DELETE":
            return JsonResponse({
                 "removed": True,
                 "totals": totals
