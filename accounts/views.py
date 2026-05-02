@@ -146,9 +146,7 @@ class ForgotPasswordView(APIView):
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-        reset_link = request.build_absolute_uri(
-            reverse("accounts:password_reset_confirm", kwargs={"uidb64": uid, "token": token})
-        )
+        reset_link = f"http://127.0.0.1:8000/accounts/reset/{uid}/{token}/"
         send_mail(
             "Password Reset",
             f"Click the link to reset your password: {reset_link}",
