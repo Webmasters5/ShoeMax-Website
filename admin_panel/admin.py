@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.template.response import TemplateResponse
 from django.urls import path
-from django.db.models import Sum, Count, F
+from django.db.models import Sum, Count
+from django.db.models.functions import Coalesce
 
 from models_app.models import Customer, Order, OrderItem, Shoe, ShoeVariant
 
@@ -35,8 +36,10 @@ class ShoeMaxAdmin(admin.AdminSite):
 
         total_sales = orders_qs.aggregate(total=Sum('total_price'))['total'] or 0
         most_sold = (
-            ShoeVariant.objects.annotate(total_sold=Sum('order_items__quantity'))
-            .select_related('shoe', 'shoe__brand')
+            Shoe.objects.annotate(total_sold=Coalesce(Sum('variants__order_items__quantity'), 0))
+            .filter(total_sold__gt=0)
+            .select_related('brand')
+            .prefetch_related('images')
             .order_by('-total_sold')[:10]
         )
 

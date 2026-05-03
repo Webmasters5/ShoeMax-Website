@@ -13,6 +13,9 @@ from django.http import Http404
 
 # Create your views here.
 
+def is_ajax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
 @login_required
 def add_wishlist_item(request, shoe_id):
     if request.method != "POST":
@@ -24,10 +27,14 @@ def add_wishlist_item(request, shoe_id):
     if not customer:
         return redirect('products:shoe_details', shoe_id=shoe_id)
 
-    models.WishlistItem.objects.get_or_create(customer=customer, shoe=shoe)
+    wishlist_item, created = models.WishlistItem.objects.get_or_create(customer=customer, shoe=shoe)
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({'success': True})
+    if is_ajax(request):
+        return JsonResponse({
+            'success': True,
+            'item_id': wishlist_item.pk,
+            'delete_url': reverse('products:wishlist_delete', args=[wishlist_item.pk]),
+        })
     
     return redirect(shoe.get_absolute_url())
 
@@ -39,10 +46,11 @@ def delete_wishlist_item(request, item_id):
     if not ((hasattr(item.customer, 'user') and item.customer.user == request.user)):
         return HttpResponseForbidden("Not allowed")
 
-    if request.method == "POST":
+    if request.method in ("POST", "DELETE"):
         item.delete()
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        if is_ajax(request):
             return JsonResponse({'success': True, 'item_id': item_id})
+        return redirect(reverse('products:wishlist'))
 
     return redirect(reverse('products:wishlist'))
 
@@ -87,18 +95,30 @@ class ShoeDetailView(generic.DetailView):
         # get variants for the selected colour
         variants = shoe.variants.filter(color=selected_color).order_by('size') if selected_color else None
 
+        wishlist_item = None
+        is_in_wishlist = False
+        wishlist_item_id = None
+        if self.request.user.is_authenticated:
+            customer = getattr(self.request.user, 'customer_profile', None)
+            if customer:
+                wishlist_item = models.WishlistItem.objects.filter(customer=customer, shoe=shoe).first()
+                if wishlist_item:
+                    is_in_wishlist = True
+                    wishlist_item_id = wishlist_item.pk
+
         context.update({
             'main_image': main_image,
             'color_available': color_available,
             'selected_color': selected_color,
             'variants': variants,
+            'is_in_wishlist': is_in_wishlist,
+            'wishlist_item_id': wishlist_item_id,
         })
         return context
 
-@login_required
 def list_variants(request, shoe_id):
     shoe = get_object_or_404(models.Shoe, pk=shoe_id)
-    color = request.GET.get('color') or request.GET.get('colour')
+    color = request.GET.get('color')
     if not color:
         return JsonResponse({'error': 'Missing required query parameter "color".'}, status=400)
 

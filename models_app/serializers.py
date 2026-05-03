@@ -26,26 +26,17 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ['url', 'id', 'username', 'email', 'first_name', 'last_name']
 
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = '__all__'
 
 class ShoeImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoeImage
         fields = '__all__'
 
-
-class ShoeVariantSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ShoeVariant
-        fields = '__all__'
-
-class BrandSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Brand
-        fields = '__all__'
-
-
-class ShoeSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField(source='shoe_id')
+class ShoeSerializer(serializers.ModelSerializer):
     brand = BrandSerializer(read_only=True)
     images = ShoeImageSerializer(many=True, read_only=True)
     total_stock = serializers.SerializerMethodField()
@@ -56,11 +47,29 @@ class ShoeSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
     def get_total_stock(self, obj):
-        return obj.total_stock()
+        return obj.total_stock
 
     def get_original_price(self, obj):
         return obj.original_price
 
+class ShoeVariantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoeVariant
+        fields = '__all__'
+
+class WishlistItemSerializer(serializers.HyperlinkedModelSerializer):
+    shoe = ShoeSerializer(read_only=True)
+    shoe_url = serializers.HyperlinkedRelatedField(
+        view_name='shoe-detail',
+        source='shoe',
+        queryset=Shoe.objects.all(),
+        write_only=True,
+    )
+
+    class Meta:
+        model = WishlistItem
+        exclude=['customer']
+        read_only_fields = ['date_added']
 
 class CustomerSerializer(serializers.ModelSerializer):
     user = serializers.HyperlinkedRelatedField(
@@ -143,20 +152,6 @@ class AdminSerializer(serializers.HyperlinkedModelSerializer):
         model = Admin
         fields = '__all__'
 
-
-class WishlistItemSerializer(serializers.HyperlinkedModelSerializer):
-    shoe = ShoeSerializer(read_only=True)
-    shoe_url = serializers.HyperlinkedRelatedField(
-        view_name='shoe-detail',
-        source='shoe',
-        queryset=Shoe.objects.all(),
-        write_only=True,
-    )
-
-    class Meta:
-        model = WishlistItem
-        exclude=['customer']
-        read_only_fields = ['date_added']
 
 
 class StoreLocationSerializer(serializers.ModelSerializer):

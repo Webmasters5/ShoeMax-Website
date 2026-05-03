@@ -97,10 +97,10 @@
                 <p class="mb-2"><small class="text-muted">Gender: <span class="badge bg-secondary" aria-label="Gender">{{ shoe.get_gender_display }}</span></small></p>
               </div>
               <div>
-                <form id="wishlist-add-form" class="wishlist-add-form" method="post" action="{% url 'products:wishlist_add' shoe.shoe_id %}">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-outline-danger" aria-label="Add to wishlist" title="Add to wishlist">
-                    <i class="far fa-heart"></i>
+                <form id="wishlist-toggle-form" class="wishlist-toggle-form" method="post" action="{% if is_in_wishlist %}{% url 'products:wishlist_delete' wishlist_item_id %}{% else %}{% url 'products:wishlist_add' shoe.shoe_id %}{% endif %}">
+                  <button type="submit" class="btn {% if is_in_wishlist %}btn-danger{% else %}btn-outline-danger{% endif %}" aria-label="{% if is_in_wishlist %}Remove from wishlist{% else %}Add to wishlist{% endif %}" title="{% if is_in_wishlist %}Remove from wishlist{% else %}Add to wishlist{% endif %}">
+                    <i class="{% if is_in_wishlist %}fas{% else %}far{% endif %} fa-heart"></i>
+                    {% if is_in_wishlist %}Added{% else %}Wishlist{% endif %}
                   </button>
                 </form>
               </div>
@@ -138,7 +138,7 @@
                   {% if variants %}
                     {% for variant in variants %}
                       <div>
-                        <input type="radio" class="btn-check" name="variant" id="variant_{{ variant.variant_id }}" value="{{ variant.variant_id }}" autocomplete="off" {% if forloop.first %}checked{% endif %} {% if variant.stock <= 0 %}disabled{% endif %}>
+                        <input type="radio" class="btn-check" name="variant" id="variant_{{ variant.variant_id }}" value="{{ variant.variant_id }}" autocomplete="off" {% if variant.stock <= 0 %}disabled{% endif %}>
                         <label class="btn btn-outline-primary btn-sm" for="variant_{{ variant.variant_id }}">{{ variant.size }}</label>
                       </div>
                     {% endfor %}
@@ -172,7 +172,7 @@
       // AJAX endpoint for loading variants by selected color.
       const variantUrl = "{% url 'products:shoe_variant_list' shoe.shoe_id %}";
 
-      // Container for the size radio buttons; replace this when new variants arrive.
+      // Container for the size radio buttons; replace with new variants.
       const $sizeOptions = $('#variant-size-options');
 
       // Render the returned array of variants into radio buttons.
@@ -182,14 +182,12 @@
           return;
         }
 
-        const html = $.map(variants, function(variant, index) {
-          const checked = index === 0 ? 'checked' : '';
+        const html = $.map(variants, function(variant) {
           const disabled = variant.stock <= 0 ? 'disabled' : '';
           const labelClass = variant.stock <= 0 ? 'btn-outline-secondary' : 'btn-outline-primary';
 
-          // Each variant is a radio button + label. The first one is pre-selected.
           return '<div>' +
-            '<input type="radio" class="btn-check" name="variant" id="variant_' + variant.variant_id + '" value="' + variant.variant_id + '" autocomplete="off" ' + checked + ' ' + disabled + '>' +
+            '<input type="radio" class="btn-check" name="variant" id="variant_' + variant.variant_id + '" value="' + variant.variant_id + '" autocomplete="off" ' + disabled + '>' +
             '<label class="btn ' + labelClass + ' btn-sm" for="variant_' + variant.variant_id + '">' + variant.size + '</label>' +
           '</div>';
         }).join('');
@@ -204,12 +202,12 @@
           method: 'GET',
           dataType: 'json',
           data: { color: color },
-        })
-        .done(function(data) {
-          renderVariants(data.variants);
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          console.error('Failed to load variants for color:', color, textStatus, errorThrown);
+          success: function(data) {
+            renderVariants(data.variants);
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Failed to load variants for color:', color, textStatus, errorThrown);
+          }
         });
       }
 
@@ -218,26 +216,52 @@
         loadVariants($(this).val());
       });
 
-      $('#wishlist-add-form').on('submit', function(event) {
+      const $wishlistToggleForm = $('#wishlist-toggle-form');
+      const wishlistAddUrl = "{% url 'products:wishlist_add' shoe.shoe_id %}";
+      const csrftoken = "{{ csrf_token }}";
+
+      // Update the wishlist button text, style, and form target URL.
+      function updateWishlistButton(isInWishlist, url) {
+        const $button = $wishlistToggleForm.find('button[type="submit"]');
+        $wishlistToggleForm.attr('action', url);
+
+        if (isInWishlist) {
+          $button.removeClass('btn-outline-danger').addClass('btn-danger');
+          $button.attr('aria-label', 'Remove from wishlist').attr('title', 'Remove from wishlist');
+          $button.html('<i class="fas fa-heart"></i> Added');
+        } else {
+          $button.removeClass('btn-danger').addClass('btn-outline-danger');
+          $button.attr('aria-label', 'Add to wishlist').attr('title', 'Add to wishlist');
+          $button.html('<i class="far fa-heart"></i> Wishlist');
+        }
+      }
+
+      // Handle wishlist toggle submission via AJAX, avoiding a full page reload.
+      $wishlistToggleForm.on('submit', function(event) {
         event.preventDefault();
         var $form = $(this);
-        var $button = $form.find('button[type="submit"]');
-        var url = $form.attr('action');
-        var data = $form.serialize();
+        var currentUrl = $form.attr('action');
+        var isInWishlist = currentUrl.indexOf('/wishlist/delete/') !== -1;
+        var method = isInWishlist ? 'DELETE' : 'POST';
 
         $.ajax({
-          url: url,
-          type: 'POST',
-          headers: { 'X-Requested-With': 'XMLHttpRequest' },
-          data: data,
+          url: currentUrl,
+          type: method,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': csrftoken,
+          },
           success: function(response) {
             if (response.success) {
-              $button.prop('disabled', true).removeClass('btn-outline-danger').addClass('btn-danger');
-              $button.html('<i class="fas fa-heart"></i> Added');
+              if (isInWishlist) {
+                updateWishlistButton(false, wishlistAddUrl);
+              } else {
+                updateWishlistButton(true, response.delete_url);
+              }
             }
           },
           error: function() {
-            window.location.href = window.location.href;
+            console.log("error changing wishlist")
           }
         });
       });
