@@ -324,6 +324,8 @@
         headers: { 'X-CSRFToken': csrf },
         data: { promo_code: code },
         success: function(data) {
+          $('#checkout-discount').text('Rs ' + data.discount);
+          $('#checkout-final-total').text('Rs ' + data.final_total);
           $('#discount-label').text('Discount (' + data.percent_off + '%)');
           $('#discount-field').text('- Rs ' + data.discount);
           $('#total-price-field').val(data.final_total);

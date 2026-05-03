@@ -56,7 +56,7 @@ def cart_summary(request):
            'cart_items': cart_items,
            'subtotal': total,
            'discount': discount,
-           'total': final_total,
+           'final_total': final_total,
         })
 
     session_cart = request.session.get('cart', {})
@@ -83,9 +83,9 @@ def cart_summary(request):
 
     return render(request, 'cart/summary.html', {
         'cart_items': cart_items,
-        'total': total,
+        'subtotal': total,
         'discount': discount,
-        "total": final_total,
+        'final_total': final_total,
     })
 
 def cart_summary_api(request):
@@ -229,7 +229,7 @@ def update_quantity(request, item_id):
 # ─────────────────────────────────────────────
 def remove_from_cart(request, item_id):
 
-    if request.method != "POST":
+    if request.method != "DELETE":
         return redirect('cart:summary')
 
     # LOGGED IN USER
@@ -243,7 +243,7 @@ def remove_from_cart(request, item_id):
 
         totals = _calculate_totals(request.user.customer_profile)
 
-        if request.method == "POST":
+        if request.method == "DELETE":
            return JsonResponse({
                 "removed": True,
                 "totals": totals
